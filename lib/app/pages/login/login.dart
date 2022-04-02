@@ -82,20 +82,25 @@ class _LoginScreenState extends State<LoginScreen> {
                 margin: const EdgeInsets.only(top: 39),
                 child: Column(
                   children: [
-                    Container(
-                      width: size.width * 0.9,
-                      decoration: BoxDecoration(
-                          color: Colors.blue,
-                          borderRadius: BorderRadius.circular(20)),
-                      margin: EdgeInsets.only(top: 15),
-                      height: size.height * 0.07,
-                      child: Center(
-                        child: Text(
-                          'Entrar',
-                          style: TextStyle(
-                              fontFamily: 'Poppins',
-                              color: Colors.white,
-                              fontSize: 20),
+                    GestureDetector(
+                      onTap: () {
+                        Modular.to.pushNamed('/navigation');
+                      },
+                      child: Container(
+                        width: size.width * 0.9,
+                        decoration: BoxDecoration(
+                            color: Colors.blue,
+                            borderRadius: BorderRadius.circular(20)),
+                        margin: EdgeInsets.only(top: 15),
+                        height: size.height * 0.07,
+                        child: Center(
+                          child: Text(
+                            'Entrar',
+                            style: TextStyle(
+                                fontFamily: 'Poppins',
+                                color: Colors.white,
+                                fontSize: 20),
+                          ),
                         ),
                       ),
                     ),

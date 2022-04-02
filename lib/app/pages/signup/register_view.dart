@@ -3,6 +3,7 @@
 import 'package:election/app/pages/signup/register_view_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({Key? key}) : super(key: key);
@@ -43,6 +44,14 @@ class _RegisterViewState extends State<RegisterView> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             bottomRight: Radius.circular(50),
+          ),
+        ),
+        centerTitle: false,
+        leading: GestureDetector(
+          onTap: () => Modular.to.pop(),
+          child: Icon(
+            FontAwesomeIcons.arrowLeft,
+            color: Colors.black,
           ),
         ),
         backgroundColor: Colors.grey,

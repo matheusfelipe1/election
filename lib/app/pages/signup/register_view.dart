@@ -4,6 +4,7 @@ import 'package:election/app/pages/signup/register_view_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({Key? key}) : super(key: key);
@@ -15,6 +16,10 @@ class RegisterView extends StatefulWidget {
 class _RegisterViewState extends State<RegisterView> {
   RegisterViewController controller = Modular.get<RegisterViewController>();
   String dropdownValue = 'Selecione sua turma';
+  MaskTextInputFormatter maskNasc =
+      new MaskTextInputFormatter(mask: '##/##/####');
+  MaskTextInputFormatter maskCPF =
+      new MaskTextInputFormatter(mask: '###.###.###-##');
   List<String> turmas = [
     'Selecione sua turma',
     'Turma 26',
@@ -122,6 +127,8 @@ class _RegisterViewState extends State<RegisterView> {
                   child: TextFormField(
                     textAlign: TextAlign.start,
                     // controller: senha,
+                    inputFormatters: [maskNasc],
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                         hintText: 'Data de Nascimento *',
                         border: InputBorder.none,
@@ -141,6 +148,8 @@ class _RegisterViewState extends State<RegisterView> {
                   child: TextFormField(
                     textAlign: TextAlign.start,
                     // controller: senha,
+                    inputFormatters: [maskCPF],
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                         hintText: 'CPF *',
                         border: InputBorder.none,
@@ -160,6 +169,7 @@ class _RegisterViewState extends State<RegisterView> {
                   child: TextFormField(
                     textAlign: TextAlign.start,
                     // controller: senha,
+                    obscureText: true,
                     decoration: InputDecoration(
                         hintText: 'Senha *',
                         border: InputBorder.none,
@@ -179,6 +189,7 @@ class _RegisterViewState extends State<RegisterView> {
                   child: TextFormField(
                     textAlign: TextAlign.start,
                     // controller: senha,
+                    obscureText: true,
                     decoration: InputDecoration(
                         hintText: 'Confirmação de senha *',
                         border: InputBorder.none,

@@ -6,6 +6,7 @@ import 'package:election/app/pages/settings/settings_page.dart';
 import 'package:election/app/pages/subscribe/subscribe_page.dart';
 import 'package:election/app/pages/vote/vote_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class BottomNavigationPage extends StatefulWidget {
@@ -168,15 +169,20 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
             bottomRight: Radius.circular(_selectedIndex == 0 ? 0 : 50),
           ),
         ),
-        leading: Padding(
-          padding: const EdgeInsets.all(5.0),
-          child: CircleAvatar(
-            maxRadius: 50,
-            backgroundColor: Colors.white,
-            child: Icon(
-              Icons.person,
-              color: Colors.black,
-              size: size.height * 0.04,
+        leading: GestureDetector(
+          onTap: () {
+            Modular.to.pushNamed('/profile-edit');
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: CircleAvatar(
+              maxRadius: 50,
+              backgroundColor: Colors.white,
+              child: Icon(
+                Icons.person,
+                color: Colors.black,
+                size: size.height * 0.04,
+              ),
             ),
           ),
         ),

@@ -68,6 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: TextFormField(
                           textAlign: TextAlign.start,
                           controller: senha,
+                          obscureText: true,
                           decoration: InputDecoration(
                               hintText: 'Digite sua senha',
                               border: InputBorder.none,

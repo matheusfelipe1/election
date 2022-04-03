@@ -3,6 +3,7 @@ import 'package:election/app/utils/modal_messages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class ProfileEdit extends StatefulWidget {
   const ProfileEdit({Key? key}) : super(key: key);
@@ -16,6 +17,11 @@ class _ProfileEditState extends State<ProfileEdit> {
   updateState() {
     if (mounted) setState(() {});
   }
+
+  MaskTextInputFormatter maskNasc =
+      new MaskTextInputFormatter(mask: '##/##/####');
+  MaskTextInputFormatter maskCPF =
+      new MaskTextInputFormatter(mask: '###.###.###-##');
 
   Matrix4 matrix = Matrix4.identity();
   @override
@@ -98,6 +104,8 @@ class _ProfileEditState extends State<ProfileEdit> {
                   child: TextFormField(
                     textAlign: TextAlign.start,
                     // controller: senha,
+                    inputFormatters: [maskNasc],
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                         hintText: 'Data de Nascimento *',
                         border: InputBorder.none,
@@ -117,6 +125,8 @@ class _ProfileEditState extends State<ProfileEdit> {
                   child: TextFormField(
                     textAlign: TextAlign.start,
                     // controller: senha,
+                    inputFormatters: [maskCPF],
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                         hintText: 'CPF *',
                         border: InputBorder.none,
@@ -136,6 +146,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                   child: TextFormField(
                     textAlign: TextAlign.start,
                     // controller: senha,
+                    obscureText: true,
                     decoration: InputDecoration(
                         hintText: 'Senha *',
                         border: InputBorder.none,
@@ -155,6 +166,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                   child: TextFormField(
                     textAlign: TextAlign.start,
                     // controller: senha,
+                    obscureText: true,
                     decoration: InputDecoration(
                         hintText: 'Confirmação de senha *',
                         border: InputBorder.none,

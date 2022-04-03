@@ -131,6 +131,10 @@ class _SubscriberChartState extends State<SubscriberChart> {
                     child: Card(
                       elevation: 4,
                       child: ListTile(
+                        onTap: () {
+                          Modular.to.pushNamed('/profile-details',
+                              arguments: controller.dataCandidates[i]);
+                        },
                         leading: CircleAvatar(
                           maxRadius: 25,
                           backgroundColor: i == 0

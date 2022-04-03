@@ -1,4 +1,5 @@
 import 'package:election/app/pages/vote/vote_page_controller.dart';
+import 'package:election/app/utils/modal_messages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -31,7 +32,7 @@ class _VotePageState extends State<VotePage> {
                   style: TextStyle(
                       color: Colors.black,
                       fontFamily: 'Poppins',
-                      fontSize: size.height * 0.02)),
+                      fontSize: size.height * 0.025)),
               Container(
                 height: size.height * 0.6,
                 margin: EdgeInsets.only(top: size.height * 0.025),
@@ -42,6 +43,10 @@ class _VotePageState extends State<VotePage> {
                         child: Card(
                           elevation: 4,
                           child: ListTile(
+                              onTap: () {
+                                Modular.to.pushNamed('/profile-details',
+                                    arguments: controller.dataCandidates[i]);
+                              },
                               leading: CircleAvatar(
                                 maxRadius: 25,
                                 backgroundColor: Colors.white,
@@ -71,12 +76,20 @@ class _VotePageState extends State<VotePage> {
                                 ],
                               ),
                               trailing: GestureDetector(
-                                onTap: () {
-                                  // Modular.to.pushNamed('/login');
+                                onTap: () async {
+                                  await UtilsModalMessage().showMessageModal(
+                                      title:
+                                          'Deseja realmente votar no candidato(a) ${controller.dataCandidates[i]['name']}?',
+                                      func: () {
+                                        controller.vote(controller
+                                            .dataCandidates[i]['name']);
+                                      },
+                                      colorButton: Colors.green,
+                                      context: context);
                                 },
                                 child: Container(
                                     width: size.width * 0.25,
-                                    height: size.height * 0.025,
+                                    height: size.height * 0.03,
                                     margin: EdgeInsets.only(
                                         top: size.height * 0.00),
                                     child: Container(
@@ -89,7 +102,7 @@ class _VotePageState extends State<VotePage> {
                                             style: TextStyle(
                                                 color: Colors.white,
                                                 fontFamily: 'Poppins',
-                                                fontSize: size.height * 0.015)),
+                                                fontSize: size.height * 0.02)),
                                       ),
                                     )
                                     // Image.asset('assets/images/icon_ok.png', width: 10, height: 10),

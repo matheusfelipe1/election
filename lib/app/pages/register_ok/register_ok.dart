@@ -20,20 +20,25 @@ class _RegisterOkState extends State<RegisterOk> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-                child: Text('Seu cadastro foi realizado com sucesso!',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontFamily: 'Poppins', fontSize: size.height * 0.025))),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                  child: Text('Seu cadastro foi realizado com sucesso!',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: size.height * 0.045,
+                          fontWeight: FontWeight.w500))),
+            ),
             Container(
                 margin: EdgeInsets.only(top: size.height * 0.12),
                 child: CircleAvatar(
-                    maxRadius: size.height * 0.068,
+                    maxRadius: size.height * 0.15,
                     backgroundColor: Colors.green,
                     child: Icon(
                       Icons.check,
                       color: Colors.white,
-                      size: size.height * 0.095,
+                      size: size.height * 0.2,
                     ))
                 // Image.asset('assets/images/icon_ok.png', width: 10, height: 10),
                 ),

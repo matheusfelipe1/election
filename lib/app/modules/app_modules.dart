@@ -3,6 +3,10 @@
 import 'package:election/app/components/bottom_navigation/bottom_navigation.dart';
 import 'package:election/app/pages/home/home_controller.dart';
 import 'package:election/app/pages/login/login.dart';
+import 'package:election/app/pages/profile/profile_details/profile_details.dart';
+import 'package:election/app/pages/profile/profile_details/profile_details_controller.dart';
+import 'package:election/app/pages/profile/profile_edit/profile_edit.dart';
+import 'package:election/app/pages/profile/profile_edit/profile_edit_controller.dart';
 import 'package:election/app/pages/register_ok/register_ok.dart';
 import 'package:election/app/pages/screen_charts/screen_charts_controller.dart';
 import 'package:election/app/pages/signup/register_view.dart';
@@ -18,6 +22,8 @@ class AppModule extends Module {
         Bind((i) => HomeController()),
         Bind((i) => ScreenChartsController()),
         Bind((i) => VotePageController()),
+        Bind((i) => ProfileEditController()),
+        Bind((i) => ProfileDetailsController()),
       ];
   @override
   List<ModularRoute> get routes => [
@@ -35,6 +41,14 @@ class AppModule extends Module {
             transition: TransitionType.fadeIn),
         ChildRoute('/navigation',
             child: (_, args) => BottomNavigationPage(),
+            transition: TransitionType.fadeIn),
+        ChildRoute('/profile-details',
+            child: (_, args) => ProfileDetails(
+                  data: args.data,
+                ),
+            transition: TransitionType.fadeIn),
+        ChildRoute('/profile-edit',
+            child: (_, args) => ProfileEdit(),
             transition: TransitionType.fadeIn),
       ];
 }

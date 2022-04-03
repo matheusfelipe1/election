@@ -1,3 +1,4 @@
+import 'package:election/app/utils/modal_messages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -9,6 +10,11 @@ class SubscribePage extends StatefulWidget {
 }
 
 class _SubscribePageState extends State<SubscribePage> {
+  register() {
+    print('oi');
+    Modular.to.pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -19,11 +25,11 @@ class _SubscribePageState extends State<SubscribePage> {
           borderRadius: BorderRadius.circular(35),
           child: Container(
             width: size.width * 0.85,
-            height: size.height * 0.65,
+            height: size.height * 0.7,
             child: Center(
                 child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(15.0),
                 child: Column(
                   children: [
                     Padding(
@@ -79,8 +85,14 @@ class _SubscribePageState extends State<SubscribePage> {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () {
+                      onTap: () async {
                         // Modular.to.pushNamed('/login');
+                        await UtilsModalMessage().showMessageModal(
+                            title:
+                                'Deseja realmente se candidatar a representante de turma?',
+                            func: register,
+                            colorButton: Colors.green,
+                            context: context);
                       },
                       child: Container(
                           width: size.width * 0.45,

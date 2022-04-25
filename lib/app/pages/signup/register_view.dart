@@ -1,6 +1,7 @@
 // ignore_for_file: unnecessary_const, prefer_const_constructors
 
 import 'package:election/app/pages/signup/register_view_controller.dart';
+import 'package:election/app/utils/modal_messages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -13,8 +14,11 @@ class RegisterView extends StatefulWidget {
   State<RegisterView> createState() => _RegisterViewState();
 }
 
+enum SingingCharacter { enable, unable }
+
 class _RegisterViewState extends State<RegisterView> {
   RegisterViewController controller = Modular.get<RegisterViewController>();
+  SingingCharacter? _character = SingingCharacter.unable;
   String dropdownValue = 'Selecione sua turma';
   MaskTextInputFormatter maskNasc =
       new MaskTextInputFormatter(mask: '##/##/####');
@@ -231,6 +235,59 @@ class _RegisterViewState extends State<RegisterView> {
                   ),
                 ),
               ),
+              Container(
+                margin: EdgeInsets.only(top: 24),
+                child: Divider(
+                  color: Colors.black26,
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 15),
+                child: Text('Você é usuário administrativo?',
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                        fontFamily: 'Poppins',
+                        color: Colors.black,
+                        fontSize: size.height * 0.025)),
+              ),
+              ListTile(
+                title: Text('Não',
+                    style: TextStyle(
+                        fontFamily: 'Poppins',
+                        color: Colors.black,
+                        fontSize: size.height * 0.025)),
+                leading: Radio<SingingCharacter>(
+                  value: SingingCharacter.unable,
+                  groupValue: _character,
+                  onChanged: (SingingCharacter? value) {
+                    setState(() {
+                      _character = value;
+                    });
+                  },
+                ),
+              ),
+              ListTile(
+                title: Text('Sim',
+                    style: TextStyle(
+                        fontFamily: 'Poppins',
+                        color: Colors.black,
+                        fontSize: size.height * 0.025)),
+                leading: Radio<SingingCharacter>(
+                  value: SingingCharacter.enable,
+                  groupValue: _character,
+                  onChanged: (SingingCharacter? value) {
+                    setState(() {
+                      _character = value;
+                    });
+                  },
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 24),
+                child: Divider(
+                  color: Colors.black26,
+                ),
+              ),
               GestureDetector(
                 onTap: () {
                   controller.showModalGetPhoto(context, updateState);
@@ -292,8 +349,17 @@ class _RegisterViewState extends State<RegisterView> {
                     )),
               ),
               GestureDetector(
-                onTap: () {
-                  Modular.to.pushNamed('/register-ok');
+                onTap: () async {
+                  if (_character == SingingCharacter.enable) {
+                    await UtilsModalMessage().showMessageModal(
+                        title: 'Você é usuário administrativo do sistema?',
+                        func: () async {
+                          await controller.sendRequest();
+                        },
+                        colorButton: Colors.green,
+                        context: context);
+                  } else
+                    Modular.to.pushNamed('/register-ok');
                 },
                 child: Container(
                     width: size.width * 0.9,
@@ -311,7 +377,7 @@ class _RegisterViewState extends State<RegisterView> {
                             fontSize: size.height * 0.02),
                       ),
                     )),
-              )
+              ),
             ],
           ),
         ),

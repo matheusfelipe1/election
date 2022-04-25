@@ -9,7 +9,8 @@ part of 'home_controller.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$HomeController on _HomeControllerBase, Store {
-  final _$dataCandidatesAtom = Atom(name: '_HomeControllerBase.dataCandidates');
+  late final _$dataCandidatesAtom =
+      Atom(name: '_HomeControllerBase.dataCandidates', context: context);
 
   @override
   List<dynamic> get dataCandidates {
@@ -24,7 +25,8 @@ mixin _$HomeController on _HomeControllerBase, Store {
     });
   }
 
-  final _$dataAtom = Atom(name: '_HomeControllerBase.data');
+  late final _$dataAtom =
+      Atom(name: '_HomeControllerBase.data', context: context);
 
   @override
   List<dynamic> get data {
@@ -39,8 +41,8 @@ mixin _$HomeController on _HomeControllerBase, Store {
     });
   }
 
-  final _$_HomeControllerBaseActionController =
-      ActionController(name: '_HomeControllerBase');
+  late final _$_HomeControllerBaseActionController =
+      ActionController(name: '_HomeControllerBase', context: context);
 
   @override
   dynamic organizerData() {

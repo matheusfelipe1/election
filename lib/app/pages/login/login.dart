@@ -98,9 +98,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Text(
                             'Entrar',
                             style: TextStyle(
-                                fontFamily: 'Poppins',
-                                color: Colors.white,
-                                fontSize: 20),
+                              fontFamily: 'Poppins',
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ),
@@ -120,9 +120,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Text(
                             'Cadastre-se',
                             style: TextStyle(
-                                fontFamily: 'Poppins',
-                                color: Colors.white,
-                                fontSize: 20),
+                              fontFamily: 'Poppins',
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ),

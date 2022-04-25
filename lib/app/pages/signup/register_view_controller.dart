@@ -92,4 +92,9 @@ abstract class _RegisterViewControllerBase with Store {
       func.call();
     }
   }
+
+  @action
+  sendRequest() {
+    Modular.to.pushNamed('/register-ok');
+  }
 }

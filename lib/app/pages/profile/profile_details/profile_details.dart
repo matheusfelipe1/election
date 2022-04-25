@@ -2,6 +2,7 @@ import 'package:election/app/utils/modal_messages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileDetails extends StatefulWidget {
   final dynamic data;
@@ -12,11 +13,23 @@ class ProfileDetails extends StatefulWidget {
 }
 
 class _ProfileDetailsState extends State<ProfileDetails> {
+  bool isAdminT = false;
   @override
   void initState() {
     // TODO: implement initState
     print(widget.data);
+    getAdminOrNot();
     super.initState();
+  }
+
+  getAdminOrNot() async {
+    var shared = await SharedPreferences.getInstance();
+    var isAdmin = shared.getBool('admin');
+    if (mounted)
+      setState(() {
+        isAdminT = isAdmin!;
+      });
+    print(isAdminT);
   }
 
   @override
@@ -100,39 +113,41 @@ class _ProfileDetailsState extends State<ProfileDetails> {
                 ],
               ),
             ),
-            Center(
-              child: Container(
-                margin: EdgeInsets.only(top: size.height * 0.07),
-                child: GestureDetector(
-                    onTap: () async {
-                      await UtilsModalMessage().showMessageModal(
-                          title:
-                              'Deseja realmente votar no candidato(a) ${widget.data['name']}?',
-                          func: () {
-                            Modular.to.pop();
-                          },
-                          colorButton: Colors.green,
-                          context: context);
-                    },
+            isAdminT
+                ? Container()
+                : Center(
                     child: Container(
-                      width: size.width * 0.57,
-                      height: size.height * 0.05,
-                      decoration: BoxDecoration(
-                          color: Colors.blue,
-                          borderRadius: BorderRadius.circular(35)),
-                      child: Center(
-                        child: Text(
-                          'Votar neste candidato',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'Poppins',
-                          ),
-                        ),
-                      ),
-                    )),
-              ),
-            )
+                      margin: EdgeInsets.only(top: size.height * 0.07),
+                      child: GestureDetector(
+                          onTap: () async {
+                            await UtilsModalMessage().showMessageModal(
+                                title:
+                                    'Deseja realmente votar no candidato(a) ${widget.data['name']}?',
+                                func: () {
+                                  Modular.to.pop();
+                                },
+                                colorButton: Colors.green,
+                                context: context);
+                          },
+                          child: Container(
+                            width: size.width * 0.57,
+                            height: size.height * 0.05,
+                            decoration: BoxDecoration(
+                                color: Colors.blue,
+                                borderRadius: BorderRadius.circular(35)),
+                            child: Center(
+                              child: Text(
+                                'Votar neste candidato',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Poppins',
+                                ),
+                              ),
+                            ),
+                          )),
+                    ),
+                  )
           ],
         ),
       ),

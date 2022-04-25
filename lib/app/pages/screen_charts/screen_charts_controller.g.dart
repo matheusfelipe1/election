@@ -9,8 +9,8 @@ part of 'screen_charts_controller.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$ScreenChartsController on _ScreenChartsControllerBase, Store {
-  final _$dataCandidatesAtom =
-      Atom(name: '_ScreenChartsControllerBase.dataCandidates');
+  late final _$dataCandidatesAtom = Atom(
+      name: '_ScreenChartsControllerBase.dataCandidates', context: context);
 
   @override
   List<dynamic> get dataCandidates {
@@ -25,8 +25,8 @@ mixin _$ScreenChartsController on _ScreenChartsControllerBase, Store {
     });
   }
 
-  final _$_ScreenChartsControllerBaseActionController =
-      ActionController(name: '_ScreenChartsControllerBase');
+  late final _$_ScreenChartsControllerBaseActionController =
+      ActionController(name: '_ScreenChartsControllerBase', context: context);
 
   @override
   dynamic organizerData() {

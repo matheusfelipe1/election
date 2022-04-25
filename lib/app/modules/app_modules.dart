@@ -1,6 +1,9 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:election/app/components/bottom_navigation/bottom_navigation.dart';
+import 'package:election/app/pages/admin_user/relatorio_admin/report_user_controller.dart';
+import 'package:election/app/pages/charts_all_turmas/page_chart_controller.dart';
+import 'package:election/app/pages/charts_all_turmas/switch_turma/switch_turma.dart';
 import 'package:election/app/pages/home/home_controller.dart';
 import 'package:election/app/pages/login/login.dart';
 import 'package:election/app/pages/profile/profile_details/profile_details.dart';
@@ -24,6 +27,8 @@ class AppModule extends Module {
         Bind((i) => VotePageController()),
         Bind((i) => ProfileEditController()),
         Bind((i) => ProfileDetailsController()),
+        Bind((i) => ReportUserController()),
+        Bind((i) => PageChartController()),
       ];
   @override
   List<ModularRoute> get routes => [
@@ -49,6 +54,9 @@ class AppModule extends Module {
             transition: TransitionType.fadeIn),
         ChildRoute('/profile-edit',
             child: (_, args) => ProfileEdit(),
+            transition: TransitionType.fadeIn),
+        ChildRoute('/list-charts',
+            child: (_, args) => SwitchCharts(),
             transition: TransitionType.fadeIn),
       ];
 }

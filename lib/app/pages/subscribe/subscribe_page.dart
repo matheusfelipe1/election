@@ -108,7 +108,7 @@ class _SubscribePageState extends State<SubscribePage> {
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontFamily: 'Poppins',
-                                        fontSize: size.height * 0.015)),
+                                        fontSize: size.height * 0.02)),
                               ),
                             ),
                           )

@@ -1,7 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class UtilsModalMessage {
+  generalToast({required String title}) {
+    Fluttertoast.showToast(
+        msg: title,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.black,
+        textColor: Colors.white,
+        fontSize: 16.0);
+  }
+
   showMessageModal({
     required String title,
     required VoidCallback func,
@@ -17,14 +29,14 @@ class UtilsModalMessage {
               title: Text(
                 title,
                 style: TextStyle(
-                  // color: Colors.white,
-                  fontFamily: 'Poppins',
-                ),
+                    // color: Colors.white,
+                    fontFamily: 'Poppins',
+                    fontSize: 15),
               ),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(35)),
               content: Container(
-                height: MediaQuery.of(context).size.height * 0.1,
+                height: MediaQuery.of(context).size.height * 0.06,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
@@ -41,9 +53,9 @@ class UtilsModalMessage {
                               'Cancelar',
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'Poppins',
-                              ),
+                                  color: Colors.white,
+                                  fontFamily: 'Poppins',
+                                  fontSize: 12),
                             ),
                           )),
                       GestureDetector(
@@ -57,9 +69,9 @@ class UtilsModalMessage {
                               'Sim',
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'Poppins',
-                              ),
+                                  color: Colors.white,
+                                  fontFamily: 'Poppins',
+                                  fontSize: 12),
                             ),
                           )),
                     ],

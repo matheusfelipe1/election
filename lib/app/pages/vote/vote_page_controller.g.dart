@@ -9,8 +9,8 @@ part of 'vote_page_controller.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$VotePageController on _VotePageControllerBase, Store {
-  final _$dataCandidatesAtom =
-      Atom(name: '_VotePageControllerBase.dataCandidates');
+  late final _$dataCandidatesAtom =
+      Atom(name: '_VotePageControllerBase.dataCandidates', context: context);
 
   @override
   List<dynamic> get dataCandidates {
@@ -25,8 +25,8 @@ mixin _$VotePageController on _VotePageControllerBase, Store {
     });
   }
 
-  final _$_VotePageControllerBaseActionController =
-      ActionController(name: '_VotePageControllerBase');
+  late final _$_VotePageControllerBaseActionController =
+      ActionController(name: '_VotePageControllerBase', context: context);
 
   @override
   dynamic organizerData() {

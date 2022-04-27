@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_final_fields
 
+import 'dart:async';
+
 import 'package:election/app/pages/admin_user/relatorio_admin/report_user.dart';
 import 'package:election/app/pages/charts_all_turmas/switch_turma/switch_turma.dart';
 import 'package:election/app/pages/home/home.dart';
@@ -7,6 +9,7 @@ import 'package:election/app/pages/screen_charts/screen_charts.dart';
 import 'package:election/app/pages/settings/settings_page.dart';
 import 'package:election/app/pages/subscribe/subscribe_page.dart';
 import 'package:election/app/pages/vote/vote_page.dart';
+import 'package:election/app/pages/winner/winner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -34,6 +37,7 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
             SwitchCharts(),
             // SubscribePage(),
             ReportUser(),
+            Winner(),
             SettingsPage()
           ]
         : [
@@ -53,9 +57,10 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
   }
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    if (mounted)
+      setState(() {
+        _selectedIndex = index;
+      });
   }
 
   callLegend() {
@@ -254,11 +259,11 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
                   label: 'Relatório',
                   backgroundColor: Colors.grey,
                 ),
-                // BottomNavigationBarItem(
-                //   icon: Icon(Icons.how_to_vote_sharp),
-                //   label: 'Vote',
-                //   backgroundColor: Colors.grey,
-                // ),
+                BottomNavigationBarItem(
+                  icon: Icon(FontAwesomeIcons.medal),
+                  label: 'Votação',
+                  backgroundColor: Colors.grey,
+                ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.settings),
                   label: 'Configurações',

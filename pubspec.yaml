@@ -50,6 +50,8 @@ dependencies:
   flutter_modular: ^4.5.1+1
   syncfusion_flutter_pdfviewer: ^20.1.50-beta
   open_file: ^3.2.1
+  percent_indicator: ^3.4.0
+  holding_gesture: ^1.1.0
 
 dev_dependencies:
   build_runner: ^2.1.7

@@ -125,10 +125,9 @@ class _ProfileEditState extends State<ProfileEdit> {
                   child: TextFormField(
                     textAlign: TextAlign.start,
                     // controller: senha,
-                    inputFormatters: [maskCPF],
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
-                        hintText: 'CPF *',
+                        hintText: 'Matrícula *',
                         border: InputBorder.none,
                         hintStyle: TextStyle(fontFamily: 'Poppins')),
                   ),

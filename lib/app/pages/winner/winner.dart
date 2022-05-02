@@ -2,8 +2,10 @@
 
 import 'dart:async';
 
+import 'package:election/app/utils/modal_messages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:holding_gesture/holding_gesture.dart';
 import 'package:percent_indicator/percent_indicator.dart';
@@ -27,6 +29,8 @@ class _WinnerState extends State<Winner> {
   bool counting = false;
   bool segurado = false;
   bool prog = false;
+  var radius = 93.0;
+  var iconSize = 45.0;
 
   @override
   void initState() {
@@ -75,219 +79,245 @@ class _WinnerState extends State<Winner> {
     final hours = myDuration.inHours.remainder(24);
     final minutes = myDuration.inMinutes.remainder(60);
     Size size = MediaQuery.of(context).size;
+
     return Container(
       child: counting
-          ? Column(
-              children: [
-                SizedBox(
-                  height: size.height * .1,
-                ),
-                Text('Tempo restante para o anúncio dos vencedores.',
-                    style: const TextStyle(
-                        fontFamily: 'Poppins',
-                        color: Colors.black,
-                        fontSize: 15)),
-                SizedBox(
-                  height: size.height * .05,
-                ),
-                Center(
-                  child: Container(
+          ? SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: size.height * .1,
+                  ),
+                  Center(
+                    child: Text('Tempo restante para o anúncio dos vencedores.',
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                            fontFamily: 'Poppins',
+                            color: Colors.black,
+                            fontSize: 15)),
+                  ),
+                  SizedBox(
+                    height: size.height * .05,
+                  ),
+                  Center(
+                    child: Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            height: size.height * 0.08,
+                            width: size.width * 0.15,
+                            decoration: BoxDecoration(
+                                color: Colors.black,
+                                borderRadius: BorderRadius.circular(15)),
+                            child: Center(
+                              child: Text("$days",
+                                  style: const TextStyle(
+                                      fontFamily: 'Poppins',
+                                      color: Colors.white,
+                                      fontSize: 30)),
+                            ),
+                          ),
+                          Text("  dias e  ",
+                              style: const TextStyle(
+                                  fontFamily: 'Poppins', color: Colors.black)),
+                          Container(
+                            height: size.height * 0.08,
+                            width: size.width * 0.15,
+                            decoration: BoxDecoration(
+                                color: Colors.black,
+                                borderRadius: BorderRadius.circular(15)),
+                            child: Center(
+                              child: Text("$hours",
+                                  style: const TextStyle(
+                                      fontFamily: 'Poppins',
+                                      color: Colors.white,
+                                      fontSize: 30)),
+                            ),
+                          ),
+                          Text('  :  '),
+                          Container(
+                            height: size.height * 0.08,
+                            width: size.width * 0.15,
+                            decoration: BoxDecoration(
+                                color: Colors.black,
+                                borderRadius: BorderRadius.circular(15)),
+                            child: Center(
+                              child: Text("$minutes",
+                                  style: const TextStyle(
+                                      fontFamily: 'Poppins',
+                                      color: Colors.white,
+                                      fontSize: 30)),
+                            ),
+                          ),
+                          Text('  :  '),
+                          Container(
+                            height: size.height * 0.08,
+                            width: size.width * 0.15,
+                            decoration: BoxDecoration(
+                                color: Colors.black,
+                                borderRadius: BorderRadius.circular(15)),
+                            child: Center(
+                              child: Text("$seconds",
+                                  style: const TextStyle(
+                                      fontFamily: 'Poppins',
+                                      color: Colors.white,
+                                      fontSize: 30)),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: size.height * .1,
+                  ),
+                  Divider(),
+                  SizedBox(
+                    height: size.height * .1,
+                  ),
+                  Container(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Container(
-                          height: size.height * 0.08,
-                          width: size.width * 0.15,
-                          decoration: BoxDecoration(
-                              color: Colors.black,
-                              borderRadius: BorderRadius.circular(15)),
-                          child: Center(
-                            child: Text("$days",
-                                style: const TextStyle(
-                                    fontFamily: 'Poppins',
-                                    color: Colors.white,
-                                    fontSize: 30)),
-                          ),
-                        ),
-                        Text("  dias e  ",
+                        Text('Anúncie agora mesmo os vencedores',
                             style: const TextStyle(
-                                fontFamily: 'Poppins', color: Colors.black)),
-                        Container(
-                          height: size.height * 0.08,
-                          width: size.width * 0.15,
-                          decoration: BoxDecoration(
-                              color: Colors.black,
-                              borderRadius: BorderRadius.circular(15)),
-                          child: Center(
-                            child: Text("$hours",
-                                style: const TextStyle(
-                                    fontFamily: 'Poppins',
-                                    color: Colors.white,
-                                    fontSize: 30)),
-                          ),
+                                fontFamily: 'Poppins',
+                                color: Colors.black,
+                                fontSize: 15)),
+                        SizedBox(
+                          width: size.width * .03,
                         ),
-                        Text('  :  '),
-                        Container(
-                          height: size.height * 0.08,
-                          width: size.width * 0.15,
-                          decoration: BoxDecoration(
-                              color: Colors.black,
-                              borderRadius: BorderRadius.circular(15)),
-                          child: Center(
-                            child: Text("$minutes",
-                                style: const TextStyle(
-                                    fontFamily: 'Poppins',
-                                    color: Colors.white,
-                                    fontSize: 30)),
-                          ),
-                        ),
-                        Text('  :  '),
-                        Container(
-                          height: size.height * 0.08,
-                          width: size.width * 0.15,
-                          decoration: BoxDecoration(
-                              color: Colors.black,
-                              borderRadius: BorderRadius.circular(15)),
-                          child: Center(
-                            child: Text("$seconds",
-                                style: const TextStyle(
-                                    fontFamily: 'Poppins',
-                                    color: Colors.white,
-                                    fontSize: 30)),
-                          ),
-                        ),
+                        Icon(FontAwesomeIcons.arrowDown)
                       ],
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: size.height * .1,
-                ),
-                Divider(),
-                SizedBox(
-                  height: size.height * .1,
-                ),
-                Container(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('Anúncie agora mesmo os vencedores',
-                          style: const TextStyle(
-                              fontFamily: 'Poppins',
-                              color: Colors.black,
-                              fontSize: 15)),
-                      SizedBox(
-                        width: size.width * .03,
-                      ),
-                      Icon(FontAwesomeIcons.arrowDown)
-                    ],
+                  SizedBox(
+                    height: size.height * .03,
                   ),
-                ),
-                SizedBox(
-                  height: size.height * .03,
-                ),
-                Container(
-                  child: HoldTimeoutDetector(
-                    onTimeout: () {
-                      percent = 1;
-                      print('end2');
-                      setState(() {
-                        segurado = true;
-                      });
-                    },
-                    onTimerInitiated: () {
-                      percent = 0.93;
-                      print('end3');
-                    },
-                    onCancel: () {
-                      if (!segurado) percent = 0.0;
-                      print('end4');
-                    },
-                    holdTimeout: Duration(milliseconds: 3000),
-                    enableHapticFeedback: true,
-                    child: CircularPercentIndicator(
-                      radius: 93,
-                      animation: true,
-                      reverse: true,
-                      animationDuration: 1000,
-                      progressColor: Colors.green,
-                      percent: percent,
-                      center: Icon(
-                        Icons.check,
-                        size: !segurado ? 30 : 45,
-                        color: segurado ? Colors.green : Colors.grey,
+                  Container(
+                    child: HoldTimeoutDetector(
+                      onTimeout: () {
+                        percent = 1;
+                        print('end2');
+                        setState(() {
+                          segurado = true;
+                        });
+                        Future.delayed(Duration(milliseconds: 1500), () {
+                          Modular.to.pushNamed('/success');
+                        });
+                      },
+                      onTimerInitiated: () async {
+                        // percent = 0.93;
+                        print('end3');
+                        setState(() {
+                          radius = 150;
+                          iconSize = 90;
+                        });
+                        setState(() {});
+                        await UtilsModalMessage().generalToast(
+                            title: 'Mantenha pressionado o botão');
+                      },
+                      onCancel: () {
+                        if (!segurado) percent = 0.0;
+                        print('end4');
+                        setState(() {
+                          radius = 93.0;
+                          iconSize = 45;
+                        });
+                      },
+                      holdTimeout: Duration(milliseconds: 3000),
+                      enableHapticFeedback: true,
+                      child: CircularPercentIndicator(
+                        radius: radius,
+                        animation: true,
+                        reverse: true,
+                        animationDuration: 1000,
+                        progressColor: Colors.green,
+                        percent: percent,
+                        center: Icon(
+                          Icons.check,
+                          size: iconSize,
+                          color: segurado ? Colors.green : Colors.grey,
+                        ),
                       ),
                     ),
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
             )
-          : Column(
-              children: [
-                SizedBox(
-                  height: size.height * .1,
-                ),
-                // counting
-                //     ? Text("$days dias e $hours:$minutes:$seconds",
-                //         style: const TextStyle(
-                //             fontFamily: 'Poppins', color: Colors.black))
-                //     : Container(),
-                Text('Selecione uma data para o fim das votações.',
-                    style: const TextStyle(
-                        fontFamily: 'Poppins',
-                        color: Colors.black,
-                        fontSize: 15)),
-                SizedBox(
-                  height: size.height * .05,
-                ),
-                CalendarDatePicker(
-                    initialDate: dateToday,
-                    firstDate: dateFirst,
-                    lastDate: dateLast,
-                    onDateChanged: (date) {
-                      setState(() {
-                        dateToday = date;
-                        print(dateToday);
-                      });
-                    }),
-                SizedBox(
-                  height: size.height * .1,
-                ),
-                Center(
-                  child: Material(
-                    elevation: 5,
-                    color: Colors.grey[400],
-                    borderRadius: BorderRadius.circular(35),
-                    child: Container(
-                        width: size.width * 0.87,
-                        height: size.height * 0.06,
-                        child: GestureDetector(
-                          onTap: () async {
-                            start(dateToday);
-                            setState(() {
-                              counting = true;
-                            });
-                          },
-                          child: Container(
-                            width: size.width * 0.02,
-                            decoration: BoxDecoration(
-                                color: Colors.blue,
-                                borderRadius: BorderRadius.circular(35)),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Center(
-                                child: Text('Cadastrar',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontFamily: 'Poppins',
-                                    )),
+          : SingleChildScrollView(
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: size.height * .1,
+                  ),
+                  // counting
+                  //     ? Text("$days dias e $hours:$minutes:$seconds",
+                  //         style: const TextStyle(
+                  //             fontFamily: 'Poppins', color: Colors.black))
+                  //     : Container(),
+                  Text('Selecione uma data para o fim das votações.',
+                      style: const TextStyle(
+                          fontFamily: 'Poppins',
+                          color: Colors.black,
+                          fontSize: 15)),
+                  SizedBox(
+                    height: size.height * .05,
+                  ),
+                  CalendarDatePicker(
+                      initialDate: dateToday,
+                      firstDate: dateFirst,
+                      lastDate: dateLast,
+                      onDateChanged: (date) {
+                        setState(() {
+                          dateToday = date;
+                          print(dateToday);
+                        });
+                      }),
+                  SizedBox(
+                    height: size.height * .07,
+                  ),
+                  Center(
+                    child: Material(
+                      elevation: 5,
+                      color: Colors.grey[400],
+                      borderRadius: BorderRadius.circular(35),
+                      child: Container(
+                          width: size.width * 0.87,
+                          height: size.height * 0.06,
+                          child: GestureDetector(
+                            onTap: () async {
+                              start(dateToday);
+                              setState(() {
+                                counting = true;
+                              });
+                            },
+                            child: Container(
+                              width: size.width * 0.02,
+                              decoration: BoxDecoration(
+                                  color: Colors.blue,
+                                  borderRadius: BorderRadius.circular(35)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Center(
+                                  child: Text('Cadastrar',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: 'Poppins',
+                                      )),
+                                ),
                               ),
                             ),
-                          ),
-                        )),
+                          )),
+                    ),
                   ),
-                ),
-              ],
+                  SizedBox(
+                    height: size.height * .02,
+                  )
+                ],
+              ),
             ),
     );
   }

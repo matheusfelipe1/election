@@ -152,10 +152,9 @@ class _RegisterViewState extends State<RegisterView> {
                   child: TextFormField(
                     textAlign: TextAlign.start,
                     // controller: senha,
-                    inputFormatters: [maskCPF],
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
-                        hintText: 'CPF *',
+                        hintText: 'Matrícula *',
                         border: InputBorder.none,
                         hintStyle: TextStyle(fontFamily: 'Poppins')),
                   ),
@@ -201,40 +200,43 @@ class _RegisterViewState extends State<RegisterView> {
                   ),
                 ),
               ),
-              Container(
-                width: size.width * 0.9,
-                decoration: BoxDecoration(
-                    color: Colors.grey[400],
-                    borderRadius: BorderRadius.circular(20)),
-                margin: EdgeInsets.only(top: 15),
-                height: size.height * 0.07,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 15.0),
-                  child: DropdownButton<String>(
-                    value: dropdownValue,
-                    // icon: const Icon(Icons.arrow_downward),
-                    hint: Text('Selecione sua turma'),
-                    dropdownColor: Colors.white,
-                    isExpanded: true,
-                    elevation: 16,
-                    style: TextStyle(
-                        color: dropdownValue == 'Selecione sua turma'
-                            ? Colors.grey
-                            : Colors.black),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        dropdownValue = newValue!;
-                      });
-                    },
-                    items: turmas.map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                  ),
-                ),
-              ),
+              _character == SingingCharacter.enable
+                  ? Container()
+                  : Container(
+                      width: size.width * 0.9,
+                      decoration: BoxDecoration(
+                          color: Colors.grey[400],
+                          borderRadius: BorderRadius.circular(20)),
+                      margin: EdgeInsets.only(top: 15),
+                      height: size.height * 0.07,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 15.0),
+                        child: DropdownButton<String>(
+                          value: dropdownValue,
+                          // icon: const Icon(Icons.arrow_downward),
+                          hint: Text('Selecione sua turma'),
+                          dropdownColor: Colors.white,
+                          isExpanded: true,
+                          elevation: 16,
+                          style: TextStyle(
+                              color: dropdownValue == 'Selecione sua turma'
+                                  ? Colors.grey
+                                  : Colors.black),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              dropdownValue = newValue!;
+                            });
+                          },
+                          items: turmas
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ),
               Container(
                 margin: EdgeInsets.only(top: 24),
                 child: Divider(

@@ -23,7 +23,7 @@ class BottomNavigationPage extends StatefulWidget {
 }
 
 class _BottomNavigationPageState extends State<BottomNavigationPage> {
-  bool userAdmin = true;
+  bool userAdmin = false;
   int _selectedIndex = 0;
   String name = 'Matheus';
 

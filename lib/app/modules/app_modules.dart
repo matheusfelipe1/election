@@ -16,6 +16,7 @@ import 'package:election/app/pages/signup/register_view.dart';
 import 'package:election/app/pages/signup/register_view_controller.dart';
 import 'package:election/app/pages/splash.dart';
 import 'package:election/app/pages/vote/vote_page_controller.dart';
+import 'package:election/app/pages/winner/message_success/message_success.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class AppModule extends Module {
@@ -58,5 +59,7 @@ class AppModule extends Module {
         ChildRoute('/list-charts',
             child: (_, args) => SwitchCharts(),
             transition: TransitionType.fadeIn),
+        ChildRoute('/success',
+            child: (_, args) => Sucess(), transition: TransitionType.fadeIn),
       ];
 }

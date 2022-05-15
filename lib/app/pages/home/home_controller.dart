@@ -27,4 +27,9 @@ abstract class _HomeControllerBase with Store {
     });
     data = dataCandidates;
   }
+
+  @observable
+  getAllCandidates() async {
+    try {} catch (e) {}
+  }
 }

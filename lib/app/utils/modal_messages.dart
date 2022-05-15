@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -79,5 +80,33 @@ class UtilsModalMessage {
                 ),
               ));
         });
+  }
+
+  showLoading(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: new Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                new CircularProgressIndicator(),
+                SizedBox(
+                  width: 25,
+                ),
+                new Text("Aguarde.."),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  closeLoading() {
+    Modular.to.pop();
   }
 }

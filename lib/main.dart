@@ -23,15 +23,14 @@ void configLoading() {
   EasyLoading.instance
     ..displayDuration = const Duration(milliseconds: 2000)
     ..indicatorType = EasyLoadingIndicatorType.circle
-    ..indicatorSize = 40.0
-    ..lineWidth = 2.0
-    ..radius = 30.0
-    ..loadingStyle = EasyLoadingStyle.custom
-    ..progressColor = Color(0xff00D7A9)
-    ..backgroundColor = Color(0xff00D7A9)
-    ..indicatorColor = Color(0xff00D7A9)
-    ..textColor = Color(0xff00D7A9)
+    ..loadingStyle = EasyLoadingStyle.dark
+    ..indicatorSize = 45.0
+    ..radius = 10.0
+    ..progressColor = Colors.green
+    ..backgroundColor = Colors.black
+    ..indicatorColor = Colors.yellow
+    ..textColor = Colors.yellow
     ..maskColor = Colors.black.withOpacity(0.5)
     ..userInteractions = true
-    ..dismissOnTap = false;
+    ..dismissOnTap = true;
 }

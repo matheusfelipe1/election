@@ -2,6 +2,7 @@
 
 import 'dart:ui';
 
+import 'package:election/app/pages/login/login_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -13,8 +14,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  TextEditingController email = new TextEditingController();
-  TextEditingController senha = new TextEditingController();
+  LoginController controller = Modular.get<LoginController>();
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -48,7 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Padding(
                         padding: const EdgeInsets.only(left: 15.0),
                         child: TextFormField(
-                          controller: email,
+                          controller: controller.email,
                           decoration: InputDecoration(
                               border: InputBorder.none,
                               hintText: 'Digite seu e-mail',
@@ -67,7 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         padding: const EdgeInsets.only(left: 15.0),
                         child: TextFormField(
                           textAlign: TextAlign.start,
-                          controller: senha,
+                          controller: controller.password,
                           obscureText: true,
                           decoration: InputDecoration(
                               hintText: 'Digite sua senha',
@@ -85,7 +85,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Modular.to.pushNamed('/navigation');
+                        // Modular.to.pushNamed('/navigation');
+                        controller.doLogin(context);
                       },
                       child: Container(
                         width: size.width * 0.9,

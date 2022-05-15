@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'dart:ui';
 
+import 'package:election/app/auth/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -14,12 +15,14 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  late AuthController controller;
   @override
   void initState() {
     // TODO: implement initState
-    Timer(const Duration(seconds: 2), () {
-      Modular.to.pushNamed('/login');
-    });
+    // Timer(const Duration(seconds: 2), () {
+    //   Modular.to.pushNamed('/login');
+    // });
+    controller = Modular.get<AuthController>();
     super.initState();
   }
 

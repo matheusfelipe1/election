@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "46530161778",
+    "firebase_url": "https://election-3742c-default-rtdb.firebaseio.com",
+    "project_id": "election-3742c",
+    "storage_bucket": "election-3742c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:46530161778:android:fe5955b8c4a9f7b805a6eb",
+        "android_client_info": {
+          "package_name": "com.example.election"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "46530161778-of0vutfu2v8i7aaatoerulrt5riqlk31.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.election",
+            "certificate_hash": "a3d437c2fa460f9e19594c8fa5ecd086a04cfbf2"
+          }
+        },
+        {
+          "client_id": "46530161778-j54075ipf5gfqea845p6k66b9buih36l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNAKTcSAZ6c9132FLfM9gQ1IZ9GsuGZJQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "46530161778-j54075ipf5gfqea845p6k66b9buih36l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

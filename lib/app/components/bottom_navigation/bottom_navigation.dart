@@ -2,6 +2,7 @@
 
 import 'dart:async';
 
+import 'package:election/app/auth/auth_controller.dart';
 import 'package:election/app/pages/admin_user/relatorio_admin/report_user.dart';
 import 'package:election/app/pages/charts_all_turmas/switch_turma/switch_turma.dart';
 import 'package:election/app/pages/home/home.dart';
@@ -23,14 +24,17 @@ class BottomNavigationPage extends StatefulWidget {
 }
 
 class _BottomNavigationPageState extends State<BottomNavigationPage> {
+  AuthController auth = Modular.get<AuthController>();
   bool userAdmin = false;
   int _selectedIndex = 0;
-  String name = 'Matheus';
+  String name = '';
 
   List<Widget> _widgetOptions = [];
   @override
   void initState() {
     // TODO: implement initState
+    userAdmin = auth.user.admin;
+    name = auth.user.name;
     _widgetOptions = userAdmin
         ? [
             HomePage(),

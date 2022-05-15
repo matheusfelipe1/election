@@ -1,11 +1,13 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:election/app/auth/auth_controller.dart';
 import 'package:election/app/components/bottom_navigation/bottom_navigation.dart';
 import 'package:election/app/pages/admin_user/relatorio_admin/report_user_controller.dart';
 import 'package:election/app/pages/charts_all_turmas/page_chart_controller.dart';
 import 'package:election/app/pages/charts_all_turmas/switch_turma/switch_turma.dart';
 import 'package:election/app/pages/home/home_controller.dart';
 import 'package:election/app/pages/login/login.dart';
+import 'package:election/app/pages/login/login_controller.dart';
 import 'package:election/app/pages/profile/profile_details/profile_details.dart';
 import 'package:election/app/pages/profile/profile_details/profile_details_controller.dart';
 import 'package:election/app/pages/profile/profile_edit/profile_edit.dart';
@@ -17,11 +19,13 @@ import 'package:election/app/pages/signup/register_view_controller.dart';
 import 'package:election/app/pages/splash.dart';
 import 'package:election/app/pages/vote/vote_page_controller.dart';
 import 'package:election/app/pages/winner/message_success/message_success.dart';
+import 'package:election/app/shared/custom_http.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class AppModule extends Module {
   @override
   List<Bind> get binds => [
+        Bind((i) => CustomHttp()),
         Bind((i) => RegisterViewController()),
         Bind((i) => HomeController()),
         Bind((i) => ScreenChartsController()),
@@ -30,6 +34,8 @@ class AppModule extends Module {
         Bind((i) => ProfileDetailsController()),
         Bind((i) => ReportUserController()),
         Bind((i) => PageChartController()),
+        Bind((i) => LoginController()),
+        Bind((i) => AuthController()),
       ];
   @override
   List<ModularRoute> get routes => [

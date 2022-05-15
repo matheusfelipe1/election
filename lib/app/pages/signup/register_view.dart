@@ -2,6 +2,7 @@
 
 import 'package:election/app/pages/signup/register_view_controller.dart';
 import 'package:election/app/utils/modal_messages.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -92,7 +93,7 @@ class _RegisterViewState extends State<RegisterView> {
                   padding: const EdgeInsets.only(left: 15.0),
                   child: TextFormField(
                     textAlign: TextAlign.start,
-                    // controller: senha,
+                    controller: controller.name,
                     decoration: InputDecoration(
                         hintText: 'Nome *',
                         border: InputBorder.none,
@@ -112,6 +113,7 @@ class _RegisterViewState extends State<RegisterView> {
                   child: TextFormField(
                     textAlign: TextAlign.start,
                     // controller: senha,
+                    controller: controller.email,
                     decoration: InputDecoration(
                         hintText: 'E-mail *',
                         border: InputBorder.none,
@@ -131,6 +133,7 @@ class _RegisterViewState extends State<RegisterView> {
                   child: TextFormField(
                     textAlign: TextAlign.start,
                     // controller: senha,
+                    controller: controller.datNasc,
                     inputFormatters: [maskNasc],
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
@@ -152,6 +155,7 @@ class _RegisterViewState extends State<RegisterView> {
                   child: TextFormField(
                     textAlign: TextAlign.start,
                     // controller: senha,
+                    controller: controller.matricula,
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                         hintText: 'Matrícula *',
@@ -172,6 +176,7 @@ class _RegisterViewState extends State<RegisterView> {
                   child: TextFormField(
                     textAlign: TextAlign.start,
                     // controller: senha,
+                    controller: controller.password,
                     obscureText: true,
                     decoration: InputDecoration(
                         hintText: 'Senha *',
@@ -192,6 +197,7 @@ class _RegisterViewState extends State<RegisterView> {
                   child: TextFormField(
                     textAlign: TextAlign.start,
                     // controller: senha,
+                    controller: controller.confirmedPassword,
                     obscureText: true,
                     decoration: InputDecoration(
                         hintText: 'Confirmação de senha *',
@@ -225,6 +231,7 @@ class _RegisterViewState extends State<RegisterView> {
                           onChanged: (String? newValue) {
                             setState(() {
                               dropdownValue = newValue!;
+                              controller.idTurma = dropdownValue;
                             });
                           },
                           items: turmas
@@ -245,45 +252,62 @@ class _RegisterViewState extends State<RegisterView> {
               ),
               Container(
                 margin: EdgeInsets.only(top: 15),
-                child: Text('Você é usuário administrativo?',
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                        fontFamily: 'Poppins',
-                        color: Colors.black,
-                        fontSize: size.height * 0.025)),
-              ),
-              ListTile(
-                title: Text('Não',
-                    style: TextStyle(
-                        fontFamily: 'Poppins',
-                        color: Colors.black,
-                        fontSize: size.height * 0.025)),
-                leading: Radio<SingingCharacter>(
-                  value: SingingCharacter.unable,
-                  groupValue: _character,
-                  onChanged: (SingingCharacter? value) {
-                    setState(() {
-                      _character = value;
-                    });
-                  },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('Você é usuário administrativo?',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            fontFamily: 'Poppins',
+                            color: Colors.black,
+                            fontSize: size.height * 0.025)),
+                    SizedBox(
+                      width: size.width * 0.05,
+                    ),
+                    CupertinoSwitch(
+                      value: controller.isAdmin,
+                      onChanged: (value) {
+                        setState(() {
+                          controller.isAdmin = value;
+                        });
+                      },
+                    ),
+                  ],
                 ),
               ),
-              ListTile(
-                title: Text('Sim',
-                    style: TextStyle(
-                        fontFamily: 'Poppins',
-                        color: Colors.black,
-                        fontSize: size.height * 0.025)),
-                leading: Radio<SingingCharacter>(
-                  value: SingingCharacter.enable,
-                  groupValue: _character,
-                  onChanged: (SingingCharacter? value) {
-                    setState(() {
-                      _character = value;
-                    });
-                  },
-                ),
-              ),
+              // ListTile(
+              //   title: Text('Não',
+              //       style: TextStyle(
+              //           fontFamily: 'Poppins',
+              //           color: Colors.black,
+              //           fontSize: size.height * 0.025)),
+              //   leading: Radio<SingingCharacter>(
+              //     value: SingingCharacter.unable,
+              //     groupValue: _character,
+              //     onChanged: (SingingCharacter? value) {
+              //       setState(() {
+              //         _character = value;
+              //       });
+              //     },
+              //   ),
+              // ),
+
+              // ListTile(
+              //   title: Text('Sim',
+              //       style: TextStyle(
+              //           fontFamily: 'Poppins',
+              //           color: Colors.black,
+              //           fontSize: size.height * 0.025)),
+              //   leading: Radio<SingingCharacter>(
+              //     value: SingingCharacter.enable,
+              //     groupValue: _character,
+              //     onChanged: (SingingCharacter? value) {
+              //       setState(() {
+              //         _character = value;
+              //       });
+              //     },
+              //   ),
+              // ),
               Container(
                 margin: EdgeInsets.only(top: 24),
                 child: Divider(
@@ -352,16 +376,22 @@ class _RegisterViewState extends State<RegisterView> {
               ),
               GestureDetector(
                 onTap: () async {
-                  if (_character == SingingCharacter.enable) {
-                    await UtilsModalMessage().showMessageModal(
-                        title: 'Você é usuário administrativo do sistema?',
-                        func: () async {
-                          await controller.sendRequest();
-                        },
-                        colorButton: Colors.green,
-                        context: context);
-                  } else
-                    Modular.to.pushNamed('/register-ok');
+                  if (controller.password.text !=
+                      controller.confirmedPassword.text)
+                    UtilsModalMessage()
+                        .generalToast(title: 'Senhas não confere.');
+                  else {
+                    if (controller.isAdmin) {
+                      await UtilsModalMessage().showMessageModal(
+                          title: 'Você é usuário administrativo do sistema?',
+                          func: () async {
+                            await controller.registerUser(context);
+                          },
+                          colorButton: Colors.green,
+                          context: context);
+                    } else
+                      controller.registerUser(context);
+                  }
                 },
                 child: Container(
                     width: size.width * 0.9,

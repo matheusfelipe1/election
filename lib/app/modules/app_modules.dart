@@ -17,6 +17,7 @@ import 'package:election/app/pages/screen_charts/screen_charts_controller.dart';
 import 'package:election/app/pages/signup/register_view.dart';
 import 'package:election/app/pages/signup/register_view_controller.dart';
 import 'package:election/app/pages/splash.dart';
+import 'package:election/app/pages/subscribe/subscribe_controller.dart';
 import 'package:election/app/pages/vote/vote_page_controller.dart';
 import 'package:election/app/pages/winner/message_success/message_success.dart';
 import 'package:election/app/shared/custom_http.dart';
@@ -36,6 +37,7 @@ class AppModule extends Module {
         Bind((i) => PageChartController()),
         Bind((i) => LoginController()),
         Bind((i) => AuthController()),
+        Bind((i) => SubscribeController()),
       ];
   @override
   List<ModularRoute> get routes => [

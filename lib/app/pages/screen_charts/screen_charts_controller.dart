@@ -1,4 +1,12 @@
+// ignore_for_file: curly_braces_in_flow_control_structures
+
+import 'package:dio/dio.dart';
+import 'package:election/app/auth/auth_controller.dart';
 import 'package:election/app/pages/screen_charts/screen_charts.dart';
+import 'package:election/app/shared/custom_http.dart';
+import 'package:election/app/utils/modal_messages.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 
 part 'screen_charts_controller.g.dart';
@@ -7,6 +15,10 @@ class ScreenChartsController = _ScreenChartsControllerBase
     with _$ScreenChartsController;
 
 abstract class _ScreenChartsControllerBase with Store {
+  final _http = CustomHttp();
+  @observable
+  AuthController auth = Modular.get<AuthController>();
+  late VoidCallback func;
   @observable
   List dataCandidates = [
     {
@@ -47,5 +59,62 @@ abstract class _ScreenChartsControllerBase with Store {
       if (b['qttVotes'] > a['qttVotes']) return 1;
       return 0;
     });
+  }
+
+  @observable
+  getValuesCharts() async {
+    UtilsModalMessage().loading(1);
+    try {
+      Response resp =
+          await _http.client.get('/v1/get-charts/${auth.user.idTurma}');
+      if (resp.statusCode == 200) {
+        if (resp.data['STATUS'] == 'SUCCESS') {
+          var result = resp.data['DATA'];
+          if (result is List) {
+            for (var item in result) {
+              if (item is Map && item['candidate'] == true) {
+                var date =
+                    item['datNasc'].toString().split('/').reversed.join('-');
+                DateTime newAge = DateTime.parse(date);
+                DateTime now = DateTime.now();
+                var v = (now.year + now.month);
+                var z = (newAge.year + newAge.month);
+                var age = v - z;
+                if (item['name'] == 'Juliana')
+                  // ignore: curly_braces_in_flow_control_structures
+                  dataCandidates.add({
+                    'name': item['name'],
+                    'age': age,
+                    'turma':
+                        item['idTurma'].toString().replaceAll('Turma ', ''),
+                    'qttVotes': 40.0,
+                    'e-mail': item['userEmail']
+                  });
+                else
+                  dataCandidates.add({
+                    'name': item['name'],
+                    'age': age,
+                    'turma':
+                        item['idTurma'].toString().replaceAll('Turma ', ''),
+                    'qttVotes': 80.0,
+                    'e-mail': item['userEmail']
+                  });
+                organizerData();
+                func.call();
+                print(item);
+                UtilsModalMessage().loading(0);
+              }
+            }
+          }
+        }
+      } else {
+        dataCandidates.clear();
+      }
+      UtilsModalMessage().loading(0);
+    } catch (e) {
+      print(e);
+      dataCandidates.clear();
+      UtilsModalMessage().loading(0);
+    }
   }
 }

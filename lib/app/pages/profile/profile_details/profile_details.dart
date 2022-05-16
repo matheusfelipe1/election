@@ -1,3 +1,4 @@
+import 'package:election/app/auth/auth_controller.dart';
 import 'package:election/app/utils/modal_messages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -13,6 +14,7 @@ class ProfileDetails extends StatefulWidget {
 }
 
 class _ProfileDetailsState extends State<ProfileDetails> {
+  AuthController auth = Modular.get<AuthController>();
   bool isAdminT = false;
   @override
   void initState() {
@@ -113,7 +115,7 @@ class _ProfileDetailsState extends State<ProfileDetails> {
                 ],
               ),
             ),
-            isAdminT
+            auth.user.alredyVoted || auth.user.candidate || auth.user.admin
                 ? Container()
                 : Center(
                     child: Container(

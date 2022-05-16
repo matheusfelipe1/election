@@ -20,8 +20,14 @@ class _SwitchChartsState extends State<SwitchCharts> {
   void initState() {
     // TODO: implement initState
     controller.organizerData();
-
+    controller.dataCandidates.clear();
+    controller.func = updateState;
+    controller.getAllCandidates();
     super.initState();
+  }
+
+  updateState() {
+    if (mounted) setState(() {});
   }
 
   @override

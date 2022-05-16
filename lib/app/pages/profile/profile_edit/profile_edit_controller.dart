@@ -1,3 +1,4 @@
+import 'package:election/app/auth/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:image_picker/image_picker.dart';
@@ -11,6 +12,28 @@ class ProfileEditController = _ProfileEditControllerBase
 abstract class _ProfileEditControllerBase with Store {
   @observable
   var pathImage;
+  @observable
+  TextEditingController email = new TextEditingController();
+  @observable
+  TextEditingController password = new TextEditingController();
+  @observable
+  TextEditingController name = new TextEditingController();
+  @observable
+  TextEditingController confirmedPassword = new TextEditingController();
+  @observable
+  TextEditingController datNasc = new TextEditingController();
+  @observable
+  TextEditingController matricula = new TextEditingController();
+  @observable
+  AuthController auth = Modular.get<AuthController>();
+
+  @action
+  renderValues() {
+    name.text = auth.user.name;
+    email.text = auth.user.email;
+    matricula.text = auth.user.matricula;
+    datNasc.text = auth.user.datNasc;
+  }
 
   @action
   showModalGetPhoto(BuildContext context, VoidCallback func) async {

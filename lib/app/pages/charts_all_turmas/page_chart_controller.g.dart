@@ -73,6 +73,12 @@ mixin _$PageChartController on _PageChartControllerBase, Store {
     });
   }
 
+  @override
+  ObservableFuture getAllCandidates() {
+    final _$future = super.getAllCandidates();
+    return ObservableFuture(_$future, context: context);
+  }
+
   late final _$_PageChartControllerBaseActionController =
       ActionController(name: '_PageChartControllerBase', context: context);
 

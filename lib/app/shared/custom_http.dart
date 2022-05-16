@@ -25,6 +25,7 @@ class CustomHttp {
         //
       }
       print(error.response);
+      return handler.next(error);
     }));
     client.options.connectTimeout = 60000;
   }

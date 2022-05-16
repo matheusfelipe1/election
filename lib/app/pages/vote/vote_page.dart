@@ -1,3 +1,4 @@
+import 'package:election/app/auth/auth_controller.dart';
 import 'package:election/app/pages/vote/vote_page_controller.dart';
 import 'package:election/app/utils/modal_messages.dart';
 import 'package:flutter/material.dart';
@@ -12,11 +13,19 @@ class VotePage extends StatefulWidget {
 
 class _VotePageState extends State<VotePage> {
   VotePageController controller = Modular.get<VotePageController>();
+  AuthController auth = Modular.get<AuthController>();
   @override
   void initState() {
     // TODO: implement initState
+    controller.dataCandidates.clear();
     controller.organizerData();
+    controller.func = updateState;
+    controller.getValuesCharts();
     super.initState();
+  }
+
+  updateState() {
+    if (mounted) setState(() {});
   }
 
   @override
@@ -42,72 +51,113 @@ class _VotePageState extends State<VotePage> {
                       return Container(
                         child: Card(
                           elevation: 4,
-                          child: ListTile(
-                              onTap: () {
-                                Modular.to.pushNamed('/profile-details',
-                                    arguments: controller.dataCandidates[i]);
-                              },
-                              leading: CircleAvatar(
-                                maxRadius: 25,
-                                backgroundColor: Colors.white,
-                                child: Icon(
-                                  Icons.person,
-                                  color: Colors.black,
-                                  size: size.height * 0.04,
-                                ),
-                              ),
-                              title: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    controller.dataCandidates[i]['name'],
-                                    style: const TextStyle(
-                                        fontFamily: 'Poppins',
-                                        color: Colors.black),
-                                  ),
-                                  Text(
-                                    controller.dataCandidates[i]['age']
-                                            .toString() +
-                                        ' anos',
-                                    style: const TextStyle(
-                                        fontFamily: 'Poppins',
-                                        color: Colors.black),
-                                  ),
-                                ],
-                              ),
-                              trailing: GestureDetector(
-                                onTap: () async {
-                                  await UtilsModalMessage().showMessageModal(
-                                      title:
-                                          'Deseja realmente votar no candidato(a) ${controller.dataCandidates[i]['name']}?',
-                                      func: () {
-                                        controller.vote(controller
-                                            .dataCandidates[i]['name']);
-                                      },
-                                      colorButton: Colors.green,
-                                      context: context);
-                                },
-                                child: Container(
-                                    width: size.width * 0.25,
-                                    height: size.height * 0.03,
-                                    margin: EdgeInsets.only(
-                                        top: size.height * 0.00),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          color: Colors.blue,
-                                          borderRadius:
-                                              BorderRadius.circular(35)),
-                                      child: Center(
-                                        child: Text('Votar',
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontFamily: 'Poppins',
-                                                fontSize: size.height * 0.02)),
-                                      ),
-                                    )
-                                    // Image.asset('assets/images/icon_ok.png', width: 10, height: 10),
+                          child: auth.user.admin ||
+                                  auth.user.candidate ||
+                                  auth.user.alredyVoted
+                              ? ListTile(
+                                  onTap: () {
+                                    Modular.to.pushNamed('/profile-details',
+                                        arguments:
+                                            controller.dataCandidates[i]);
+                                  },
+                                  leading: CircleAvatar(
+                                    maxRadius: 25,
+                                    backgroundColor: Colors.white,
+                                    child: Icon(
+                                      Icons.person,
+                                      color: Colors.black,
+                                      size: size.height * 0.04,
                                     ),
-                              )),
+                                  ),
+                                  title: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        controller.dataCandidates[i]['name'],
+                                        style: const TextStyle(
+                                            fontFamily: 'Poppins',
+                                            color: Colors.black),
+                                      ),
+                                      Text(
+                                        controller.dataCandidates[i]['age']
+                                                .toString() +
+                                            ' anos',
+                                        style: const TextStyle(
+                                            fontFamily: 'Poppins',
+                                            color: Colors.black),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              : ListTile(
+                                  onTap: () {
+                                    Modular.to.pushNamed('/profile-details',
+                                        arguments:
+                                            controller.dataCandidates[i]);
+                                  },
+                                  leading: CircleAvatar(
+                                    maxRadius: 25,
+                                    backgroundColor: Colors.white,
+                                    child: Icon(
+                                      Icons.person,
+                                      color: Colors.black,
+                                      size: size.height * 0.04,
+                                    ),
+                                  ),
+                                  title: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        controller.dataCandidates[i]['name'],
+                                        style: const TextStyle(
+                                            fontFamily: 'Poppins',
+                                            color: Colors.black),
+                                      ),
+                                      Text(
+                                        controller.dataCandidates[i]['age']
+                                                .toString() +
+                                            ' anos',
+                                        style: const TextStyle(
+                                            fontFamily: 'Poppins',
+                                            color: Colors.black),
+                                      ),
+                                    ],
+                                  ),
+                                  trailing: GestureDetector(
+                                    onTap: () async {
+                                      await UtilsModalMessage().showMessageModal(
+                                          title: 'Deseja realmente votar no candidato(a) ${controller.dataCandidates[i]['name']}?',
+                                          func: () {
+                                            controller.vote(controller
+                                                .dataCandidates[i]['name']);
+                                          },
+                                          colorButton: Colors.green,
+                                          context: context);
+                                    },
+                                    child: Container(
+                                        width: size.width * 0.25,
+                                        height: size.height * 0.03,
+                                        margin: EdgeInsets.only(
+                                            top: size.height * 0.00),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              color: Colors.blue,
+                                              borderRadius:
+                                                  BorderRadius.circular(35)),
+                                          child: Center(
+                                            child: Text('Votar',
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontFamily: 'Poppins',
+                                                    fontSize:
+                                                        size.height * 0.02)),
+                                          ),
+                                        )
+                                        // Image.asset('assets/images/icon_ok.png', width: 10, height: 10),
+                                        ),
+                                  )),
                         ),
                       );
                     }),

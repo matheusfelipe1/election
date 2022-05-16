@@ -16,7 +16,18 @@ abstract class _AuthControllerBase with Store {
   @observable
   String id = '';
   @observable
-  late UserModel user;
+  // ignore: unnecessary_new
+  UserModel user = new UserModel(
+      userId: '',
+      name: '',
+      email: '',
+      admin: false,
+      idTurma: '',
+      urlFoto: '',
+      datNasc: '',
+      matricula: '',
+      alredyVoted: false,
+      candidate: false);
 
   _AuthControllerBase() {
     _init();
@@ -24,17 +35,6 @@ abstract class _AuthControllerBase with Store {
 
   _init() async {
     // ignore: unnecessary_new
-    user = new UserModel(
-        userId: '',
-        name: '',
-        email: '',
-        admin: false,
-        idTurma: '',
-        urlFoto: '',
-        datNasc: '',
-        matricula: '',
-        alredyVoted: false,
-        candidate: false);
     var shared = await SharedPreferences.getInstance();
     var idGet = shared.getString('idUser');
     if (idGet != null) {
@@ -69,5 +69,34 @@ abstract class _AuthControllerBase with Store {
       print(id);
       Modular.to.pushNamed('/login');
     }
+  }
+
+  @action
+  deleteProfile() async {
+    UtilsModalMessage().loading(1);
+    try {
+      Response resp =
+          await _http.client.delete('/v1/deleteUser/${user.userId}');
+      if (resp.statusCode == 200) {
+        print(resp.data);
+        loggout();
+        UtilsModalMessage().loading(0);
+      }
+    } catch (e) {
+      print(e);
+      UtilsModalMessage().loading(0);
+      UtilsModalMessage()
+          .generalToast(title: 'Não foi possível excluir seu perfil');
+    }
+  }
+
+  @action
+  loggout() async {
+    print('logout');
+    var shared = await SharedPreferences.getInstance();
+    shared.remove('token');
+    shared.remove('refreshToken');
+    shared.remove('idUser');
+    Modular.to.pushNamed('/login');
   }
 }

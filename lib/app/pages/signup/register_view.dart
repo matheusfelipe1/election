@@ -206,7 +206,7 @@ class _RegisterViewState extends State<RegisterView> {
                   ),
                 ),
               ),
-              _character == SingingCharacter.enable
+              controller.isAdmin
                   ? Container()
                   : Container(
                       width: size.width * 0.9,

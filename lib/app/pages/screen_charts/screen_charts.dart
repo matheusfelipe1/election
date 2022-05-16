@@ -1,3 +1,4 @@
+import 'package:election/app/auth/auth_controller.dart';
 import 'package:election/app/pages/screen_charts/screen_charts_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
@@ -15,7 +16,22 @@ class _ScreenChartsState extends State<ScreenCharts> {
   @override
   void initState() {
     // TODO: implement initState
+    controller.func = updateState;
     controller.organizerData();
+    controller.dataCandidates.clear();
+    controller.func = updateState;
+    _init();
+    super.initState();
+  }
+
+  updateState() {
+    if (mounted) setState(() {});
+  }
+
+  _init() async {
+    controller.func = updateState;
+    await controller.getValuesCharts();
+    controller.func = updateState;
     int ctt = 0;
     for (var item in controller.dataCandidates) {
       controller.data.add(SubscriberSeries(
@@ -31,7 +47,6 @@ class _ScreenChartsState extends State<ScreenCharts> {
       ));
       ctt++;
     }
-    super.initState();
   }
 
   @override
@@ -69,6 +84,7 @@ class _SubscriberChartState extends State<SubscriberChart> {
 
   @override
   Widget build(BuildContext context) {
+    AuthController auth = Modular.get<AuthController>();
     Size size = MediaQuery.of(context).size;
     List<charts.Series<SubscriberSeries, String>> series = [
       charts.Series(
@@ -91,7 +107,7 @@ class _SubscriberChartState extends State<SubscriberChart> {
                 child: Column(
                   children: <Widget>[
                     Text(
-                      "Turma 26",
+                      auth.user.idTurma,
                       style: const TextStyle(
                           fontFamily: 'Poppins', color: Colors.black),
                       // style: Theme.of(context).textTheme.body2,

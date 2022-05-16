@@ -24,8 +24,8 @@ abstract class _LoginControllerBase with Store {
   AuthController auth = Modular.get<AuthController>();
 
   @action
-  doLogin(BuildContext context) async {
-    UtilsModalMessage().showLoading(context);
+  Future doLogin(BuildContext context) async {
+    UtilsModalMessage().loading(1);
     try {
       final map = {'email': email.text, 'password': password.text};
       Response resp =
@@ -42,19 +42,20 @@ abstract class _LoginControllerBase with Store {
 
           auth.id = resultId;
           // return Modular.to.pushNamed('/navigation');
+          UtilsModalMessage().loading(0);
           return auth.getUser();
         } else {
+          UtilsModalMessage().loading(0);
           return UtilsModalMessage()
               .generalToast(title: 'Erro ao efetuar o login.');
         }
       }
-
+      UtilsModalMessage().loading(0);
       UtilsModalMessage().generalToast(title: 'Erro ao efetuar o login.');
-      return null;
     } catch (e) {
-      await UtilsModalMessage().closeLoading();
+      print(e);
+      await UtilsModalMessage().loading(0);
       UtilsModalMessage().generalToast(title: 'Erro ao efetuar o login.');
-      return null;
     }
   }
 }

@@ -140,7 +140,7 @@ abstract class _RegisterViewControllerBase with Store {
 
   @action
   registerUser(BuildContext context) async {
-    UtilsModalMessage().showLoading(context);
+    UtilsModalMessage().loading(1);
     try {
       final map = {
         "email": email.text.toString(),
@@ -162,19 +162,19 @@ abstract class _RegisterViewControllerBase with Store {
         if (result['STATUS'] == 'SUCCESS') {
           UtilsModalMessage()
               .generalToast(title: 'Usuário cadastrado com sucesso');
-          EasyLoading.dismiss(animation: false);
+          UtilsModalMessage().loading(0);
           return Modular.to.pushNamed('/register-ok');
         } else {
-          EasyLoading.dismiss(animation: false);
+          UtilsModalMessage().loading(0);
           UtilsModalMessage().generalToast(title: 'Erro ao cadastrar usuário');
         }
       }
       print(response.data);
-      EasyLoading.dismiss(animation: false);
+      UtilsModalMessage().loading(0);
       UtilsModalMessage().generalToast(title: 'Erro ao cadastrar usuário');
     } catch (e) {
       print(e);
-      await EasyLoading.dismiss(animation: false);
+      await UtilsModalMessage().loading(0);
       UtilsModalMessage().generalToast(title: 'Erro ao cadastrar usuário');
     }
   }

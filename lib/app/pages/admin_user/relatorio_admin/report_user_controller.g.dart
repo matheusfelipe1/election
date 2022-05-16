@@ -47,6 +47,12 @@ mixin _$ReportUserController on _ReportUserControllerBase, Store {
     return ObservableFuture(_$future, context: context);
   }
 
+  @override
+  ObservableFuture getAllCandidates() {
+    final _$future = super.getAllCandidates();
+    return ObservableFuture(_$future, context: context);
+  }
+
   late final _$_ReportUserControllerBaseActionController =
       ActionController(name: '_ReportUserControllerBase', context: context);
 

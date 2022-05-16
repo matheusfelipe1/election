@@ -30,6 +30,9 @@ class _ReportUserState extends State<ReportUser> {
   @override
   void initState() {
     // TODO: implement initState
+    controller.func = updateState;
+    controller.dataCandidates.clear();
+    controller.getAllCandidates();
     controller.organizerData();
     controller.data.clear();
     super.initState();

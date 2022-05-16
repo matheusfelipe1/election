@@ -25,6 +25,182 @@ mixin _$RegisterViewController on _RegisterViewControllerBase, Store {
     });
   }
 
+  late final _$emailAtom =
+      Atom(name: '_RegisterViewControllerBase.email', context: context);
+
+  @override
+  TextEditingController get email {
+    _$emailAtom.reportRead();
+    return super.email;
+  }
+
+  @override
+  set email(TextEditingController value) {
+    _$emailAtom.reportWrite(value, super.email, () {
+      super.email = value;
+    });
+  }
+
+  late final _$passwordAtom =
+      Atom(name: '_RegisterViewControllerBase.password', context: context);
+
+  @override
+  TextEditingController get password {
+    _$passwordAtom.reportRead();
+    return super.password;
+  }
+
+  @override
+  set password(TextEditingController value) {
+    _$passwordAtom.reportWrite(value, super.password, () {
+      super.password = value;
+    });
+  }
+
+  late final _$nameAtom =
+      Atom(name: '_RegisterViewControllerBase.name', context: context);
+
+  @override
+  TextEditingController get name {
+    _$nameAtom.reportRead();
+    return super.name;
+  }
+
+  @override
+  set name(TextEditingController value) {
+    _$nameAtom.reportWrite(value, super.name, () {
+      super.name = value;
+    });
+  }
+
+  late final _$confirmedPasswordAtom = Atom(
+      name: '_RegisterViewControllerBase.confirmedPassword', context: context);
+
+  @override
+  TextEditingController get confirmedPassword {
+    _$confirmedPasswordAtom.reportRead();
+    return super.confirmedPassword;
+  }
+
+  @override
+  set confirmedPassword(TextEditingController value) {
+    _$confirmedPasswordAtom.reportWrite(value, super.confirmedPassword, () {
+      super.confirmedPassword = value;
+    });
+  }
+
+  late final _$isAdminAtom =
+      Atom(name: '_RegisterViewControllerBase.isAdmin', context: context);
+
+  @override
+  bool get isAdmin {
+    _$isAdminAtom.reportRead();
+    return super.isAdmin;
+  }
+
+  @override
+  set isAdmin(bool value) {
+    _$isAdminAtom.reportWrite(value, super.isAdmin, () {
+      super.isAdmin = value;
+    });
+  }
+
+  late final _$datNascAtom =
+      Atom(name: '_RegisterViewControllerBase.datNasc', context: context);
+
+  @override
+  TextEditingController get datNasc {
+    _$datNascAtom.reportRead();
+    return super.datNasc;
+  }
+
+  @override
+  set datNasc(TextEditingController value) {
+    _$datNascAtom.reportWrite(value, super.datNasc, () {
+      super.datNasc = value;
+    });
+  }
+
+  late final _$matriculaAtom =
+      Atom(name: '_RegisterViewControllerBase.matricula', context: context);
+
+  @override
+  TextEditingController get matricula {
+    _$matriculaAtom.reportRead();
+    return super.matricula;
+  }
+
+  @override
+  set matricula(TextEditingController value) {
+    _$matriculaAtom.reportWrite(value, super.matricula, () {
+      super.matricula = value;
+    });
+  }
+
+  late final _$idTurmaAtom =
+      Atom(name: '_RegisterViewControllerBase.idTurma', context: context);
+
+  @override
+  String get idTurma {
+    _$idTurmaAtom.reportRead();
+    return super.idTurma;
+  }
+
+  @override
+  set idTurma(String value) {
+    _$idTurmaAtom.reportWrite(value, super.idTurma, () {
+      super.idTurma = value;
+    });
+  }
+
+  late final _$base64ToSendAtom =
+      Atom(name: '_RegisterViewControllerBase.base64ToSend', context: context);
+
+  @override
+  dynamic get base64ToSend {
+    _$base64ToSendAtom.reportRead();
+    return super.base64ToSend;
+  }
+
+  @override
+  set base64ToSend(dynamic value) {
+    _$base64ToSendAtom.reportWrite(value, super.base64ToSend, () {
+      super.base64ToSend = value;
+    });
+  }
+
+  late final _$extensionnAtom =
+      Atom(name: '_RegisterViewControllerBase.extensionn', context: context);
+
+  @override
+  String get extensionn {
+    _$extensionnAtom.reportRead();
+    return super.extensionn;
+  }
+
+  @override
+  set extensionn(String value) {
+    _$extensionnAtom.reportWrite(value, super.extensionn, () {
+      super.extensionn = value;
+    });
+  }
+
+  late final _$filenameAtom =
+      Atom(name: '_RegisterViewControllerBase.filename', context: context);
+
+  @override
+  String get filename {
+    _$filenameAtom.reportRead();
+    return super.filename;
+  }
+
+  @override
+  set filename(String value) {
+    _$filenameAtom.reportWrite(value, super.filename, () {
+      super.filename = value;
+    });
+  }
+
   late final _$showModalGetPhotoAsyncAction = AsyncAction(
       '_RegisterViewControllerBase.showModalGetPhoto',
       context: context);
@@ -45,6 +221,14 @@ mixin _$RegisterViewController on _RegisterViewControllerBase, Store {
         .run(() => super.accessGalleryOrCamera(source, func));
   }
 
+  late final _$registerUserAsyncAction =
+      AsyncAction('_RegisterViewControllerBase.registerUser', context: context);
+
+  @override
+  Future registerUser(BuildContext context) {
+    return _$registerUserAsyncAction.run(() => super.registerUser(context));
+  }
+
   late final _$_RegisterViewControllerBaseActionController =
       ActionController(name: '_RegisterViewControllerBase', context: context);
 
@@ -62,7 +246,18 @@ mixin _$RegisterViewController on _RegisterViewControllerBase, Store {
   @override
   String toString() {
     return '''
-pathImage: ${pathImage}
+pathImage: ${pathImage},
+email: ${email},
+password: ${password},
+name: ${name},
+confirmedPassword: ${confirmedPassword},
+isAdmin: ${isAdmin},
+datNasc: ${datNasc},
+matricula: ${matricula},
+idTurma: ${idTurma},
+base64ToSend: ${base64ToSend},
+extensionn: ${extensionn},
+filename: ${filename}
     ''';
   }
 }

@@ -32,5 +32,5 @@ void configLoading() {
     ..textColor = Colors.yellow
     ..maskColor = Colors.black.withOpacity(0.5)
     ..userInteractions = true
-    ..dismissOnTap = true;
+    ..dismissOnTap = false;
 }

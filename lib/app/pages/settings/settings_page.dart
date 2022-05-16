@@ -1,6 +1,8 @@
+import 'package:election/app/auth/auth_controller.dart';
 import 'package:election/app/utils/modal_messages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -10,17 +12,17 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  loggout() {
-    print('logout');
-    Modular.to.pushNamed('/login');
-  }
-
-  deleteProfile() {
-    print('deleted');
-  }
+  AuthController auth = Modular.get<AuthController>();
 
   @override
   Widget build(BuildContext context) {
+    String age = '';
+    DateTime agr = DateTime.now();
+    var newQuery = auth.user.datNasc.toString().split('/').reversed.join('-');
+    DateTime query = DateTime.parse(newQuery);
+    var v = (agr.year + agr.month);
+    var z = (query.year + query.month);
+    age = (v - z).toString();
     Size size = MediaQuery.of(context).size;
     return Container(
       child: Column(
@@ -75,28 +77,34 @@ class _SettingsPageState extends State<SettingsPage> {
                                   children: [
                                     Padding(
                                       padding: const EdgeInsets.only(top: 5.0),
-                                      child: Text('Matheus Felipe Silva Santos',
+                                      child: Text(auth.user.name.toString(),
                                           style: TextStyle(
                                               color: Colors.black,
                                               fontFamily: 'Poppins')),
                                     ),
+                                    auth.user.admin
+                                        ? Container()
+                                        : Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 5.0),
+                                            child: Text(auth.user.idTurma,
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontFamily: 'Poppins')),
+                                          ),
+                                    auth.user.admin
+                                        ? Container()
+                                        : Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 5.0),
+                                            child: Text(age + ' Anos',
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontFamily: 'Poppins')),
+                                          ),
                                     Padding(
                                       padding: const EdgeInsets.only(top: 5.0),
-                                      child: Text('Turma 26',
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontFamily: 'Poppins')),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 5.0),
-                                      child: Text('21 anos',
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontFamily: 'Poppins')),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 5.0),
-                                      child: Text('matheusteste@gmail.com',
+                                      child: Text(auth.user.email,
                                           style: TextStyle(
                                               color: Colors.black,
                                               fontFamily: 'Poppins')),
@@ -137,7 +145,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             await UtilsModalMessage().showMessageModal(
                                 title: 'Deseja realmente sair?',
                                 func: () {
-                                  loggout();
+                                  auth.loggout();
                                 },
                                 colorButton: Colors.green,
                                 context: context);
@@ -187,7 +195,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             await UtilsModalMessage().showMessageModal(
                                 title: 'Deseja realmente excluir sua conta?',
                                 func: () {
-                                  deleteProfile();
+                                  auth.deleteProfile();
                                 },
                                 colorButton: Colors.red,
                                 context: context);

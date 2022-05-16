@@ -15,8 +15,11 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     // TODO: implement initState
+    controller.dataCandidates.clear();
     controller.organizerData();
     print(controller.dataCandidates);
+    controller.getAllCandidates();
+    controller.func = updateState;
     super.initState();
   }
 
@@ -32,6 +35,10 @@ class _HomePageState extends State<HomePage> {
                 .contains(query.toString().toLowerCase()))
             .toList();
       });
+  }
+
+  updateState() {
+    if (mounted) setState(() {});
   }
 
   @override

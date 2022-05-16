@@ -1,3 +1,5 @@
+import 'package:election/app/auth/auth_controller.dart';
+import 'package:election/app/pages/subscribe/subscribe_controller.dart';
 import 'package:election/app/utils/modal_messages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -10,10 +12,8 @@ class SubscribePage extends StatefulWidget {
 }
 
 class _SubscribePageState extends State<SubscribePage> {
-  register() {
-    print('oi');
-    Modular.to.pop();
-  }
+  SubscribeController controller = Modular.get<SubscribeController>();
+  AuthController auth = Modular.get<AuthController>();
 
   @override
   Widget build(BuildContext context) {
@@ -84,37 +84,61 @@ class _SubscribePageState extends State<SubscribePage> {
                                 fontSize: 12)),
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () async {
-                        // Modular.to.pushNamed('/login');
-                        await UtilsModalMessage().showMessageModal(
-                            title:
-                                'Deseja realmente se candidatar a representante de turma?',
-                            func: register,
-                            colorButton: Colors.green,
-                            context: context);
-                      },
-                      child: Container(
-                          width: size.width * 0.45,
-                          margin: EdgeInsets.only(top: size.height * 0.02),
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: Colors.green[700],
-                                borderRadius: BorderRadius.circular(35)),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Center(
-                                child: Text('Candidatar',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontFamily: 'Poppins',
-                                        fontSize: size.height * 0.02)),
+                    auth.user.candidate
+                        ? Container(
+                            width: size.width * 0.45,
+                            margin: EdgeInsets.only(top: size.height * 0.02),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.grey,
+                                  borderRadius: BorderRadius.circular(35)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Center(
+                                  child: Text('Você já se candidatou',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontFamily: 'Poppins',
+                                          fontSize: size.height * 0.02)),
+                                ),
                               ),
-                            ),
+                            )
+                            // Image.asset('assets/images/icon_ok.png', width: 10, height: 10),
+                            )
+                        : GestureDetector(
+                            onTap: () async {
+                              // Modular.to.pushNamed('/login');
+                              await UtilsModalMessage().showMessageModal(
+                                  title:
+                                      'Deseja realmente se candidatar a representante de turma?',
+                                  func: () {
+                                    controller.subscribe();
+                                  },
+                                  colorButton: Colors.green,
+                                  context: context);
+                            },
+                            child: Container(
+                                width: size.width * 0.45,
+                                margin:
+                                    EdgeInsets.only(top: size.height * 0.02),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.green[700],
+                                      borderRadius: BorderRadius.circular(35)),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Center(
+                                      child: Text('Candidatar',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontFamily: 'Poppins',
+                                              fontSize: size.height * 0.02)),
+                                    ),
+                                  ),
+                                )
+                                // Image.asset('assets/images/icon_ok.png', width: 10, height: 10),
+                                ),
                           )
-                          // Image.asset('assets/images/icon_ok.png', width: 10, height: 10),
-                          ),
-                    )
                   ],
                 ),
               ),

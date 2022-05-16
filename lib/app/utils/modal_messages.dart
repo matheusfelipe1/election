@@ -82,31 +82,34 @@ class UtilsModalMessage {
         });
   }
 
-  showLoading(BuildContext context) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return Dialog(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: new Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                new CircularProgressIndicator(),
-                SizedBox(
-                  width: 25,
-                ),
-                new Text("Aguarde.."),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  closeLoading() {
-    Modular.to.pop();
+  loading(int param) {
+    // showDialog(
+    //   context: context,
+    //   barrierDismissible: false,
+    //   builder: (BuildContext context) {
+    //     return Dialog(
+    //       child: Padding(
+    //         padding: const EdgeInsets.all(8.0),
+    //         child: new Row(
+    //           mainAxisSize: MainAxisSize.min,
+    //           children: [
+    //             new CircularProgressIndicator(),
+    //             SizedBox(
+    //               width: 25,
+    //             ),
+    //             new Text("Aguarde.."),
+    //           ],
+    //         ),
+    //       ),
+    //     );
+    //   },
+    // );
+    switch (param) {
+      case 1:
+        EasyLoading.show(maskType: EasyLoadingMaskType.custom);
+        break;
+      default:
+        EasyLoading.dismiss();
+    }
   }
 }

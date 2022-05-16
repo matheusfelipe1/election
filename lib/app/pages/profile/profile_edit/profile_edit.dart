@@ -1,3 +1,4 @@
+import 'package:election/app/auth/auth_controller.dart';
 import 'package:election/app/pages/profile/profile_edit/profile_edit_controller.dart';
 import 'package:election/app/utils/modal_messages.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ class ProfileEdit extends StatefulWidget {
 
 class _ProfileEditState extends State<ProfileEdit> {
   ProfileEditController controller = Modular.get<ProfileEditController>();
+  AuthController auth = Modular.get<AuthController>();
   updateState() {
     if (mounted) setState(() {});
   }
@@ -22,6 +24,13 @@ class _ProfileEditState extends State<ProfileEdit> {
       new MaskTextInputFormatter(mask: '##/##/####');
   MaskTextInputFormatter maskCPF =
       new MaskTextInputFormatter(mask: '###.###.###-##');
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    controller.renderValues();
+    super.initState();
+  }
 
   Matrix4 matrix = Matrix4.identity();
   @override
@@ -65,7 +74,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                   padding: const EdgeInsets.only(left: 15.0),
                   child: TextFormField(
                     textAlign: TextAlign.start,
-                    // controller: senha,
+                    controller: controller.name,
                     decoration: InputDecoration(
                         hintText: 'Nome *',
                         border: InputBorder.none,
@@ -84,6 +93,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                   padding: const EdgeInsets.only(left: 15.0),
                   child: TextFormField(
                     textAlign: TextAlign.start,
+                    controller: controller.email,
                     // controller: senha,
                     decoration: InputDecoration(
                         hintText: 'E-mail *',
@@ -103,6 +113,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                   padding: const EdgeInsets.only(left: 15.0),
                   child: TextFormField(
                     textAlign: TextAlign.start,
+                    controller: controller.datNasc,
                     // controller: senha,
                     inputFormatters: [maskNasc],
                     keyboardType: TextInputType.number,
@@ -124,6 +135,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                   padding: const EdgeInsets.only(left: 15.0),
                   child: TextFormField(
                     textAlign: TextAlign.start,
+                    controller: controller.matricula,
                     // controller: senha,
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
@@ -144,6 +156,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                   padding: const EdgeInsets.only(left: 15.0),
                   child: TextFormField(
                     textAlign: TextAlign.start,
+                    controller: controller.password,
                     // controller: senha,
                     obscureText: true,
                     decoration: InputDecoration(
@@ -165,6 +178,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                   child: TextFormField(
                     textAlign: TextAlign.start,
                     // controller: senha,
+                    controller: controller.confirmedPassword,
                     obscureText: true,
                     decoration: InputDecoration(
                         hintText: 'Confirmação de senha *',

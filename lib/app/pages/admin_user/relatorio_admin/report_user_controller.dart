@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:dio/dio.dart';
+import 'package:election/app/shared/custom_http.dart';
 import 'package:election/app/utils/modal_messages.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
@@ -17,7 +19,9 @@ class ReportUserController = _ReportUserControllerBase
     with _$ReportUserController;
 
 abstract class _ReportUserControllerBase with Store {
+  final _http = CustomHttp();
   var fileN;
+  late VoidCallback func;
   @observable
   List<dynamic> dataCandidates = [
     {
@@ -213,7 +217,9 @@ abstract class _ReportUserControllerBase with Store {
   createFileXlsx(VoidCallback func) async {
     try {
       if (data.length == 0)
-        UtilsModalMessage().generalToast(title: 'Selecione uma turma');
+        UtilsModalMessage().generalToast(
+            title:
+                'Selecione uma turma que contenha candidatos a representante de turma');
       else {
         var status = await Permission.storage.status;
         if (!status.isGranted) {
@@ -240,7 +246,7 @@ abstract class _ReportUserControllerBase with Store {
           item.forEach((k, v) => arrayN.add(v));
         }
         var length = (arrayN.length / 5).toInt();
-        arrayN[length - 4];
+        arrayN[length - 1];
 
         pdf.addPage(pw.MultiPage(build: (context) => buildContent(context)));
         var vwluee = DateTime.now().microsecondsSinceEpoch.toString();
@@ -345,5 +351,57 @@ abstract class _ReportUserControllerBase with Store {
                 itemCount: data.length)
           ])))
     ];
+  }
+
+  @observable
+  getAllCandidates() async {
+    UtilsModalMessage().loading(1);
+    try {
+      Response resp = await _http.client.get('/v1/get-all-users');
+      if (resp.statusCode == 200) {
+        if (resp.data['STATUS'] == 'SUCCESS') {
+          var result = resp.data['DATA'];
+          if (result is List) {
+            for (var item in result) {
+              if (item is Map && item['candidate'] == true) {
+                var date =
+                    item['datNasc'].toString().split('/').reversed.join('-');
+                DateTime newAge = DateTime.parse(date);
+                DateTime now = DateTime.now();
+                var v = (now.year + now.month);
+                var z = (newAge.year + newAge.month);
+                var age = v - z;
+                if (item['name'] == 'Juliana')
+                  dataCandidates.add({
+                    'name': item['name'],
+                    'age': age,
+                    'turma':
+                        item['idTurma'].toString().replaceAll('Turma ', ''),
+                    'qttVotes': 40.0,
+                    'e-mail': item['userEmail']
+                  });
+                else
+                  dataCandidates.add({
+                    'name': item['name'],
+                    'age': age,
+                    'turma':
+                        item['idTurma'].toString().replaceAll('Turma ', ''),
+                    'qttVotes': 80.0,
+                    'e-mail': item['userEmail']
+                  });
+                organizerData();
+                func.call();
+                print(item);
+                UtilsModalMessage().loading(0);
+              }
+            }
+          }
+        }
+      }
+      UtilsModalMessage().loading(0);
+    } catch (e) {
+      print(e);
+      UtilsModalMessage().loading(0);
+    }
   }
 }

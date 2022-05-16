@@ -41,6 +41,12 @@ mixin _$HomeController on _HomeControllerBase, Store {
     });
   }
 
+  @override
+  ObservableFuture getAllCandidates() {
+    final _$future = super.getAllCandidates();
+    return ObservableFuture(_$future, context: context);
+  }
+
   late final _$_HomeControllerBaseActionController =
       ActionController(name: '_HomeControllerBase', context: context);
 

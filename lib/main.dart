@@ -1,3 +1,6 @@
+// @dart=2.10
+import 'package:election/app/shared/push_service.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -11,6 +14,8 @@ void main() {
   SystemChrome.setPreferredOrientations(
           [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown])
       .then((_) async {
+    await Firebase.initializeApp();
+    // await PushService().getToken();
     runApp(ModularApp(
       module: AppModule(),
       child: AppWidget(),

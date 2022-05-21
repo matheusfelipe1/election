@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:election/app/auth/auth_controller.dart';
 import 'package:election/app/shared/custom_http.dart';
 import 'package:election/app/utils/modal_messages.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
@@ -15,6 +18,7 @@ abstract class _VotePageControllerBase with Store {
   AuthController auth = Modular.get<AuthController>();
   final _http = CustomHttp();
   late VoidCallback func;
+
   @observable
   List dataCandidates = [
     {
@@ -57,7 +61,7 @@ abstract class _VotePageControllerBase with Store {
 
   @action
   vote(String id) {
-    print('votado');
+    updateVoteInDatabase(id);
     Modular.to.pop();
   }
 
@@ -73,6 +77,7 @@ abstract class _VotePageControllerBase with Store {
           if (result is List) {
             for (var item in result) {
               if (item is Map && item['candidate'] == true) {
+                print(item);
                 var date =
                     item['datNasc'].toString().split('/').reversed.join('-');
                 DateTime newAge = DateTime.parse(date);
@@ -88,7 +93,8 @@ abstract class _VotePageControllerBase with Store {
                     'turma':
                         item['idTurma'].toString().replaceAll('Turma ', ''),
                     'qttVotes': 40.0,
-                    'e-mail': item['userEmail']
+                    'e-mail': item['userEmail'],
+                    'id': item['userId']
                   });
                 else
                   dataCandidates.add({
@@ -97,7 +103,8 @@ abstract class _VotePageControllerBase with Store {
                     'turma':
                         item['idTurma'].toString().replaceAll('Turma ', ''),
                     'qttVotes': 80.0,
-                    'e-mail': item['userEmail']
+                    'e-mail': item['userEmail'],
+                    'id': item['userId']
                   });
                 organizerData();
                 func.call();
@@ -115,6 +122,60 @@ abstract class _VotePageControllerBase with Store {
       print(e);
       dataCandidates.clear();
       UtilsModalMessage().loading(0);
+    }
+  }
+
+  @action
+  updateVoteInDatabase(String id) async {
+    UtilsModalMessage().loading(1);
+    try {
+      final map = {'userId': auth.user.userId};
+      Response response =
+          await _http.client.post('/v1/voted', data: json.encode(map));
+      if (response.statusCode == 200) {
+        var _result = response.data;
+        if (_result['STATUS'] == 'SUCCESS') {
+          await voteCandidate(id);
+          UtilsModalMessage().loading(0);
+          UtilsModalMessage().generalToast(title: 'Voto enviado com sucesso!');
+          await auth.getUser();
+        } else {
+          UtilsModalMessage().loading(0);
+          UtilsModalMessage()
+              .generalToast(title: 'Erro ao votar no candidato.');
+        }
+      } else {
+        UtilsModalMessage().loading(0);
+        UtilsModalMessage().generalToast(title: 'Erro ao votar no candidato.');
+      }
+    } catch (e) {
+      UtilsModalMessage().loading(0);
+      UtilsModalMessage().generalToast(title: 'Erro ao votar no candidato.');
+      print(e);
+    }
+  }
+
+  @action
+  voteCandidate(String id) async {
+    DataSnapshot data = await FirebaseDatabase.instance
+        .reference()
+        .child('votation')
+        .child(id)
+        .once();
+    if (data.value != null) {
+      var soma = data.value['ctt'] + 1;
+
+      return FirebaseDatabase.instance
+          .reference()
+          .child('votation')
+          .child(id)
+          .set({'ctt': soma}).asStream();
+    } else {
+      return FirebaseDatabase.instance
+          .reference()
+          .child('votation')
+          .child(id)
+          .set({'ctt': 1}).asStream();
     }
   }
 }

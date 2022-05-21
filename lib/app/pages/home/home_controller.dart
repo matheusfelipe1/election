@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:election/app/shared/custom_http.dart';
 import 'package:election/app/utils/modal_messages.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 import 'package:mobx/mobx.dart';
 
@@ -15,6 +16,8 @@ abstract class _HomeControllerBase with Store {
   @observable
   List data = [];
   late VoidCallback func;
+  @observable
+  List values = [];
 
   @action
   organizerData() {
@@ -44,17 +47,32 @@ abstract class _HomeControllerBase with Store {
                 var v = (now.year + now.month);
                 var z = (newAge.year + newAge.month);
                 var age = v - z;
-                dataCandidates.add({
+                var obj = {
                   'name': item['name'],
                   'age': age,
                   'turma': item['idTurma'].toString().replaceAll('Turma ', ''),
-                  'qttVotes': 40.0
-                });
-                organizerData();
-                func.call();
+                  'qttVotes': 0.0,
+                  'e-mail': item['userEmail'],
+                  'id': item['userId'],
+                };
+                dataCandidates.add(obj);
+
                 UtilsModalMessage().loading(0);
               }
             }
+            if (values.length > 0) {
+              values.forEach((element) {
+                dataCandidates.forEach((element2) {
+                  if (element2['id'] == element['id']) {
+                    element2['qttVotes'] =
+                        double.tryParse(element['ctt'].toString());
+                  }
+                });
+              });
+            }
+            await organizerData();
+            organizerData();
+            func.call();
           }
         }
       }
@@ -62,6 +80,19 @@ abstract class _HomeControllerBase with Store {
     } catch (e) {
       print(e);
       UtilsModalMessage().loading(0);
+    }
+  }
+
+  @action
+  getDataInRealtime() async {
+    values.clear();
+    DataSnapshot data =
+        await FirebaseDatabase.instance.reference().child('votation').once();
+    if (data.value != null) {
+      var result = data.value;
+      result.forEach((k, v) {
+        values.add({'id': k, 'ctt': v['ctt']});
+      });
     }
   }
 }

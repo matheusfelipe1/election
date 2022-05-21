@@ -1,4 +1,5 @@
 import 'package:election/app/auth/auth_controller.dart';
+import 'package:election/app/pages/profile/profile_details/profile_details_controller.dart';
 import 'package:election/app/utils/modal_messages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -15,6 +16,7 @@ class ProfileDetails extends StatefulWidget {
 
 class _ProfileDetailsState extends State<ProfileDetails> {
   AuthController auth = Modular.get<AuthController>();
+  ProfileDetailsController controller = Modular.get<ProfileDetailsController>();
   bool isAdminT = false;
   @override
   void initState() {
@@ -126,7 +128,8 @@ class _ProfileDetailsState extends State<ProfileDetails> {
                                 title:
                                     'Deseja realmente votar no candidato(a) ${widget.data['name']}?',
                                 func: () {
-                                  Modular.to.pop();
+                                  controller
+                                      .updateVoteInDatabase(widget.data['id']);
                                 },
                                 colorButton: Colors.green,
                                 context: context);

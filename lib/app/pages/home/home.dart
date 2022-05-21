@@ -16,6 +16,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     // TODO: implement initState
     controller.dataCandidates.clear();
+    controller.getDataInRealtime();
     controller.organizerData();
     print(controller.dataCandidates);
     controller.getAllCandidates();
@@ -104,7 +105,7 @@ class _HomePageState extends State<HomePage> {
                         padding:
                             const EdgeInsets.only(right: 13, top: 5, bottom: 5),
                         child: Text(
-                          'Votos(%)',
+                          'Quantidade de votos',
                           style: const TextStyle(
                               fontFamily: 'Poppins', color: Colors.white),
                         ),
@@ -151,8 +152,10 @@ class _HomePageState extends State<HomePage> {
                                 ],
                               ),
                               trailing: Text(
-                                controller.data[i]['qttVotes'].toString() +
-                                    ' %',
+                                controller.data[i]['qttVotes']
+                                    .toString()
+                                    .split('.')
+                                    .first,
                                 style: const TextStyle(
                                     fontFamily: 'Poppins', color: Colors.black),
                               ),

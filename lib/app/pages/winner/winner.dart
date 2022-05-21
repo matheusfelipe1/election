@@ -2,6 +2,7 @@
 
 import 'dart:async';
 
+import 'package:election/app/pages/winner/winner_controller.dart';
 import 'package:election/app/utils/modal_messages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
@@ -18,36 +19,40 @@ class Winner extends StatefulWidget {
 }
 
 class _WinnerState extends State<Winner> {
-  DateTime dateToday = DateTime.now();
-  DateTime date = DateTime.now();
-  DateTime dateFirst = DateTime.parse('2022-01-01 00:00:00.000');
-  DateTime dateLast = DateTime.parse('2022-12-31 00:00:00.000');
-  DateTime dateCalc = DateTime.parse('2022-05-05T00:00:00Z');
-  Duration myDuration = Duration(days: 5);
   double percent = 0;
   late Timer timer;
-  bool counting = false;
   bool segurado = false;
   bool prog = false;
   var radius = 93.0;
   var iconSize = 45.0;
+  WinnerController controller = Modular.get<WinnerController>();
 
   @override
   void initState() {
     // TODO: implement initState
-
+    if (mounted) controller.func = updateState;
+    init();
     super.initState();
+  }
+
+  init() async {
+    bool inStart = await controller.getDataInRealtime();
+    print(inStart);
+    if (inStart) {
+      setState(() {});
+      start(controller.dateToday);
+    }
   }
 
   updateTime() {
     final reduceSecondsBy = 1;
     if (mounted)
       setState(() {
-        final seconds = myDuration.inSeconds - reduceSecondsBy;
+        final seconds = controller.myDuration.inSeconds - reduceSecondsBy;
         if (seconds < 0) {
           timer.cancel();
         } else {
-          myDuration = Duration(seconds: seconds);
+          controller.myDuration = Duration(seconds: seconds);
         }
       });
   }
@@ -55,13 +60,17 @@ class _WinnerState extends State<Winner> {
   start(DateTime req) {
     if (mounted)
       setState(() {
-        var difference = req.difference(date).inDays;
-        myDuration = Duration(days: difference);
+        var difference = req.difference(controller.date).inDays;
+        controller.myDuration = Duration(days: difference);
       });
 
     timer = Timer.periodic(Duration(seconds: 1), (timer) {
       updateTime();
     });
+  }
+
+  updateState() {
+    if (mounted) setState(() {});
   }
 
   @override
@@ -73,15 +82,15 @@ class _WinnerState extends State<Winner> {
 
   @override
   Widget build(BuildContext context) {
-    final seconds = myDuration.inSeconds.remainder(60);
-    final days = myDuration.inDays;
+    final seconds = controller.myDuration.inSeconds.remainder(60);
+    final days = controller.myDuration.inDays;
     // Step 7
-    final hours = myDuration.inHours.remainder(24);
-    final minutes = myDuration.inMinutes.remainder(60);
+    final hours = controller.myDuration.inHours.remainder(24);
+    final minutes = controller.myDuration.inMinutes.remainder(60);
     Size size = MediaQuery.of(context).size;
 
     return Container(
-      child: counting
+      child: controller.counting
           ? SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -267,13 +276,13 @@ class _WinnerState extends State<Winner> {
                     height: size.height * .05,
                   ),
                   CalendarDatePicker(
-                      initialDate: dateToday,
-                      firstDate: dateFirst,
-                      lastDate: dateLast,
+                      initialDate: controller.dateToday,
+                      firstDate: controller.dateFirst,
+                      lastDate: controller.dateLast,
                       onDateChanged: (date) {
                         setState(() {
-                          dateToday = date;
-                          print(dateToday);
+                          controller.dateToday = date;
+                          print(controller.dateToday);
                         });
                       }),
                   SizedBox(
@@ -289,10 +298,16 @@ class _WinnerState extends State<Winner> {
                           height: size.height * 0.06,
                           child: GestureDetector(
                             onTap: () async {
-                              start(dateToday);
-                              setState(() {
-                                counting = true;
-                              });
+                              bool valid =
+                                  await controller.setDateValidInRealtime(
+                                      controller.dateToday.toIso8601String());
+                              if (valid) {
+                                start(controller.dateToday);
+                                setState(() {
+                                  controller.counting = true;
+                                });
+                                setState(() {});
+                              }
                             },
                             child: Container(
                               width: size.width * 0.02,

@@ -30,23 +30,10 @@ class _ScreenChartsState extends State<ScreenCharts> {
 
   _init() async {
     controller.func = updateState;
+    await controller.getDataInRealtime();
     await controller.getValuesCharts();
+    controller.listenValues();
     controller.func = updateState;
-    int ctt = 0;
-    for (var item in controller.dataCandidates) {
-      controller.data.add(SubscriberSeries(
-        year: item['name'].toString(),
-        subscribers: item['qttVotes'],
-        barColor: ctt == 0
-            ? charts.ColorUtil.fromDartColor(Colors.blue)
-            : ctt == 1
-                ? charts.ColorUtil.fromDartColor(Colors.green)
-                : ctt == 2
-                    ? charts.ColorUtil.fromDartColor(Colors.yellow)
-                    : charts.ColorUtil.fromDartColor(Colors.red),
-      ));
-      ctt++;
-    }
   }
 
   @override

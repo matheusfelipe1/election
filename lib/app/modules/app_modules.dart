@@ -20,6 +20,7 @@ import 'package:election/app/pages/splash.dart';
 import 'package:election/app/pages/subscribe/subscribe_controller.dart';
 import 'package:election/app/pages/vote/vote_page_controller.dart';
 import 'package:election/app/pages/winner/message_success/message_success.dart';
+import 'package:election/app/pages/winner/winner_controller.dart';
 import 'package:election/app/shared/custom_http.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -38,6 +39,7 @@ class AppModule extends Module {
         Bind((i) => LoginController()),
         Bind((i) => AuthController()),
         Bind((i) => SubscribeController()),
+        Bind((i) => WinnerController()),
       ];
   @override
   List<ModularRoute> get routes => [

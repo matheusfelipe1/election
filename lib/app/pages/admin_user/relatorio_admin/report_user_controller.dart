@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:election/app/shared/custom_http.dart';
 import 'package:election/app/utils/modal_messages.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'package:open_file/open_file.dart';
@@ -22,6 +23,8 @@ abstract class _ReportUserControllerBase with Store {
   final _http = CustomHttp();
   var fileN;
   late VoidCallback func;
+  @observable
+  List values = [];
   @observable
   List<dynamic> dataCandidates = [
     {
@@ -371,24 +374,24 @@ abstract class _ReportUserControllerBase with Store {
                 var v = (now.year + now.month);
                 var z = (newAge.year + newAge.month);
                 var age = v - z;
-                if (item['name'] == 'Juliana')
-                  dataCandidates.add({
-                    'name': item['name'],
-                    'age': age,
-                    'turma':
-                        item['idTurma'].toString().replaceAll('Turma ', ''),
-                    'qttVotes': 40.0,
-                    'e-mail': item['userEmail']
+
+                dataCandidates.add({
+                  'name': item['name'],
+                  'age': age,
+                  'turma': item['idTurma'].toString().replaceAll('Turma ', ''),
+                  'qttVotes': 0,
+                  'e-mail': item['userEmail'],
+                  'id': item['userId'],
+                });
+                if (values.length > 0) {
+                  values.forEach((element) {
+                    dataCandidates.forEach((element2) {
+                      if (element2['id'] == element['id']) {
+                        element2['qttVotes'] = element['ctt'];
+                      }
+                    });
                   });
-                else
-                  dataCandidates.add({
-                    'name': item['name'],
-                    'age': age,
-                    'turma':
-                        item['idTurma'].toString().replaceAll('Turma ', ''),
-                    'qttVotes': 80.0,
-                    'e-mail': item['userEmail']
-                  });
+                }
                 organizerData();
                 func.call();
                 print(item);
@@ -402,6 +405,19 @@ abstract class _ReportUserControllerBase with Store {
     } catch (e) {
       print(e);
       UtilsModalMessage().loading(0);
+    }
+  }
+
+  @action
+  getDataInRealtime() async {
+    values.clear();
+    DataSnapshot data =
+        await FirebaseDatabase.instance.reference().child('votation').once();
+    if (data.value != null) {
+      var result = data.value;
+      result.forEach((k, v) {
+        values.add({'id': k, 'ctt': v['ctt']});
+      });
     }
   }
 }

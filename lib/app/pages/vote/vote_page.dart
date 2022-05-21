@@ -131,7 +131,7 @@ class _VotePageState extends State<VotePage> {
                                           title: 'Deseja realmente votar no candidato(a) ${controller.dataCandidates[i]['name']}?',
                                           func: () {
                                             controller.vote(controller
-                                                .dataCandidates[i]['name']);
+                                                .dataCandidates[i]['id']);
                                           },
                                           colorButton: Colors.green,
                                           context: context);

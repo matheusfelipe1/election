@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:election/app/pages/charts_all_turmas/page_chart_turma.dart';
 import 'package:election/app/shared/custom_http.dart';
 import 'package:election/app/utils/modal_messages.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
@@ -24,6 +25,8 @@ abstract class _PageChartControllerBase with Store {
     'Turma 15',
     'Turma 10',
   ];
+  @observable
+  List values = [];
   @observable
   List candidatesFilter = [];
   @observable
@@ -255,25 +258,26 @@ abstract class _PageChartControllerBase with Store {
                 var v = (now.year + now.month);
                 var z = (newAge.year + newAge.month);
                 var age = v - z;
-                if (item['name'] == 'Juliana')
-                  dataCandidates.add({
-                    'name': item['name'],
-                    'age': age,
-                    'turma':
-                        item['idTurma'].toString().replaceAll('Turma ', ''),
-                    'qttVotes': 40.0,
-                    'e-mail': item['userEmail']
+
+                dataCandidates.add({
+                  'name': item['name'],
+                  'age': age,
+                  'turma': item['idTurma'].toString().replaceAll('Turma ', ''),
+                  'qttVotes': 0.0,
+                  'e-mail': item['userEmail'],
+                  'id': item['userId'],
+                });
+                if (values.length > 0) {
+                  values.forEach((element) {
+                    dataCandidates.forEach((element2) {
+                      if (element2['id'] == element['id']) {
+                        element2['qttVotes'] =
+                            double.tryParse(element['ctt'].toString());
+                      }
+                    });
                   });
-                else
-                  dataCandidates.add({
-                    'name': item['name'],
-                    'age': age,
-                    'turma':
-                        item['idTurma'].toString().replaceAll('Turma ', ''),
-                    'qttVotes': 80.0,
-                    'e-mail': item['userEmail']
-                  });
-                organizerData();
+                }
+                await organizerData();
                 func.call();
                 print(item);
                 UtilsModalMessage().loading(0);
@@ -286,6 +290,19 @@ abstract class _PageChartControllerBase with Store {
     } catch (e) {
       print(e);
       UtilsModalMessage().loading(0);
+    }
+  }
+
+  @action
+  getDataInRealtime() async {
+    values.clear();
+    DataSnapshot data =
+        await FirebaseDatabase.instance.reference().child('votation').once();
+    if (data.value != null) {
+      var result = data.value;
+      result.forEach((k, v) {
+        values.add({'id': k, 'ctt': v['ctt']});
+      });
     }
   }
 }

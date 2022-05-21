@@ -5,9 +5,11 @@ import 'package:election/app/auth/auth_controller.dart';
 import 'package:election/app/pages/screen_charts/screen_charts.dart';
 import 'package:election/app/shared/custom_http.dart';
 import 'package:election/app/utils/modal_messages.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 
 part 'screen_charts_controller.g.dart';
 
@@ -19,6 +21,8 @@ abstract class _ScreenChartsControllerBase with Store {
   @observable
   AuthController auth = Modular.get<AuthController>();
   late VoidCallback func;
+  @observable
+  List values = [];
   @observable
   List dataCandidates = [
     {
@@ -64,6 +68,7 @@ abstract class _ScreenChartsControllerBase with Store {
   @observable
   getValuesCharts() async {
     UtilsModalMessage().loading(1);
+    dataCandidates.clear();
     try {
       Response resp =
           await _http.client.get('/v1/get-charts/${auth.user.idTurma}');
@@ -80,26 +85,31 @@ abstract class _ScreenChartsControllerBase with Store {
                 var v = (now.year + now.month);
                 var z = (newAge.year + newAge.month);
                 var age = v - z;
-                if (item['name'] == 'Juliana')
-                  // ignore: curly_braces_in_flow_control_structures
-                  dataCandidates.add({
-                    'name': item['name'],
-                    'age': age,
-                    'turma':
-                        item['idTurma'].toString().replaceAll('Turma ', ''),
-                    'qttVotes': 40.0,
-                    'e-mail': item['userEmail']
+                // ignore: curly_braces_in_flow_control_structures
+
+                dataCandidates.add({
+                  'name': item['name'],
+                  'age': age,
+                  'turma': item['idTurma'].toString().replaceAll('Turma ', ''),
+                  'qttVotes': 0.0,
+                  'e-mail': item['userEmail'],
+                  'id': item['userId'],
+                });
+
+                if (values.length > 0) {
+                  values.forEach((element) {
+                    dataCandidates.forEach((element2) {
+                      if (element['id'] == element2['id']) {
+                        element2['qttVotes'] =
+                            double.tryParse(element['ctt'].toString());
+                      }
+                    });
                   });
-                else
-                  dataCandidates.add({
-                    'name': item['name'],
-                    'age': age,
-                    'turma':
-                        item['idTurma'].toString().replaceAll('Turma ', ''),
-                    'qttVotes': 80.0,
-                    'e-mail': item['userEmail']
-                  });
-                organizerData();
+                }
+
+                await organizerData();
+                renderDataInChart();
+
                 func.call();
                 print(item);
                 UtilsModalMessage().loading(0);
@@ -112,9 +122,69 @@ abstract class _ScreenChartsControllerBase with Store {
       }
       UtilsModalMessage().loading(0);
     } catch (e) {
-      print(e);
       dataCandidates.clear();
       UtilsModalMessage().loading(0);
+    }
+  }
+
+  @action
+  getDataInRealtime() async {
+    values.clear();
+    DataSnapshot data =
+        await FirebaseDatabase.instance.reference().child('votation').once();
+    if (data.value != null) {
+      var result = data.value;
+      result.forEach((k, v) {
+        values.add({'id': k, 'ctt': v['ctt']});
+      });
+    }
+  }
+
+  @observable
+  listenValues() {
+    FirebaseDatabase.instance
+        .reference()
+        .child('votation')
+        .onValue
+        .listen((event) async {
+      var result = event.snapshot.value;
+      if (result != null) {
+        values.clear();
+        result.forEach((k, v) {
+          values.add({'id': k, 'ctt': v['ctt']});
+          values.forEach((element) {
+            dataCandidates.forEach((element2) {
+              if (element2['id'] == element['id']) {
+                element2['qttVotes'] =
+                    double.tryParse(element['ctt'].toString());
+              }
+            });
+          });
+        });
+        await organizerData();
+        renderDataInChart();
+        func.call();
+      }
+    });
+  }
+
+  @observable
+  renderDataInChart() {
+    data.clear();
+    int ctt = 0;
+    for (var item in dataCandidates) {
+      data.add(SubscriberSeries(
+        year: item['name'].toString(),
+        subscribers: item['qttVotes'],
+        barColor: ctt == 0
+            ? charts.ColorUtil.fromDartColor(Colors.blue)
+            : ctt == 1
+                ? charts.ColorUtil.fromDartColor(Colors.green)
+                : ctt == 2
+                    ? charts.ColorUtil.fromDartColor(Colors.yellow)
+                    : charts.ColorUtil.fromDartColor(Colors.red),
+      ));
+      ctt++;
     }
   }
 }

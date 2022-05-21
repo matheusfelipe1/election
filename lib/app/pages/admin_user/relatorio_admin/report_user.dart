@@ -32,6 +32,7 @@ class _ReportUserState extends State<ReportUser> {
     // TODO: implement initState
     controller.func = updateState;
     controller.dataCandidates.clear();
+    controller.getDataInRealtime();
     controller.getAllCandidates();
     controller.organizerData();
     controller.data.clear();

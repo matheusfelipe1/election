@@ -41,6 +41,22 @@ mixin _$PageChartController on _PageChartControllerBase, Store {
     });
   }
 
+  late final _$valuesAtom =
+      Atom(name: '_PageChartControllerBase.values', context: context);
+
+  @override
+  List<dynamic> get values {
+    _$valuesAtom.reportRead();
+    return super.values;
+  }
+
+  @override
+  set values(List<dynamic> value) {
+    _$valuesAtom.reportWrite(value, super.values, () {
+      super.values = value;
+    });
+  }
+
   late final _$candidatesFilterAtom =
       Atom(name: '_PageChartControllerBase.candidatesFilter', context: context);
 
@@ -79,6 +95,15 @@ mixin _$PageChartController on _PageChartControllerBase, Store {
     return ObservableFuture(_$future, context: context);
   }
 
+  late final _$getDataInRealtimeAsyncAction = AsyncAction(
+      '_PageChartControllerBase.getDataInRealtime',
+      context: context);
+
+  @override
+  Future getDataInRealtime() {
+    return _$getDataInRealtimeAsyncAction.run(() => super.getDataInRealtime());
+  }
+
   late final _$_PageChartControllerBaseActionController =
       ActionController(name: '_PageChartControllerBase', context: context);
 
@@ -109,6 +134,7 @@ mixin _$PageChartController on _PageChartControllerBase, Store {
     return '''
 turmaText: ${turmaText},
 turmas: ${turmas},
+values: ${values},
 candidatesFilter: ${candidatesFilter},
 dataCandidates: ${dataCandidates}
     ''';

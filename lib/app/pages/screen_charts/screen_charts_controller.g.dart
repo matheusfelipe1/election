@@ -25,6 +25,22 @@ mixin _$ScreenChartsController on _ScreenChartsControllerBase, Store {
     });
   }
 
+  late final _$valuesAtom =
+      Atom(name: '_ScreenChartsControllerBase.values', context: context);
+
+  @override
+  List<dynamic> get values {
+    _$valuesAtom.reportRead();
+    return super.values;
+  }
+
+  @override
+  set values(List<dynamic> value) {
+    _$valuesAtom.reportWrite(value, super.values, () {
+      super.values = value;
+    });
+  }
+
   late final _$dataCandidatesAtom = Atom(
       name: '_ScreenChartsControllerBase.dataCandidates', context: context);
 
@@ -47,6 +63,15 @@ mixin _$ScreenChartsController on _ScreenChartsControllerBase, Store {
     return ObservableFuture(_$future, context: context);
   }
 
+  late final _$getDataInRealtimeAsyncAction = AsyncAction(
+      '_ScreenChartsControllerBase.getDataInRealtime',
+      context: context);
+
+  @override
+  Future getDataInRealtime() {
+    return _$getDataInRealtimeAsyncAction.run(() => super.getDataInRealtime());
+  }
+
   late final _$_ScreenChartsControllerBaseActionController =
       ActionController(name: '_ScreenChartsControllerBase', context: context);
 
@@ -65,6 +90,7 @@ mixin _$ScreenChartsController on _ScreenChartsControllerBase, Store {
   String toString() {
     return '''
 auth: ${auth},
+values: ${values},
 dataCandidates: ${dataCandidates}
     ''';
   }

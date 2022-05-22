@@ -1,5 +1,5 @@
-// @dart=2.10
-import 'package:election/app/shared/push_service.dart';
+// @dart=2.9
+import 'package:election/app/shared/push_services.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,7 +15,7 @@ void main() {
           [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown])
       .then((_) async {
     await Firebase.initializeApp();
-    // await PushService().getToken();
+    await PushService().config();
     runApp(ModularApp(
       module: AppModule(),
       child: AppWidget(),
@@ -37,5 +37,5 @@ void configLoading() {
     ..textColor = Colors.yellow
     ..maskColor = Colors.black.withOpacity(0.5)
     ..userInteractions = true
-    ..dismissOnTap = false;
+    ..dismissOnTap = true;
 }

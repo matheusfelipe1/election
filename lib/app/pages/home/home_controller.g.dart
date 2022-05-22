@@ -41,10 +41,34 @@ mixin _$HomeController on _HomeControllerBase, Store {
     });
   }
 
+  late final _$valuesAtom =
+      Atom(name: '_HomeControllerBase.values', context: context);
+
+  @override
+  List<dynamic> get values {
+    _$valuesAtom.reportRead();
+    return super.values;
+  }
+
+  @override
+  set values(List<dynamic> value) {
+    _$valuesAtom.reportWrite(value, super.values, () {
+      super.values = value;
+    });
+  }
+
   @override
   ObservableFuture getAllCandidates() {
     final _$future = super.getAllCandidates();
     return ObservableFuture(_$future, context: context);
+  }
+
+  late final _$getDataInRealtimeAsyncAction =
+      AsyncAction('_HomeControllerBase.getDataInRealtime', context: context);
+
+  @override
+  Future getDataInRealtime() {
+    return _$getDataInRealtimeAsyncAction.run(() => super.getDataInRealtime());
   }
 
   late final _$_HomeControllerBaseActionController =
@@ -65,7 +89,8 @@ mixin _$HomeController on _HomeControllerBase, Store {
   String toString() {
     return '''
 dataCandidates: ${dataCandidates},
-data: ${data}
+data: ${data},
+values: ${values}
     ''';
   }
 }

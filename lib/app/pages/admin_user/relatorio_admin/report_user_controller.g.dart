@@ -9,6 +9,22 @@ part of 'report_user_controller.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$ReportUserController on _ReportUserControllerBase, Store {
+  late final _$valuesAtom =
+      Atom(name: '_ReportUserControllerBase.values', context: context);
+
+  @override
+  List<dynamic> get values {
+    _$valuesAtom.reportRead();
+    return super.values;
+  }
+
+  @override
+  set values(List<dynamic> value) {
+    _$valuesAtom.reportWrite(value, super.values, () {
+      super.values = value;
+    });
+  }
+
   late final _$dataCandidatesAtom =
       Atom(name: '_ReportUserControllerBase.dataCandidates', context: context);
 
@@ -53,6 +69,15 @@ mixin _$ReportUserController on _ReportUserControllerBase, Store {
     return ObservableFuture(_$future, context: context);
   }
 
+  late final _$getDataInRealtimeAsyncAction = AsyncAction(
+      '_ReportUserControllerBase.getDataInRealtime',
+      context: context);
+
+  @override
+  Future getDataInRealtime() {
+    return _$getDataInRealtimeAsyncAction.run(() => super.getDataInRealtime());
+  }
+
   late final _$_ReportUserControllerBaseActionController =
       ActionController(name: '_ReportUserControllerBase', context: context);
 
@@ -92,6 +117,7 @@ mixin _$ReportUserController on _ReportUserControllerBase, Store {
   @override
   String toString() {
     return '''
+values: ${values},
 dataCandidates: ${dataCandidates},
 data: ${data}
     ''';

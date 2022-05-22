@@ -140,7 +140,6 @@ abstract class _ScreenChartsControllerBase with Store {
     }
   }
 
-  @observable
   listenValues() {
     FirebaseDatabase.instance
         .reference()
@@ -168,7 +167,6 @@ abstract class _ScreenChartsControllerBase with Store {
     });
   }
 
-  @observable
   renderDataInChart() {
     data.clear();
     int ctt = 0;

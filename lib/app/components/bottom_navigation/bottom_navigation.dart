@@ -52,12 +52,14 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
             SettingsPage()
           ];
     setAdminOrNot();
+    print(auth.user.urlFoto);
     super.initState();
   }
 
   setAdminOrNot() async {
     var shared = await SharedPreferences.getInstance();
     shared.setBool('admin', userAdmin);
+    await auth.saveDeviceToken();
   }
 
   void _onItemTapped(int index) {
@@ -223,15 +225,23 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
           },
           child: Padding(
             padding: const EdgeInsets.all(9.0),
-            child: CircleAvatar(
-              maxRadius: 40,
-              backgroundColor: Colors.white,
-              child: Icon(
-                Icons.person,
-                color: Colors.black,
-                size: size.height * 0.04,
-              ),
-            ),
+            child: auth.user.urlFoto != ''
+                ? Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                        image: DecorationImage(
+                            image: NetworkImage(auth.user.urlFoto),
+                            fit: BoxFit.fill)),
+                  )
+                : CircleAvatar(
+                    maxRadius: 40,
+                    backgroundColor: Colors.white,
+                    child: Icon(
+                      Icons.person,
+                      color: Colors.black,
+                      size: size.height * 0.04,
+                    ),
+                  ),
           ),
         ),
         backgroundColor: Colors.grey,

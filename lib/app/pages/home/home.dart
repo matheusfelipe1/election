@@ -128,11 +128,23 @@ class _HomePageState extends State<HomePage> {
                               leading: CircleAvatar(
                                 maxRadius: 25,
                                 backgroundColor: Colors.white,
-                                child: Icon(
-                                  Icons.person,
-                                  color: Colors.black,
-                                  size: size.height * 0.04,
-                                ),
+                                child: controller.dataCandidates[i]['foto'] !=
+                                        ''
+                                    ? Container(
+                                        width: size.width * 0.13,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(50),
+                                            image: DecorationImage(
+                                                image: NetworkImage(controller
+                                                    .dataCandidates[i]['foto']),
+                                                fit: BoxFit.fill)),
+                                      )
+                                    : Icon(
+                                        Icons.person,
+                                        color: Colors.black,
+                                        size: size.height * 0.04,
+                                      ),
                               ),
                               title: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,

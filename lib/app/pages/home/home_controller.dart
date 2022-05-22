@@ -54,6 +54,7 @@ abstract class _HomeControllerBase with Store {
                   'qttVotes': 0.0,
                   'e-mail': item['userEmail'],
                   'id': item['userId'],
+                  'foto': item['urlFoto']
                 };
                 dataCandidates.add(obj);
 

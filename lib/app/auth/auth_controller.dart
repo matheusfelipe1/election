@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:election/app/models/user_model.dart';
 import 'package:election/app/shared/custom_http.dart';
@@ -98,5 +100,24 @@ abstract class _AuthControllerBase with Store {
     shared.remove('refreshToken');
     shared.remove('idUser');
     Modular.to.pushNamed('/login');
+  }
+
+  @action
+  saveDeviceToken() async {
+    try {
+      var shared = await SharedPreferences.getInstance();
+      var token = shared.getString('deviceId');
+      final map = {'deviceId': token};
+      Response response = await _http.client
+          .post('/v1/register-device-id', data: json.encode(map));
+      if (response.statusCode == 200) {
+        var _result = response.data;
+        if (_result['STATUS'] == 'SUCCESS') {
+          print(_result);
+        }
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 }

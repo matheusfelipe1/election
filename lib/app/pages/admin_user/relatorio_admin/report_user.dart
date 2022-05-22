@@ -117,15 +117,33 @@ class _ReportUserState extends State<ReportUser> {
                                               '/profile-details',
                                               arguments: controller.data[i]);
                                         },
-                                        leading: CircleAvatar(
-                                          maxRadius: 25,
-                                          backgroundColor: Colors.white,
-                                          child: Icon(
-                                            Icons.person,
-                                            color: Colors.black,
-                                            size: size.height * 0.04,
-                                          ),
-                                        ),
+                                        leading: controller.data[i]['foto'] !=
+                                                ''
+                                            ? Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Container(
+                                                  width: size.width * 0.12,
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              50),
+                                                      image: DecorationImage(
+                                                          image: NetworkImage(
+                                                              controller.data[i]
+                                                                  ['foto']),
+                                                          fit: BoxFit.fill)),
+                                                ),
+                                              )
+                                            : CircleAvatar(
+                                                maxRadius: 25,
+                                                backgroundColor: Colors.white,
+                                                child: Icon(
+                                                  Icons.person,
+                                                  color: Colors.black,
+                                                  size: size.height * 0.04,
+                                                ),
+                                              ),
                                         title: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,

@@ -266,6 +266,7 @@ abstract class _PageChartControllerBase with Store {
                   'qttVotes': 0.0,
                   'e-mail': item['userEmail'],
                   'id': item['userId'],
+                  'foto': item['urlFoto'],
                 });
                 if (values.length > 0) {
                   values.forEach((element) {

@@ -85,27 +85,19 @@ abstract class _VotePageControllerBase with Store {
                 var v = (now.year + now.month);
                 var z = (newAge.year + newAge.month);
                 var age = v - z;
-                if (item['name'] == 'Juliana')
-                  // ignore: curly_braces_in_flow_control_structures
-                  dataCandidates.add({
-                    'name': item['name'],
-                    'age': age,
-                    'turma':
-                        item['idTurma'].toString().replaceAll('Turma ', ''),
-                    'qttVotes': 40.0,
-                    'e-mail': item['userEmail'],
-                    'id': item['userId']
-                  });
-                else
-                  dataCandidates.add({
-                    'name': item['name'],
-                    'age': age,
-                    'turma':
-                        item['idTurma'].toString().replaceAll('Turma ', ''),
-                    'qttVotes': 80.0,
-                    'e-mail': item['userEmail'],
-                    'id': item['userId']
-                  });
+                // ignore: curly_braces_in_flow_control_structures
+                dataCandidates.add({
+                  'name': item['userId'] == auth.user.userId
+                      ? 'Você'
+                      : item['name'],
+                  'age': age,
+                  'turma': item['idTurma'].toString().replaceAll('Turma ', ''),
+                  'qttVotes': 40.0,
+                  'e-mail': item['userEmail'],
+                  'id': item['userId'],
+                  'foto': item['urlFoto']
+                });
+
                 organizerData();
                 func.call();
                 print(item);

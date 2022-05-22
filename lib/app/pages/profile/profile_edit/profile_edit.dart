@@ -29,6 +29,7 @@ class _ProfileEditState extends State<ProfileEdit> {
   void initState() {
     // TODO: implement initState
     controller.renderValues();
+    controller.urlFoto = auth.user.urlFoto;
     super.initState();
   }
 
@@ -206,33 +207,44 @@ class _ProfileEditState extends State<ProfileEdit> {
                         CircleAvatar(
                           maxRadius: 50,
                           backgroundColor: Colors.white,
-                          child: controller.pathImage != null
-                              ? Transform(
-                                  transform: matrix,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(50),
-                                    child: Image.memory(
-                                      controller.pathImage,
-                                      width: size.width * 0.9,
-                                      height: size.height * 0.9,
-                                      fit: BoxFit.fill,
-                                      isAntiAlias: true,
-                                    ),
-                                  ),
-                                )
-                              : Container(
-                                  width: size.width * 0.9,
-                                  height: size.height * 0.2,
+                          child: controller.urlFoto != ''
+                              ? Container(
                                   decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(100),
-                                      border: Border.all(color: Colors.black)),
-                                  child: Icon(
-                                    Icons.person,
-                                    color: Colors.black,
-                                    size: size.height * 0.08,
-                                  ),
-                                ),
+                                      borderRadius: BorderRadius.circular(50),
+                                      image: DecorationImage(
+                                          image:
+                                              NetworkImage(auth.user.urlFoto),
+                                          fit: BoxFit.fill)),
+                                )
+                              : controller.pathImage != null
+                                  ? Transform(
+                                      transform: matrix,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(50),
+                                        child: Image.memory(
+                                          controller.pathImage,
+                                          width: size.width * 0.9,
+                                          height: size.height * 0.9,
+                                          fit: BoxFit.fill,
+                                          isAntiAlias: true,
+                                        ),
+                                      ),
+                                    )
+                                  : Container(
+                                      width: size.width * 0.9,
+                                      height: size.height * 0.2,
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(100),
+                                          border:
+                                              Border.all(color: Colors.black)),
+                                      child: Icon(
+                                        Icons.person,
+                                        color: Colors.black,
+                                        size: size.height * 0.08,
+                                      ),
+                                    ),
                         ),
                         Container(
                           child: Text(
@@ -253,7 +265,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                   await UtilsModalMessage().showMessageModal(
                       title: 'Deseja realmente editar essas informações?',
                       func: () {
-                        Modular.to.pop();
+                        controller.editUser(context);
                       },
                       colorButton: Colors.green,
                       context: context);

@@ -62,11 +62,21 @@ class _SettingsPageState extends State<SettingsPage> {
                                 child: CircleAvatar(
                                   maxRadius: 25,
                                   backgroundColor: Colors.white,
-                                  child: Icon(
-                                    Icons.person,
-                                    color: Colors.black,
-                                    size: size.height * 0.04,
-                                  ),
+                                  child: auth.user.urlFoto != ''
+                                      ? Container(
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(50),
+                                              image: DecorationImage(
+                                                  image: NetworkImage(
+                                                      auth.user.urlFoto),
+                                                  fit: BoxFit.fill)),
+                                        )
+                                      : Icon(
+                                          Icons.person,
+                                          color: Colors.black,
+                                          size: size.height * 0.04,
+                                        ),
                                 ),
                               ),
                             ),

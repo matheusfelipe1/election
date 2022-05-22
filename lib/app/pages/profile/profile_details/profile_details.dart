@@ -99,19 +99,31 @@ class _ProfileDetailsState extends State<ProfileDetails> {
                     child: CircleAvatar(
                       maxRadius: 50,
                       backgroundColor: Colors.white,
-                      child: Container(
-                        width: size.width * 0.9,
-                        height: size.height * 0.2,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(100),
-                            border: Border.all(color: Colors.black)),
-                        child: Icon(
-                          Icons.person,
-                          color: Colors.black,
-                          size: size.height * 0.08,
-                        ),
-                      ),
+                      child: widget.data['foto'] != ''
+                          ? Container(
+                              width: size.width * 0.9,
+                              height: size.height * 0.2,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(100),
+                                  border: Border.all(color: Colors.black),
+                                  image: DecorationImage(
+                                      image: NetworkImage(widget.data['foto']),
+                                      fit: BoxFit.fill)),
+                            )
+                          : Container(
+                              width: size.width * 0.9,
+                              height: size.height * 0.2,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(100),
+                                  border: Border.all(color: Colors.black)),
+                              child: Icon(
+                                Icons.person,
+                                color: Colors.black,
+                                size: size.height * 0.08,
+                              ),
+                            ),
                     ),
                   )
                 ],

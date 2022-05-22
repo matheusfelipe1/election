@@ -42,6 +42,7 @@ class _WinnerState extends State<Winner> {
       setState(() {});
       start(controller.dateToday);
     }
+    setState(() {});
   }
 
   updateTime() {
@@ -206,6 +207,7 @@ class _WinnerState extends State<Winner> {
                     height: size.height * .03,
                   ),
                   Container(
+                    margin: EdgeInsets.only(bottom: 25),
                     child: HoldTimeoutDetector(
                       onTimeout: () {
                         percent = 1;
@@ -213,7 +215,8 @@ class _WinnerState extends State<Winner> {
                         setState(() {
                           segurado = true;
                         });
-                        Future.delayed(Duration(milliseconds: 1500), () {
+                        Future.delayed(Duration(milliseconds: 1500), () async {
+                          await controller.finishVotation();
                           Modular.to.pushNamed('/success');
                         });
                       },
@@ -225,8 +228,8 @@ class _WinnerState extends State<Winner> {
                           iconSize = 90;
                         });
                         setState(() {});
-                        await UtilsModalMessage().generalToast(
-                            title: 'Mantenha pressionado o botão');
+                        await UtilsModalMessage()
+                            .generalToast(title: 'Continue segurando o botão');
                       },
                       onCancel: () {
                         if (!segurado) percent = 0.0;
@@ -252,7 +255,10 @@ class _WinnerState extends State<Winner> {
                         ),
                       ),
                     ),
-                  )
+                  ),
+                  SizedBox(
+                    height: size.height * .04,
+                  ),
                 ],
               ),
             )

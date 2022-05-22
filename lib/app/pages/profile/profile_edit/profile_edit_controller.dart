@@ -1,4 +1,11 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:election/app/auth/auth_controller.dart';
+import 'package:election/app/shared/custom_http.dart';
+import 'package:election/app/utils/modal_messages.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:image_picker/image_picker.dart';
@@ -10,6 +17,7 @@ class ProfileEditController = _ProfileEditControllerBase
     with _$ProfileEditController;
 
 abstract class _ProfileEditControllerBase with Store {
+  final _http = CustomHttp();
   @observable
   var pathImage;
   @observable
@@ -26,6 +34,12 @@ abstract class _ProfileEditControllerBase with Store {
   TextEditingController matricula = new TextEditingController();
   @observable
   AuthController auth = Modular.get<AuthController>();
+  @observable
+  String urlFoto = '';
+  @observable
+  String urlImage = '';
+  @observable
+  XFile? fileSend;
 
   @action
   renderValues() {
@@ -104,10 +118,80 @@ abstract class _ProfileEditControllerBase with Store {
   accessGalleryOrCamera(ImageSource source, VoidCallback func) async {
     XFile? file = await ImagePicker.platform.getImage(source: source);
     if (file != null) {
+      fileSend = file;
+      urlFoto = '';
       Modular.to.pop();
       var newFile = await file.readAsBytes();
       pathImage = newFile;
       func.call();
+    }
+  }
+
+  @action
+  sendPhoto(XFile? file) async {
+    try {
+      FirebaseStorage firebase = FirebaseStorage.instance;
+
+      // Create a Reference to the file
+      var date = DateTime.now().toIso8601String();
+      Reference ref = firebase.ref().child('$date.jpg');
+
+      final metadata = SettableMetadata(
+          contentType: 'image/jpeg',
+          customMetadata: {'picked-file-path': file!.path});
+
+      ref.putFile(File(file.path), metadata).then((p0) async {
+        urlImage = await p0.ref.getDownloadURL();
+      });
+      // print(await ref.getDownloadURL());
+
+      // return Future.value(uploadTask);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  @action
+  editUser(BuildContext context) async {
+    UtilsModalMessage().loading(1);
+    try {
+      if (fileSend != null) {
+        await sendPhoto(fileSend);
+      }
+      print(urlImage);
+      final map = {
+        "email": email.text.toString(),
+        "password": password.text.toString(),
+        "displayName": name.text.toString(),
+        "admin": auth.user.admin,
+        "datNasc": datNasc.text.toString(),
+        "matricula": matricula.text.toString(),
+        "idTurma": auth.user.idTurma,
+        "urlFoto": urlImage,
+      };
+
+      Response response = await _http.client
+          .post('/v1/updateUser/${auth.user.userId}', data: json.encode(map));
+      if (response.statusCode == 200) {
+        var result = response.data;
+        if (result['STATUS'] == 'SUCCESS') {
+          UtilsModalMessage()
+              .generalToast(title: 'Usuário atualizado com sucesso');
+          UtilsModalMessage().loading(0);
+          await auth.getUser();
+          return Modular.to.pushNamed('/navigation');
+        } else {
+          UtilsModalMessage().loading(0);
+          UtilsModalMessage().generalToast(title: 'Erro ao atualizar usuário');
+        }
+      }
+      print(response.data);
+      UtilsModalMessage().loading(0);
+      UtilsModalMessage().generalToast(title: 'Erro ao atualizar usuário');
+    } catch (e) {
+      print(e);
+      await UtilsModalMessage().loading(0);
+      UtilsModalMessage().generalToast(title: 'Erro ao atualizar usuário');
     }
   }
 }

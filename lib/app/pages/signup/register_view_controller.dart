@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:election/app/shared/custom_http.dart';
 import 'package:election/app/utils/modal_messages.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -43,6 +44,10 @@ abstract class _RegisterViewControllerBase with Store {
   String extensionn = '';
   @observable
   String filename = '';
+  @observable
+  String urlImage = '';
+  @observable
+  XFile? fileSend;
 
   _RegisterViewControllerBase() {
     _init();
@@ -116,18 +121,16 @@ abstract class _RegisterViewControllerBase with Store {
 
   @action
   accessGalleryOrCamera(ImageSource source, VoidCallback func) async {
-    var none = await ImagePicker.platform.pickImage(source: source);
-    File file = File(none!.path);
-    print(none.path);
+    XFile? file = await ImagePicker.platform.getImage(source: source);
+    print(file!.path);
 
     if (file != null) {
+      fileSend = file;
+      // await sendPhoto(file);
       Modular.to.pop();
-      var newFile = file.readAsBytesSync();
-      base64ToSend = base64.encode(file.readAsBytesSync());
-      var nameAndExt = file.path;
-      filename = nameAndExt.toString().split('.').first;
-      extensionn = nameAndExt.toString().split('.').last;
-      print(base64ToSend);
+      var newFile = await file.readAsBytes();
+      // base64ToSend = base64.encode(await file.readAsBytes());
+
       pathImage = newFile;
       func.call();
     }
@@ -142,6 +145,9 @@ abstract class _RegisterViewControllerBase with Store {
   registerUser(BuildContext context) async {
     UtilsModalMessage().loading(1);
     try {
+      if (fileSend != null) {
+        await sendPhoto(fileSend);
+      }
       final map = {
         "email": email.text.toString(),
         "password": password.text.toString(),
@@ -150,9 +156,7 @@ abstract class _RegisterViewControllerBase with Store {
         "datNasc": datNasc.text.toString(),
         "matricula": matricula.text.toString(),
         "idTurma": idTurma.toString(),
-        "base64": base64ToSend,
-        "name": filename.toString().split('/').last,
-        "extension": '.$extensionn'
+        "urlFoto": urlImage,
       };
 
       Response response =
@@ -176,6 +180,30 @@ abstract class _RegisterViewControllerBase with Store {
       print(e);
       await UtilsModalMessage().loading(0);
       UtilsModalMessage().generalToast(title: 'Erro ao cadastrar usuário');
+    }
+  }
+
+  @action
+  sendPhoto(XFile? file) async {
+    try {
+      FirebaseStorage firebase = FirebaseStorage.instance;
+
+      // Create a Reference to the file
+      var date = DateTime.now().toIso8601String();
+      Reference ref = firebase.ref().child('$date.jpg');
+
+      final metadata = SettableMetadata(
+          contentType: 'image/jpeg',
+          customMetadata: {'picked-file-path': file!.path});
+
+      ref.putFile(File(file.path), metadata).then((p0) async {
+        urlImage = await p0.ref.getDownloadURL();
+      });
+      // print(await ref.getDownloadURL());
+
+      // return Future.value(uploadTask);
+    } catch (e) {
+      print(e);
     }
   }
 }

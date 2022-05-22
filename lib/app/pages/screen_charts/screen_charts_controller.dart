@@ -88,7 +88,9 @@ abstract class _ScreenChartsControllerBase with Store {
                 // ignore: curly_braces_in_flow_control_structures
 
                 dataCandidates.add({
-                  'name': item['name'],
+                  'name': item['userId'] == auth.user.userId
+                      ? 'Você'
+                      : item['name'],
                   'age': age,
                   'turma': item['idTurma'].toString().replaceAll('Turma ', ''),
                   'qttVotes': 0.0,
@@ -172,7 +174,9 @@ abstract class _ScreenChartsControllerBase with Store {
     int ctt = 0;
     for (var item in dataCandidates) {
       data.add(SubscriberSeries(
-        year: item['name'].toString(),
+        year: item['userId'] == auth.user.userId
+            ? 'Você'
+            : item['name'].toString(),
         subscribers: item['qttVotes'],
         barColor: ctt == 0
             ? charts.ColorUtil.fromDartColor(Colors.blue)

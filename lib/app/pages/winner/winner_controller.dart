@@ -1,3 +1,5 @@
+import 'package:dio/dio.dart';
+import 'package:election/app/shared/custom_http.dart';
 import 'package:election/app/utils/modal_messages.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +11,7 @@ part 'winner_controller.g.dart';
 class WinnerController = _WinnerControllerBase with _$WinnerController;
 
 abstract class _WinnerControllerBase with Store {
+  final _http = CustomHttp();
   @observable
   DateTime dateToday = DateTime.now();
   @observable
@@ -62,10 +65,32 @@ abstract class _WinnerControllerBase with Store {
         return true;
       } else {
         UtilsModalMessage().loading(0);
+        counting = false;
         return false;
       }
     } catch (e) {
       return false;
     }
+  }
+
+  @action
+  callNotifications() async {
+    try {
+      Response response = await _http.client.post('/v1/call-notifications');
+      if (response.statusCode == 200) {
+        var result = response.data;
+        if (result['STATUS'] == 'SUCCESS') {
+          print(result);
+        }
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  @action
+  finishVotation() async {
+    FirebaseDatabase.instance.reference().child('isInProgress').set(false);
+    await callNotifications();
   }
 }

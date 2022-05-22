@@ -382,6 +382,7 @@ abstract class _ReportUserControllerBase with Store {
                   'qttVotes': 0,
                   'e-mail': item['userEmail'],
                   'id': item['userId'],
+                  'foto': item['urlFoto']
                 });
                 if (values.length > 0) {
                   values.forEach((element) {

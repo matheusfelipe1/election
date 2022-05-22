@@ -60,14 +60,32 @@ class _VotePageState extends State<VotePage> {
                                         arguments:
                                             controller.dataCandidates[i]);
                                   },
-                                  leading: CircleAvatar(
-                                    maxRadius: 25,
-                                    backgroundColor: Colors.white,
-                                    child: Icon(
-                                      Icons.person,
-                                      color: Colors.black,
-                                      size: size.height * 0.04,
-                                    ),
+                                  leading: Padding(
+                                    padding: const EdgeInsets.all(9.0),
+                                    child: controller.dataCandidates[i]
+                                                ['foto'] !=
+                                            ''
+                                        ? Container(
+                                            width: size.width * 0.11,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(50),
+                                                image: DecorationImage(
+                                                    image: NetworkImage(
+                                                        controller
+                                                                .dataCandidates[
+                                                            i]['foto']),
+                                                    fit: BoxFit.fill)),
+                                          )
+                                        : CircleAvatar(
+                                            maxRadius: 25,
+                                            backgroundColor: Colors.white,
+                                            child: Icon(
+                                              Icons.person,
+                                              color: Colors.black,
+                                              size: size.height * 0.04,
+                                            ),
+                                          ),
                                   ),
                                   title: Column(
                                     crossAxisAlignment:

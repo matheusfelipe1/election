@@ -13,6 +13,7 @@ class UserModel {
   late String matricula;
   late bool alredyVoted;
   late bool candidate;
+  late bool aproved;
 
   UserModel({
     required this.userId,
@@ -25,6 +26,7 @@ class UserModel {
     required this.matricula,
     required this.alredyVoted,
     required this.candidate,
+    required this.aproved,
   });
 
   UserModel.fromJson(Map<String, dynamic> json) {
@@ -38,6 +40,7 @@ class UserModel {
     matricula = json['matricula'];
     alredyVoted = json['alreadyVoted'];
     candidate = json['candidate'];
+    aproved = json['aproved'];
   }
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();

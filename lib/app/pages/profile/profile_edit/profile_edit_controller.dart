@@ -140,7 +140,7 @@ abstract class _ProfileEditControllerBase with Store {
           contentType: 'image/jpeg',
           customMetadata: {'picked-file-path': file!.path});
 
-      ref.putFile(File(file.path), metadata).then((p0) async {
+      await ref.putFile(File(file.path), metadata).then((p0) async {
         urlImage = await p0.ref.getDownloadURL();
       });
       // print(await ref.getDownloadURL());

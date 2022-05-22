@@ -29,6 +29,7 @@ abstract class _AuthControllerBase with Store {
       datNasc: '',
       matricula: '',
       alredyVoted: false,
+      aproved: false,
       candidate: false);
 
   _AuthControllerBase() {
@@ -61,7 +62,17 @@ abstract class _AuthControllerBase with Store {
         if (result['STATUS'] == 'SUCCESS') {
           var data = result['DATA'];
           user = UserModel.fromJson(data);
-          Modular.to.pushNamed('/navigation');
+          if (user.admin) {
+            if (user.aproved) {
+              Modular.to.pushNamed('/navigation');
+            } else {
+              Modular.to.pushNamed('/passport');
+            }
+          } else {
+            Modular.to.pushNamed('/navigation');
+          }
+        } else {
+          Modular.to.pushNamed('/login');
         }
       } else {
         Modular.to.pushNamed('/login');
@@ -107,17 +118,82 @@ abstract class _AuthControllerBase with Store {
     try {
       var shared = await SharedPreferences.getInstance();
       var token = shared.getString('deviceId');
-      final map = {'deviceId': token};
-      Response response = await _http.client
-          .post('/v1/register-device-id', data: json.encode(map));
-      if (response.statusCode == 200) {
-        var _result = response.data;
-        if (_result['STATUS'] == 'SUCCESS') {
-          print(_result);
+      final map = {'deviceId': token, 'userId': user.userId};
+      bool valid = await verifyDeviceInDataBase();
+      if (!valid) {
+        Response response = await _http.client
+            .post('/v1/register-device-id', data: json.encode(map));
+        if (response.statusCode == 200) {
+          var _result = response.data;
+          if (_result['STATUS'] == 'SUCCESS') {
+            print(_result);
+          }
         }
       }
     } catch (e) {
       print(e);
+    }
+  }
+
+  @action
+  verifyAproveRegister() async {
+    UtilsModalMessage().loading(1);
+    try {
+      Response response =
+          await _http.client.get('/v1/get-user-by-id/${user.userId}');
+      if (response.statusCode == 200) {
+        var result = response.data;
+        if (result['STATUS'] == 'SUCCESS') {
+          var data = result['DATA'];
+          user = UserModel.fromJson(data);
+          if (user.aproved) {
+            UtilsModalMessage().loading(0);
+            Modular.to.pushNamed('/navigation');
+          } else {
+            UtilsModalMessage().loading(0);
+            UtilsModalMessage()
+                .generalToast(title: 'Seu cadastro ainda não foi aprovado.');
+          }
+        } else {
+          UtilsModalMessage().loading(0);
+          UtilsModalMessage()
+              .generalToast(title: 'Seu cadastro ainda não foi aprovado.');
+        }
+      } else {
+        UtilsModalMessage().loading(0);
+        UtilsModalMessage()
+            .generalToast(title: 'Seu cadastro ainda não foi aprovado.');
+      }
+    } catch (e) {
+      print(e);
+      UtilsModalMessage().loading(0);
+      UtilsModalMessage()
+          .generalToast(title: 'Seu cadastro ainda não foi aprovado.');
+    }
+  }
+
+  @action
+  Future<bool> verifyDeviceInDataBase() async {
+    try {
+      Response response =
+          await _http.client.get('/v1/get-device-id/${user.userId}');
+      if (response.statusCode == 200) {
+        var result = response.data;
+        if (result['STATUS'] == 'SUCCESS') {
+          if (result['DATA'] != null) {
+            return true;
+          } else {
+            return false;
+          }
+        } else {
+          return false;
+        }
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print(e);
+      return false;
     }
   }
 }

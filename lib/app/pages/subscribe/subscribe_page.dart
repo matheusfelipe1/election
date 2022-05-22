@@ -97,9 +97,9 @@ class _SubscribePageState extends State<SubscribePage> {
                                 child: Center(
                                   child: Text('Você já se candidatou',
                                       style: TextStyle(
-                                          color: Colors.white,
-                                          fontFamily: 'Poppins',
-                                          fontSize: size.height * 0.02)),
+                                        color: Colors.white,
+                                        fontFamily: 'Poppins',
+                                      )),
                                 ),
                               ),
                             )

@@ -8,6 +8,7 @@ import 'package:election/app/pages/charts_all_turmas/switch_turma/switch_turma.d
 import 'package:election/app/pages/home/home_controller.dart';
 import 'package:election/app/pages/login/login.dart';
 import 'package:election/app/pages/login/login_controller.dart';
+import 'package:election/app/pages/passport/passport_admin.dart';
 import 'package:election/app/pages/profile/profile_details/profile_details.dart';
 import 'package:election/app/pages/profile/profile_details/profile_details_controller.dart';
 import 'package:election/app/pages/profile/profile_edit/profile_edit.dart';
@@ -71,5 +72,7 @@ class AppModule extends Module {
             transition: TransitionType.fadeIn),
         ChildRoute('/success',
             child: (_, args) => Sucess(), transition: TransitionType.fadeIn),
+        ChildRoute('/passport',
+            child: (_, args) => Passport(), transition: TransitionType.fadeIn),
       ];
 }

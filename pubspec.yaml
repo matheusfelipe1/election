@@ -59,6 +59,7 @@ dependencies:
   firebase_database: ^6.0.0
   firebase_messaging: ^10.0.0
   flutter_local_notifications: ^9.5.3+1
+  age_calculator: ^1.0.0
 
 dependency_overrides:
   firebase_messaging_platform_interface: 3.1.6

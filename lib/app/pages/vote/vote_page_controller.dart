@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:age_calculator/age_calculator.dart';
 import 'package:dio/dio.dart';
 import 'package:election/app/auth/auth_controller.dart';
 import 'package:election/app/shared/custom_http.dart';
@@ -77,14 +78,13 @@ abstract class _VotePageControllerBase with Store {
           if (result is List) {
             for (var item in result) {
               if (item is Map && item['candidate'] == true) {
-                print(item);
+                var age;
                 var date =
                     item['datNasc'].toString().split('/').reversed.join('-');
                 DateTime newAge = DateTime.parse(date);
-                DateTime now = DateTime.now();
-                var v = (now.year + now.month);
-                var z = (newAge.year + newAge.month);
-                var age = v - z;
+                DateDuration duration;
+                duration = AgeCalculator.age(newAge);
+                age = duration.years;
                 // ignore: curly_braces_in_flow_control_structures
                 dataCandidates.add({
                   'name': item['userId'] == auth.user.userId

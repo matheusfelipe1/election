@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:age_calculator/age_calculator.dart';
 import 'package:dio/dio.dart';
 import 'package:election/app/shared/custom_http.dart';
 import 'package:election/app/utils/modal_messages.dart';
@@ -367,13 +368,13 @@ abstract class _ReportUserControllerBase with Store {
           if (result is List) {
             for (var item in result) {
               if (item is Map && item['candidate'] == true) {
+                var age;
                 var date =
                     item['datNasc'].toString().split('/').reversed.join('-');
                 DateTime newAge = DateTime.parse(date);
-                DateTime now = DateTime.now();
-                var v = (now.year + now.month);
-                var z = (newAge.year + newAge.month);
-                var age = v - z;
+                DateDuration duration;
+                duration = AgeCalculator.age(newAge);
+                age = duration.years;
 
                 dataCandidates.add({
                   'name': item['name'],

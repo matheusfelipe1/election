@@ -1,3 +1,4 @@
+import 'package:age_calculator/age_calculator.dart';
 import 'package:election/app/auth/auth_controller.dart';
 import 'package:election/app/utils/modal_messages.dart';
 import 'package:flutter/material.dart';
@@ -17,12 +18,11 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     String age = '';
-    DateTime agr = DateTime.now();
     var newQuery = auth.user.datNasc.toString().split('/').reversed.join('-');
     DateTime query = DateTime.parse(newQuery);
-    var v = (agr.year + agr.month);
-    var z = (query.year + query.month);
-    age = (v - z).toString();
+    DateDuration duration;
+    duration = AgeCalculator.age(query);
+    age = duration.years.toString();
     Size size = MediaQuery.of(context).size;
     return Container(
       child: Column(

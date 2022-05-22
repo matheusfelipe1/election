@@ -59,6 +59,9 @@ class UtilsModalMessage {
                                   fontSize: 12),
                             ),
                           )),
+                      SizedBox(
+                        width: 15,
+                      ),
                       GestureDetector(
                           onTap: () => func.call(),
                           child: Container(

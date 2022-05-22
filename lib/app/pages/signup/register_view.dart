@@ -258,9 +258,9 @@ class _RegisterViewState extends State<RegisterView> {
                     Text('Você é usuário administrativo?',
                         textAlign: TextAlign.start,
                         style: TextStyle(
-                            fontFamily: 'Poppins',
-                            color: Colors.black,
-                            fontSize: size.height * 0.025)),
+                          fontFamily: 'Poppins',
+                          color: Colors.black,
+                        )),
                     SizedBox(
                       width: size.width * 0.05,
                     ),

@@ -9,6 +9,7 @@ import 'package:election/app/pages/home/home_controller.dart';
 import 'package:election/app/pages/login/login.dart';
 import 'package:election/app/pages/login/login_controller.dart';
 import 'package:election/app/pages/passport/passport_admin.dart';
+import 'package:election/app/pages/profile/profile_details/image/image_details.dart';
 import 'package:election/app/pages/profile/profile_details/profile_details.dart';
 import 'package:election/app/pages/profile/profile_details/profile_details_controller.dart';
 import 'package:election/app/pages/profile/profile_edit/profile_edit.dart';
@@ -61,6 +62,11 @@ class AppModule extends Module {
             transition: TransitionType.fadeIn),
         ChildRoute('/profile-details',
             child: (_, args) => ProfileDetails(
+                  data: args.data,
+                ),
+            transition: TransitionType.fadeIn),
+        ChildRoute('/image-details',
+            child: (_, args) => ImageDetails(
                   data: args.data,
                 ),
             transition: TransitionType.fadeIn),

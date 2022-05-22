@@ -1,20 +1,39 @@
+// ignore_for_file: curly_braces_in_flow_control_structures
+
+import 'dart:io';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'local_notifications.dart';
 
 class PushService {
   FirebaseMessaging messaging = FirebaseMessaging.instance;
   config() async {
-    await messaging.requestPermission(
+    if (Platform.isIOS)
+      await messaging.requestPermission(
+        alert: true,
+        announcement: false,
+        badge: true,
+        sound: true,
+      );
+
+    var token = await messaging.getToken();
+    print(token);
+
+    var shared = await SharedPreferences.getInstance();
+    shared.setString('deviceId', token!);
+    await FirebaseMessaging.instance
+        .setForegroundNotificationPresentationOptions(
       alert: true,
-      announcement: false,
       badge: true,
       sound: true,
     );
-
-    // var token = await messaging.getToken();
-    // print(token);
-
-    // var shared = await SharedPreferences.getInstance();
-    // shared.setString('deviceId', token!);
+    FirebaseMessaging.onMessage.listen((message) {
+      RemoteNotification? notification = message.notification;
+      AndroidNotification? android = message.notification?.android;
+      NotificationsCall().showNotification(
+          notification!.hashCode, notification.title!, notification.body!);
+    });
   }
 }

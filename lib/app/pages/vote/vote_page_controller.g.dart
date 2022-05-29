@@ -41,6 +41,22 @@ mixin _$VotePageController on _VotePageControllerBase, Store {
     });
   }
 
+  late final _$valuesAtom =
+      Atom(name: '_VotePageControllerBase.values', context: context);
+
+  @override
+  List<dynamic> get values {
+    _$valuesAtom.reportRead();
+    return super.values;
+  }
+
+  @override
+  set values(List<dynamic> value) {
+    _$valuesAtom.reportWrite(value, super.values, () {
+      super.values = value;
+    });
+  }
+
   @override
   ObservableFuture getValuesCharts() {
     final _$future = super.getValuesCharts();
@@ -63,6 +79,15 @@ mixin _$VotePageController on _VotePageControllerBase, Store {
   @override
   Future voteCandidate(String id) {
     return _$voteCandidateAsyncAction.run(() => super.voteCandidate(id));
+  }
+
+  late final _$getDataInRealtimeAsyncAction = AsyncAction(
+      '_VotePageControllerBase.getDataInRealtime',
+      context: context);
+
+  @override
+  Future getDataInRealtime() {
+    return _$getDataInRealtimeAsyncAction.run(() => super.getDataInRealtime());
   }
 
   late final _$_VotePageControllerBaseActionController =
@@ -94,7 +119,8 @@ mixin _$VotePageController on _VotePageControllerBase, Store {
   String toString() {
     return '''
 auth: ${auth},
-dataCandidates: ${dataCandidates}
+dataCandidates: ${dataCandidates},
+values: ${values}
     ''';
   }
 }

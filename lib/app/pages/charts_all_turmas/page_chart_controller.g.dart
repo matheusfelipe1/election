@@ -89,6 +89,22 @@ mixin _$PageChartController on _PageChartControllerBase, Store {
     });
   }
 
+  late final _$authAtom =
+      Atom(name: '_PageChartControllerBase.auth', context: context);
+
+  @override
+  AuthController get auth {
+    _$authAtom.reportRead();
+    return super.auth;
+  }
+
+  @override
+  set auth(AuthController value) {
+    _$authAtom.reportWrite(value, super.auth, () {
+      super.auth = value;
+    });
+  }
+
   @override
   ObservableFuture getAllCandidates() {
     final _$future = super.getAllCandidates();
@@ -102,6 +118,14 @@ mixin _$PageChartController on _PageChartControllerBase, Store {
   @override
   Future getDataInRealtime() {
     return _$getDataInRealtimeAsyncAction.run(() => super.getDataInRealtime());
+  }
+
+  late final _$getTeamsAsyncAction =
+      AsyncAction('_PageChartControllerBase.getTeams', context: context);
+
+  @override
+  Future getTeams() {
+    return _$getTeamsAsyncAction.run(() => super.getTeams());
   }
 
   late final _$_PageChartControllerBaseActionController =
@@ -136,7 +160,8 @@ turmaText: ${turmaText},
 turmas: ${turmas},
 values: ${values},
 candidatesFilter: ${candidatesFilter},
-dataCandidates: ${dataCandidates}
+dataCandidates: ${dataCandidates},
+auth: ${auth}
     ''';
   }
 }

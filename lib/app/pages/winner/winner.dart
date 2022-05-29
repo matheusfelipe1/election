@@ -40,6 +40,7 @@ class _WinnerState extends State<Winner> {
     print(inStart);
     if (inStart) {
       setState(() {});
+      print(controller.dateToday);
       start(controller.dateToday);
     }
     setState(() {});
@@ -52,6 +53,7 @@ class _WinnerState extends State<Winner> {
         final seconds = controller.myDuration.inSeconds - reduceSecondsBy;
         if (seconds < 0) {
           timer.cancel();
+          controller.finishVotation();
         } else {
           controller.myDuration = Duration(seconds: seconds);
         }
@@ -62,7 +64,9 @@ class _WinnerState extends State<Winner> {
     if (mounted)
       setState(() {
         var difference = req.difference(controller.date).inDays;
+        print(difference);
         controller.myDuration = Duration(days: difference);
+        print(controller.myDuration);
       });
 
     timer = Timer.periodic(Duration(seconds: 1), (timer) {
@@ -216,7 +220,6 @@ class _WinnerState extends State<Winner> {
                           segurado = true;
                         });
                         Future.delayed(Duration(milliseconds: 1500), () async {
-                          await controller.finishVotation();
                           Modular.to.pushNamed('/success');
                         });
                       },

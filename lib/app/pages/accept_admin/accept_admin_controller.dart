@@ -19,7 +19,7 @@ abstract class _AcceptAdminControllerBase with Store {
   List users = [];
 
   @observable
-  late VoidCallback func;
+  VoidCallback? func;
 
   @observable
   getAllUsers() async {
@@ -49,7 +49,7 @@ abstract class _AcceptAdminControllerBase with Store {
                   'foto': item['urlFoto'],
                   'blocked': item['blocked']
                 });
-                func.call();
+                func!.call();
                 print(item);
                 UtilsModalMessage().loading(0);
               }
@@ -80,7 +80,7 @@ abstract class _AcceptAdminControllerBase with Store {
               .generalToast(title: 'Usuário aprovado com sucesso.');
           await callNotification(id, 'Aprovado',
               'Seu cadastro como usuário administrativo foi aprovado.');
-          func.call();
+          func!.call();
         }
       }
     } catch (e) {
@@ -110,7 +110,7 @@ abstract class _AcceptAdminControllerBase with Store {
           });
           await callNotification(id, 'Reprovado',
               'Seu cadastro como usuário administrativo foi reprovado.');
-          func.call();
+          func!.call();
         }
       }
     } catch (e) {

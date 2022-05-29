@@ -26,6 +26,7 @@ import 'package:election/app/pages/subscribe/subscribe_controller.dart';
 import 'package:election/app/pages/vote/vote_page_controller.dart';
 import 'package:election/app/pages/winner/message_success/message_success.dart';
 import 'package:election/app/pages/winner/winner_controller.dart';
+import 'package:election/app/pages/winners/winners.dart';
 import 'package:election/app/shared/custom_http.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -88,5 +89,7 @@ class AppModule extends Module {
         ChildRoute('/add-admin',
             child: (_, args) => AcceptAdmin(),
             transition: TransitionType.fadeIn),
+        ChildRoute('/winners',
+            child: (_, args) => Winners(), transition: TransitionType.fadeIn),
       ];
 }

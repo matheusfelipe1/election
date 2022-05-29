@@ -22,7 +22,7 @@ abstract class _CreateTeamControllerBase with Store {
   @observable
   TextEditingController disciplina = new TextEditingController();
   @observable
-  late VoidCallback func;
+  VoidCallback? func;
 
   @action
   createTeam() async {
@@ -46,7 +46,7 @@ abstract class _CreateTeamControllerBase with Store {
           periodo.text = '';
           curso.text = '';
           disciplina.text = '';
-          func.call();
+          func!.call();
         }
       }
     } catch (e) {

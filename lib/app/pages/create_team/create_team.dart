@@ -20,12 +20,13 @@ class _CreateTeamState extends State<CreateTeam> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    controller.func = updateState;
+    // controller.func = updateState;
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+
     return Scaffold(
         body: SingleChildScrollView(
       child: Column(
@@ -132,6 +133,7 @@ class _CreateTeamState extends State<CreateTeam> {
           ),
           GestureDetector(
             onTap: () {
+              controller.func = updateState;
               controller.createTeam();
             },
             child: Container(

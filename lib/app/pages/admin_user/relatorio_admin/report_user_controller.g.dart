@@ -57,6 +57,22 @@ mixin _$ReportUserController on _ReportUserControllerBase, Store {
     });
   }
 
+  late final _$turmasAtom =
+      Atom(name: '_ReportUserControllerBase.turmas', context: context);
+
+  @override
+  List<String> get turmas {
+    _$turmasAtom.reportRead();
+    return super.turmas;
+  }
+
+  @override
+  set turmas(List<String> value) {
+    _$turmasAtom.reportWrite(value, super.turmas, () {
+      super.turmas = value;
+    });
+  }
+
   @override
   ObservableFuture createFileXlsx(VoidCallback func) {
     final _$future = super.createFileXlsx(func);
@@ -76,6 +92,14 @@ mixin _$ReportUserController on _ReportUserControllerBase, Store {
   @override
   Future getDataInRealtime() {
     return _$getDataInRealtimeAsyncAction.run(() => super.getDataInRealtime());
+  }
+
+  late final _$getTeamsAsyncAction =
+      AsyncAction('_ReportUserControllerBase.getTeams', context: context);
+
+  @override
+  Future getTeams() {
+    return _$getTeamsAsyncAction.run(() => super.getTeams());
   }
 
   late final _$_ReportUserControllerBaseActionController =
@@ -119,7 +143,8 @@ mixin _$ReportUserController on _ReportUserControllerBase, Store {
     return '''
 values: ${values},
 dataCandidates: ${dataCandidates},
-data: ${data}
+data: ${data},
+turmas: ${turmas}
     ''';
   }
 }

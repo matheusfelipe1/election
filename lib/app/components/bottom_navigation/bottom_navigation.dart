@@ -56,6 +56,7 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
           ];
     setAdminOrNot();
     print(auth.user.urlFoto);
+    auth.listenDataBase();
     super.initState();
   }
 

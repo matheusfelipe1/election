@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:election/app/models/user_model.dart';
 import 'package:election/app/shared/custom_http.dart';
 import 'package:election/app/utils/modal_messages.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -35,6 +36,8 @@ abstract class _AuthControllerBase with Store {
   _AuthControllerBase() {
     _init();
   }
+
+  FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
 
   _init() async {
     // ignore: unnecessary_new
@@ -195,5 +198,17 @@ abstract class _AuthControllerBase with Store {
       print(e);
       return false;
     }
+  }
+
+  @action
+  listenDataBase() {
+    firebaseDatabase.reference().child('isInProgress').onValue.listen((event) {
+      if (event.snapshot.value != null) {
+        var value = event.snapshot.value;
+        if (value == false) {
+          Modular.to.pushNamed('/winners');
+        }
+      }
+    });
   }
 }

@@ -18,7 +18,7 @@ abstract class _VotePageControllerBase with Store {
   @observable
   AuthController auth = Modular.get<AuthController>();
   final _http = CustomHttp();
-  late VoidCallback func;
+  VoidCallback? func;
 
   @observable
   List dataCandidates = [
@@ -51,6 +51,8 @@ abstract class _VotePageControllerBase with Store {
       'e-mail': 'teste@gmail.com'
     },
   ];
+  @observable
+  List values = [];
   @action
   organizerData() {
     dataCandidates.sort((a, b) {
@@ -92,14 +94,27 @@ abstract class _VotePageControllerBase with Store {
                       : item['name'],
                   'age': age,
                   'turma': item['idTurma'].toString().replaceAll('Turma ', ''),
-                  'qttVotes': 40.0,
+                  'qttVotes': 0.0,
                   'e-mail': item['userEmail'],
                   'id': item['userId'],
                   'foto': item['urlFoto']
                 });
 
+                await getDataInRealtime();
+
+                if (values.length > 0) {
+                  values.forEach((element) {
+                    dataCandidates.forEach((element2) {
+                      if (element2['id'] == element['id']) {
+                        element2['qttVotes'] =
+                            double.tryParse(element['ctt'].toString());
+                      }
+                    });
+                  });
+                }
+
                 organizerData();
-                func.call();
+                func!.call();
                 print(item);
                 UtilsModalMessage().loading(0);
               }
@@ -168,6 +183,19 @@ abstract class _VotePageControllerBase with Store {
           .child('votation')
           .child(id)
           .set({'ctt': 1}).asStream();
+    }
+  }
+
+  @action
+  getDataInRealtime() async {
+    values.clear();
+    DataSnapshot data =
+        await FirebaseDatabase.instance.reference().child('votation').once();
+    if (data.value != null) {
+      var result = data.value;
+      result.forEach((k, v) {
+        values.add({'id': k, 'ctt': v['ctt']});
+      });
     }
   }
 }

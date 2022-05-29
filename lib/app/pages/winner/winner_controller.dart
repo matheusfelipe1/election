@@ -26,7 +26,7 @@ abstract class _WinnerControllerBase with Store {
   Duration myDuration = Duration(days: 5);
   @observable
   bool counting = false;
-  late VoidCallback func;
+  VoidCallback? func;
   @action
   Future<bool> setDateValidInRealtime(String date) async {
     try {

@@ -16,7 +16,7 @@ abstract class _HomeControllerBase with Store {
   List dataCandidates = [];
   @observable
   List data = [];
-  late VoidCallback func;
+  VoidCallback? func;
   @observable
   List values = [];
 
@@ -74,7 +74,7 @@ abstract class _HomeControllerBase with Store {
             }
             await organizerData();
             organizerData();
-            func.call();
+            func!.call();
           }
         }
       }

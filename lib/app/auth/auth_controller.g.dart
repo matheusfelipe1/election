@@ -91,6 +91,20 @@ mixin _$AuthController on _AuthControllerBase, Store {
         .run(() => super.verifyDeviceInDataBase());
   }
 
+  late final _$_AuthControllerBaseActionController =
+      ActionController(name: '_AuthControllerBase', context: context);
+
+  @override
+  dynamic listenDataBase() {
+    final _$actionInfo = _$_AuthControllerBaseActionController.startAction(
+        name: '_AuthControllerBase.listenDataBase');
+    try {
+      return super.listenDataBase();
+    } finally {
+      _$_AuthControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''

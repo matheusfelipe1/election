@@ -23,7 +23,7 @@ class ReportUserController = _ReportUserControllerBase
 abstract class _ReportUserControllerBase with Store {
   final _http = CustomHttp();
   var fileN;
-  late VoidCallback func;
+  VoidCallback? func;
   @observable
   List values = [];
   @observable
@@ -399,7 +399,7 @@ abstract class _ReportUserControllerBase with Store {
                   });
                 }
                 organizerData();
-                func.call();
+                func!.call();
                 print(item);
                 UtilsModalMessage().loading(0);
               }
@@ -442,7 +442,7 @@ abstract class _ReportUserControllerBase with Store {
           });
           UtilsModalMessage().loading(0);
           print(turmas);
-          func.call();
+          func!.call();
         }
       }
     } catch (e) {

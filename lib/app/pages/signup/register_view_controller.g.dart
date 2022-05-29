@@ -233,6 +233,38 @@ mixin _$RegisterViewController on _RegisterViewControllerBase, Store {
     });
   }
 
+  late final _$teamsAtom =
+      Atom(name: '_RegisterViewControllerBase.teams', context: context);
+
+  @override
+  List<String> get teams {
+    _$teamsAtom.reportRead();
+    return super.teams;
+  }
+
+  @override
+  set teams(List<String> value) {
+    _$teamsAtom.reportWrite(value, super.teams, () {
+      super.teams = value;
+    });
+  }
+
+  late final _$funcAtom =
+      Atom(name: '_RegisterViewControllerBase.func', context: context);
+
+  @override
+  VoidCallback? get func {
+    _$funcAtom.reportRead();
+    return super.func;
+  }
+
+  @override
+  set func(VoidCallback? value) {
+    _$funcAtom.reportWrite(value, super.func, () {
+      super.func = value;
+    });
+  }
+
   late final _$showModalGetPhotoAsyncAction = AsyncAction(
       '_RegisterViewControllerBase.showModalGetPhoto',
       context: context);
@@ -269,6 +301,14 @@ mixin _$RegisterViewController on _RegisterViewControllerBase, Store {
     return _$sendPhotoAsyncAction.run(() => super.sendPhoto(file));
   }
 
+  late final _$getTeamsAsyncAction =
+      AsyncAction('_RegisterViewControllerBase.getTeams', context: context);
+
+  @override
+  Future getTeams() {
+    return _$getTeamsAsyncAction.run(() => super.getTeams());
+  }
+
   late final _$_RegisterViewControllerBaseActionController =
       ActionController(name: '_RegisterViewControllerBase', context: context);
 
@@ -299,7 +339,9 @@ base64ToSend: ${base64ToSend},
 extensionn: ${extensionn},
 filename: ${filename},
 urlImage: ${urlImage},
-fileSend: ${fileSend}
+fileSend: ${fileSend},
+teams: ${teams},
+func: ${func}
     ''';
   }
 }

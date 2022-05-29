@@ -51,7 +51,7 @@ abstract class _RegisterViewControllerBase with Store {
   @observable
   List<String> teams = ['Selecione sua turma'];
   @observable
-  late VoidCallback func;
+  VoidCallback? func;
 
   _RegisterViewControllerBase() {
     _init();
@@ -226,7 +226,7 @@ abstract class _RegisterViewControllerBase with Store {
           });
           UtilsModalMessage().loading(0);
           print(teams);
-          func.call();
+          func!.call();
         }
       }
     } catch (e) {

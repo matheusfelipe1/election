@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:election/app/pages/winner/winner_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -16,6 +17,7 @@ class _SucessState extends State<Sucess> with SingleTickerProviderStateMixin {
   late Animation colorAnimation;
   late AnimationController controller;
   late Timer timer;
+  WinnerController _controller = Modular.get<WinnerController>();
 
   @override
   void initState() {
@@ -45,6 +47,9 @@ class _SucessState extends State<Sucess> with SingleTickerProviderStateMixin {
     // TODO: implement dispose
     super.dispose();
     timer.cancel();
+    Future.delayed(Duration(seconds: 2), () {
+      _controller.finishVotation();
+    });
   }
 
   @override

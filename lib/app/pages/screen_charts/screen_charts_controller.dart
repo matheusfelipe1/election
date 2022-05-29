@@ -21,7 +21,7 @@ abstract class _ScreenChartsControllerBase with Store {
   final _http = CustomHttp();
   @observable
   AuthController auth = Modular.get<AuthController>();
-  late VoidCallback func;
+  VoidCallback? func;
   @observable
   List values = [];
   @observable
@@ -114,7 +114,7 @@ abstract class _ScreenChartsControllerBase with Store {
                 await organizerData();
                 renderDataInChart();
 
-                func.call();
+                func!.call();
                 print(item);
                 UtilsModalMessage().loading(0);
               }
@@ -166,7 +166,7 @@ abstract class _ScreenChartsControllerBase with Store {
         });
         await organizerData();
         renderDataInChart();
-        func.call();
+        func!.call();
       }
     });
   }

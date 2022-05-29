@@ -23,7 +23,7 @@ class _AcceptAdminState extends State<AcceptAdmin> {
     // TODO: implement initState
     super.initState();
     controller.users.clear();
-    controller.func = updateState;
+
     controller.getAllUsers();
   }
 
@@ -153,6 +153,7 @@ class _AcceptAdminState extends State<AcceptAdmin> {
                                           children: [
                                             GestureDetector(
                                               onTap: () async {
+                                                controller.func = updateState;
                                                 await UtilsModalMessage()
                                                     .showMessageModal(
                                                         title:
@@ -200,6 +201,7 @@ class _AcceptAdminState extends State<AcceptAdmin> {
                                             ),
                                             GestureDetector(
                                               onTap: () async {
+                                                controller.func = updateState;
                                                 await UtilsModalMessage()
                                                     .showMessageModal(
                                                         title:

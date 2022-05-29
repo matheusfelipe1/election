@@ -14,7 +14,7 @@ class PageChartController = _PageChartControllerBase with _$PageChartController;
 
 abstract class _PageChartControllerBase with Store {
   final _http = CustomHttp();
-  late VoidCallback func;
+  VoidCallback? func;
   @observable
   String turmaText = '';
   @observable
@@ -107,7 +107,7 @@ abstract class _PageChartControllerBase with Store {
                   });
                 }
                 await organizerData();
-                func.call();
+                func!.call();
                 print(item);
                 UtilsModalMessage().loading(0);
               }
@@ -150,7 +150,7 @@ abstract class _PageChartControllerBase with Store {
           });
           UtilsModalMessage().loading(0);
           print(turmas);
-          func.call();
+          func!.call();
         }
       }
     } catch (e) {
@@ -181,7 +181,7 @@ abstract class _PageChartControllerBase with Store {
         });
         await organizerData();
         renderDataInChart();
-        func.call();
+        func!.call();
       }
     });
   }

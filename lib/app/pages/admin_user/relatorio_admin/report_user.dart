@@ -18,19 +18,13 @@ class _ReportUserState extends State<ReportUser> {
     if (mounted) setState(() {});
   }
 
-  List<String> turmas = [
-    'Selecione uma turma',
-    'Turma 26',
-    'Turma 36',
-    'Turma 25',
-    'Turma 19',
-    'Turma 15',
-    'Turma 10',
-  ];
   @override
   void initState() {
     // TODO: implement initState
     controller.func = updateState;
+    controller.turmas.clear();
+    controller.turmas.add('Selecione uma turma');
+    controller.getTeams();
     controller.dataCandidates.clear();
     controller.getDataInRealtime();
     controller.getAllCandidates();
@@ -83,7 +77,7 @@ class _ReportUserState extends State<ReportUser> {
                             controller.filterDatas(dropdownValue);
                           });
                         },
-                        items: turmas
+                        items: controller.turmas
                             .map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,

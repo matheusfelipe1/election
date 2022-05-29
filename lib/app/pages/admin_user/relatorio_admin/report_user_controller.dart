@@ -199,6 +199,10 @@ abstract class _ReportUserControllerBase with Store {
   ];
   @observable
   List<dynamic> data = [];
+  @observable
+  List<String> turmas = [
+    'Selecione uma turma',
+  ];
 
   @action
   organizerData() {
@@ -420,6 +424,30 @@ abstract class _ReportUserControllerBase with Store {
       result.forEach((k, v) {
         values.add({'id': k, 'ctt': v['ctt']});
       });
+    }
+  }
+
+  @action
+  getTeams() async {
+    UtilsModalMessage().loading(1);
+    try {
+      Response response = await _http.client.get('/v1/get-teams');
+      if (response.statusCode == 200) {
+        var result = response.data;
+        if (result['STATUS'] == 'SUCCESS') {
+          print(result['DATA']);
+          var finalResult = result['DATA'];
+          finalResult.forEach((element) {
+            turmas.add(element['turma']);
+          });
+          UtilsModalMessage().loading(0);
+          print(turmas);
+          func.call();
+        }
+      }
+    } catch (e) {
+      print(e);
+      UtilsModalMessage().loading(0);
     }
   }
 }

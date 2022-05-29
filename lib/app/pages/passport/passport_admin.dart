@@ -20,6 +20,7 @@ class _PassportState extends State<Passport> {
   void initState() {
     // TODO: implement initState
     switchState();
+    auth.saveDeviceToken();
     super.initState();
   }
 

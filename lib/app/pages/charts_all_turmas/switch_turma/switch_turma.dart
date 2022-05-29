@@ -19,11 +19,15 @@ class _SwitchChartsState extends State<SwitchCharts> {
   @override
   void initState() {
     // TODO: implement initState
+    controller.turmas.clear();
+    controller.turmas.add('Selecione uma turma');
     controller.organizerData();
+    controller.getTeams();
     controller.getDataInRealtime();
     controller.dataCandidates.clear();
     controller.func = updateState;
     controller.getAllCandidates();
+    controller.listenValues();
     super.initState();
   }
 

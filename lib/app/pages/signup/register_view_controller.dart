@@ -48,6 +48,10 @@ abstract class _RegisterViewControllerBase with Store {
   String urlImage = '';
   @observable
   XFile? fileSend;
+  @observable
+  List<String> teams = ['Selecione sua turma'];
+  @observable
+  late VoidCallback func;
 
   _RegisterViewControllerBase() {
     _init();
@@ -204,6 +208,30 @@ abstract class _RegisterViewControllerBase with Store {
       // return Future.value(uploadTask);
     } catch (e) {
       print(e);
+    }
+  }
+
+  @action
+  getTeams() async {
+    UtilsModalMessage().loading(1);
+    try {
+      Response response = await _http.client.get('/v1/get-teams');
+      if (response.statusCode == 200) {
+        var result = response.data;
+        if (result['STATUS'] == 'SUCCESS') {
+          print(result['DATA']);
+          var finalResult = result['DATA'];
+          finalResult.forEach((element) {
+            teams.add(element['turma']);
+          });
+          UtilsModalMessage().loading(0);
+          print(teams);
+          func.call();
+        }
+      }
+    } catch (e) {
+      print(e);
+      UtilsModalMessage().loading(0);
     }
   }
 }

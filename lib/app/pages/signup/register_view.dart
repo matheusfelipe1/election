@@ -39,6 +39,10 @@ class _RegisterViewState extends State<RegisterView> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    controller.teams.clear();
+    controller.teams.add('Selecione sua turma');
+    controller.getTeams();
+    controller.func = updateState;
   }
 
   updateState() {
@@ -234,7 +238,7 @@ class _RegisterViewState extends State<RegisterView> {
                               controller.idTurma = dropdownValue;
                             });
                           },
-                          items: turmas
+                          items: controller.teams
                               .map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
                               value: value,

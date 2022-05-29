@@ -1,9 +1,11 @@
 import 'package:dio/dio.dart';
+import 'package:election/app/auth/auth_controller.dart';
 import 'package:election/app/pages/charts_all_turmas/page_chart_turma.dart';
 import 'package:election/app/shared/custom_http.dart';
 import 'package:election/app/utils/modal_messages.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 part 'page_chart_controller.g.dart';
@@ -18,189 +20,15 @@ abstract class _PageChartControllerBase with Store {
   @observable
   List<String> turmas = [
     'Selecione uma turma',
-    'Turma 26',
-    'Turma 36',
-    'Turma 25',
-    'Turma 19',
-    'Turma 15',
-    'Turma 10',
   ];
   @observable
   List values = [];
   @observable
   List candidatesFilter = [];
   @observable
-  List dataCandidates = [
-    // {
-    //   'name': 'Marcus',
-    //   'age': 21,
-    //   'qttVotes': 95.0,
-    //   'turma': 26,
-    //   'e-mail': 'teste@gmail.com'
-    // },
-    // {
-    //   'name': 'Marcus',
-    //   'age': 21,
-    //   'qttVotes': 95.0,
-    //   'turma': 36,
-    //   'e-mail': 'teste@gmail.com'
-    // },
-    // {
-    //   'name': 'Marcus',
-    //   'age': 21,
-    //   'qttVotes': 95.0,
-    //   'turma': 25,
-    //   'e-mail': 'teste@gmail.com'
-    // },
-    // {
-    //   'name': 'Ana Carolina',
-    //   'age': 22,
-    //   'qttVotes': 56.0,
-    //   'turma': 19,
-    //   'e-mail': 'teste@gmail.com'
-    // },
-    // {
-    //   'name': 'Carlos',
-    //   'age': 20,
-    //   'qttVotes': 47.0,
-    //   'turma': 15,
-    //   'e-mail': 'teste@gmail.com'
-    // },
-    // {
-    //   'name': 'Edgar',
-    //   'age': 21,
-    //   'qttVotes': 85.0,
-    //   'turma': 10,
-    //   'e-mail': 'teste@gmail.com'
-    // },
-    // {
-    //   'name': 'Edgar',
-    //   'age': 21,
-    //   'qttVotes': 85.0,
-    //   'turma': 26,
-    //   'e-mail': 'teste@gmail.com'
-    // },
-    // {
-    //   'name': 'Edgar',
-    //   'age': 21,
-    //   'qttVotes': 85.0,
-    //   'turma': 36,
-    //   'e-mail': 'teste@gmail.com'
-    // },
-    // {
-    //   'name': 'Edgar',
-    //   'age': 21,
-    //   'qttVotes': 85.0,
-    //   'turma': 25,
-    //   'e-mail': 'teste@gmail.com'
-    // },
-    // {
-    //   'name': 'Edgar',
-    //   'age': 21,
-    //   'qttVotes': 85.0,
-    //   'turma': 19,
-    //   'e-mail': 'teste@gmail.com'
-    // },
-    // {
-    //   'name': 'Edgar',
-    //   'age': 21,
-    //   'qttVotes': 85.0,
-    //   'turma': 15,
-    //   'e-mail': 'teste@gmail.com'
-    // },
-    // {
-    //   'name': 'Edgar',
-    //   'age': 21,
-    //   'qttVotes': 85.0,
-    //   'turma': 10,
-    //   'e-mail': 'teste@gmail.com'
-    // },
-    // {
-    //   'name': 'Edgar',
-    //   'age': 21,
-    //   'qttVotes': 85.0,
-    //   'turma': 26,
-    //   'e-mail': 'teste@gmail.com'
-    // },
-    // {
-    //   'name': 'Edgar',
-    //   'age': 21,
-    //   'qttVotes': 85.0,
-    //   'turma': 36,
-    //   'e-mail': 'teste@gmail.com'
-    // },
-    // {
-    //   'name': 'Austim',
-    //   'age': 21,
-    //   'qttVotes': 84.0,
-    //   'turma': 25,
-    //   'e-mail': 'teste@gmail.com'
-    // },
-    // {
-    //   'name': 'Edgar',
-    //   'age': 21,
-    //   'qttVotes': 85.0,
-    //   'turma': 19,
-    //   'e-mail': 'teste@gmail.com'
-    // },
-    // {
-    //   'name': 'Edgar',
-    //   'age': 21,
-    //   'qttVotes': 85.0,
-    //   'turma': 15,
-    //   'e-mail': 'teste@gmail.com'
-    // },
-    // {
-    //   'name': 'Edgar',
-    //   'age': 21,
-    //   'qttVotes': 85.0,
-    //   'turma': 10,
-    //   'e-mail': 'teste@gmail.com'
-    // },
-    // {
-    //   'name': 'Edgar',
-    //   'age': 21,
-    //   'qttVotes': 85.0,
-    //   'turma': 26,
-    //   'e-mail': 'teste@gmail.com'
-    // },
-    // {
-    //   'name': 'Edgar',
-    //   'age': 21,
-    //   'qttVotes': 85.0,
-    //   'turma': 36,
-    //   'e-mail': 'teste@gmail.com'
-    // },
-    // {
-    //   'name': 'Jhon',
-    //   'age': 21,
-    //   'qttVotes': 86.0,
-    //   'turma': 25,
-    //   'e-mail': 'teste@gmail.com'
-    // },
-    // {
-    //   'name': 'Edgar',
-    //   'age': 21,
-    //   'qttVotes': 85.0,
-    //   'turma': 19,
-    //   'e-mail': 'teste@gmail.com'
-    // },
-    // {
-    //   'name': 'Edgar',
-    //   'age': 21,
-    //   'qttVotes': 85.0,
-    //   'turma': 15,
-    //   'e-mail': 'teste@gmail.com'
-    // },
-    // {
-    //   'name': 'Edgar',
-    //   'age': 21,
-    //   'qttVotes': 85.0,
-    //   'turma': 10,
-    //   'e-mail': 'teste@gmail.com'
-    // },
-  ];
-  // @observable
+  List dataCandidates = [];
+  @observable
+  AuthController auth = Modular.get<AuthController>();
   final List<SubscriberSeries> data = [];
   @action
   organizerData() {
@@ -304,6 +132,78 @@ abstract class _PageChartControllerBase with Store {
       result.forEach((k, v) {
         values.add({'id': k, 'ctt': v['ctt']});
       });
+    }
+  }
+
+  @action
+  getTeams() async {
+    UtilsModalMessage().loading(1);
+    try {
+      Response response = await _http.client.get('/v1/get-teams');
+      if (response.statusCode == 200) {
+        var result = response.data;
+        if (result['STATUS'] == 'SUCCESS') {
+          print(result['DATA']);
+          var finalResult = result['DATA'];
+          finalResult.forEach((element) {
+            turmas.add(element['turma']);
+          });
+          UtilsModalMessage().loading(0);
+          print(turmas);
+          func.call();
+        }
+      }
+    } catch (e) {
+      print(e);
+      UtilsModalMessage().loading(0);
+    }
+  }
+
+  listenValues() {
+    FirebaseDatabase.instance
+        .reference()
+        .child('votation')
+        .onValue
+        .listen((event) async {
+      var result = event.snapshot.value;
+      if (result != null) {
+        values.clear();
+        result.forEach((k, v) {
+          values.add({'id': k, 'ctt': v['ctt']});
+          values.forEach((element) {
+            dataCandidates.forEach((element2) {
+              if (element2['id'] == element['id']) {
+                element2['qttVotes'] =
+                    double.tryParse(element['ctt'].toString());
+              }
+            });
+          });
+        });
+        await organizerData();
+        renderDataInChart();
+        func.call();
+      }
+    });
+  }
+
+  renderDataInChart() {
+    data.clear();
+    int ctt = 0;
+    for (var item in dataCandidates) {
+      data.add(SubscriberSeries(
+        year: item['userId'] == auth.user.userId
+            ? 'Você'
+            : item['name'].toString(),
+        subscribers: item['qttVotes'],
+        barColor: ctt == 0
+            ? charts.ColorUtil.fromDartColor(Colors.blue)
+            : ctt == 1
+                ? charts.ColorUtil.fromDartColor(Colors.green)
+                : ctt == 2
+                    ? charts.ColorUtil.fromDartColor(Colors.yellow)
+                    : charts.ColorUtil.fromDartColor(Colors.red),
+      ));
+      ctt++;
     }
   }
 }

@@ -165,7 +165,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                   child: Container(
                                     width: size.width * 0.02,
                                     decoration: BoxDecoration(
-                                        color: Colors.blue,
+                                        color: Colors.green,
                                         borderRadius:
                                             BorderRadius.circular(35)),
                                     child: Padding(

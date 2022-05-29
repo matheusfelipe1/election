@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:age_calculator/age_calculator.dart';
 import 'package:dio/dio.dart';
 import 'package:election/app/shared/custom_http.dart';
@@ -44,7 +46,8 @@ abstract class _AcceptAdminControllerBase with Store {
                   'turma': item['idTurma'].toString().replaceAll('Turma ', ''),
                   'e-mail': item['userEmail'],
                   'id': item['userId'],
-                  'foto': item['urlFoto']
+                  'foto': item['urlFoto'],
+                  'blocked': item['blocked']
                 });
                 func.call();
                 print(item);
@@ -58,6 +61,76 @@ abstract class _AcceptAdminControllerBase with Store {
     } catch (e) {
       print(e);
       UtilsModalMessage().loading(0);
+    }
+  }
+
+  @action
+  aprovar(String id) async {
+    UtilsModalMessage().loading(1);
+    try {
+      final map = {'userId': id, 'param': 2};
+      Response response =
+          await _http.client.post('/v1/aprove-or-not', data: json.encode(map));
+      if (response.statusCode == 200) {
+        var result = response.data;
+        if (result['STATUS'] == 'SUCCESS') {
+          users.removeWhere((element) => element['id'] == id);
+          UtilsModalMessage().loading(0);
+          UtilsModalMessage()
+              .generalToast(title: 'Usuário aprovado com sucesso.');
+          await callNotification(id, 'Aprovado',
+              'Seu cadastro como usuário administrativo foi aprovado.');
+          func.call();
+        }
+      }
+    } catch (e) {
+      UtilsModalMessage().loading(0);
+      UtilsModalMessage()
+          .generalToast(title: 'Erro ao prosseguir com a solicitação.');
+    }
+  }
+
+  @action
+  reprovar(String id) async {
+    UtilsModalMessage().loading(1);
+    try {
+      final map = {'userId': id, 'param': 1};
+      Response response =
+          await _http.client.post('/v1/aprove-or-not', data: json.encode(map));
+      if (response.statusCode == 200) {
+        var result = response.data;
+        if (result['STATUS'] == 'SUCCESS') {
+          UtilsModalMessage().loading(0);
+          UtilsModalMessage()
+              .generalToast(title: 'Usuário reprovado com sucesso.');
+          users.forEach((element) {
+            if (element['id'] == id) {
+              element['blocked'] = true;
+            }
+          });
+          await callNotification(id, 'Reprovado',
+              'Seu cadastro como usuário administrativo foi reprovado.');
+          func.call();
+        }
+      }
+    } catch (e) {
+      UtilsModalMessage().loading(0);
+      UtilsModalMessage()
+          .generalToast(title: 'Erro ao prosseguir com a solicitação.');
+    }
+  }
+
+  callNotification(String id, String title, String body) async {
+    try {
+      final map = {
+        'userId': id,
+        'title': title,
+        'body': body,
+      };
+      Response response = await _http.client
+          .post('/v1/call-notifications-service', data: json.encode(map));
+    } catch (e) {
+      print(e);
     }
   }
 }

@@ -96,6 +96,7 @@ abstract class _ScreenChartsControllerBase with Store {
                   'turma': item['idTurma'].toString().replaceAll('Turma ', ''),
                   'qttVotes': 0.0,
                   'e-mail': item['userEmail'],
+                  'foto': item['urlFoto'],
                   'id': item['userId'],
                 });
 

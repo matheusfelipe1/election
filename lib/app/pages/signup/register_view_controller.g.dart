@@ -201,6 +201,38 @@ mixin _$RegisterViewController on _RegisterViewControllerBase, Store {
     });
   }
 
+  late final _$urlImageAtom =
+      Atom(name: '_RegisterViewControllerBase.urlImage', context: context);
+
+  @override
+  String get urlImage {
+    _$urlImageAtom.reportRead();
+    return super.urlImage;
+  }
+
+  @override
+  set urlImage(String value) {
+    _$urlImageAtom.reportWrite(value, super.urlImage, () {
+      super.urlImage = value;
+    });
+  }
+
+  late final _$fileSendAtom =
+      Atom(name: '_RegisterViewControllerBase.fileSend', context: context);
+
+  @override
+  XFile? get fileSend {
+    _$fileSendAtom.reportRead();
+    return super.fileSend;
+  }
+
+  @override
+  set fileSend(XFile? value) {
+    _$fileSendAtom.reportWrite(value, super.fileSend, () {
+      super.fileSend = value;
+    });
+  }
+
   late final _$showModalGetPhotoAsyncAction = AsyncAction(
       '_RegisterViewControllerBase.showModalGetPhoto',
       context: context);
@@ -227,6 +259,14 @@ mixin _$RegisterViewController on _RegisterViewControllerBase, Store {
   @override
   Future registerUser(BuildContext context) {
     return _$registerUserAsyncAction.run(() => super.registerUser(context));
+  }
+
+  late final _$sendPhotoAsyncAction =
+      AsyncAction('_RegisterViewControllerBase.sendPhoto', context: context);
+
+  @override
+  Future sendPhoto(XFile? file) {
+    return _$sendPhotoAsyncAction.run(() => super.sendPhoto(file));
   }
 
   late final _$_RegisterViewControllerBaseActionController =
@@ -257,7 +297,9 @@ matricula: ${matricula},
 idTurma: ${idTurma},
 base64ToSend: ${base64ToSend},
 extensionn: ${extensionn},
-filename: ${filename}
+filename: ${filename},
+urlImage: ${urlImage},
+fileSend: ${fileSend}
     ''';
   }
 }

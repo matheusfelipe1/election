@@ -139,6 +139,22 @@ mixin _$WinnerController on _WinnerControllerBase, Store {
     return _$getDataInRealtimeAsyncAction.run(() => super.getDataInRealtime());
   }
 
+  late final _$callNotificationsAsyncAction =
+      AsyncAction('_WinnerControllerBase.callNotifications', context: context);
+
+  @override
+  Future callNotifications() {
+    return _$callNotificationsAsyncAction.run(() => super.callNotifications());
+  }
+
+  late final _$finishVotationAsyncAction =
+      AsyncAction('_WinnerControllerBase.finishVotation', context: context);
+
+  @override
+  Future finishVotation() {
+    return _$finishVotationAsyncAction.run(() => super.finishVotation());
+  }
+
   @override
   String toString() {
     return '''

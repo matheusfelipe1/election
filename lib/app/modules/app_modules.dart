@@ -2,9 +2,12 @@
 
 import 'package:election/app/auth/auth_controller.dart';
 import 'package:election/app/components/bottom_navigation/bottom_navigation.dart';
+import 'package:election/app/pages/accept_admin/accept_admin.dart';
+import 'package:election/app/pages/accept_admin/accept_admin_controller.dart';
 import 'package:election/app/pages/admin_user/relatorio_admin/report_user_controller.dart';
 import 'package:election/app/pages/charts_all_turmas/page_chart_controller.dart';
 import 'package:election/app/pages/charts_all_turmas/switch_turma/switch_turma.dart';
+import 'package:election/app/pages/create_team/create_team_controller.dart';
 import 'package:election/app/pages/home/home_controller.dart';
 import 'package:election/app/pages/login/login.dart';
 import 'package:election/app/pages/login/login_controller.dart';
@@ -42,6 +45,8 @@ class AppModule extends Module {
         Bind((i) => AuthController()),
         Bind((i) => SubscribeController()),
         Bind((i) => WinnerController()),
+        Bind((i) => AcceptAdminController()),
+        Bind((i) => CreateTeamController()),
       ];
   @override
   List<ModularRoute> get routes => [
@@ -80,5 +85,8 @@ class AppModule extends Module {
             child: (_, args) => Sucess(), transition: TransitionType.fadeIn),
         ChildRoute('/passport',
             child: (_, args) => Passport(), transition: TransitionType.fadeIn),
+        ChildRoute('/add-admin',
+            child: (_, args) => AcceptAdmin(),
+            transition: TransitionType.fadeIn),
       ];
 }

@@ -25,214 +25,269 @@ class _SettingsPageState extends State<SettingsPage> {
     age = duration.years.toString();
     Size size = MediaQuery.of(context).size;
     return Container(
-      child: Column(
-        children: [
-          Container(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                        left: size.width * 0.071, top: 17, bottom: 10),
-                    child: Text('Editar perfil',
-                        style: TextStyle(
-                            color: Colors.black, fontFamily: 'Poppins')),
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                          left: size.width * 0.071, top: 17, bottom: 10),
+                      child: Text('Editar perfil',
+                          style: TextStyle(
+                              color: Colors.black, fontFamily: 'Poppins')),
+                    ),
                   ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Modular.to.pushNamed('/profile-edit');
-                  },
-                  child: Center(
+                  GestureDetector(
+                    onTap: () {
+                      Modular.to.pushNamed('/profile-edit');
+                    },
+                    child: Center(
+                      child: Material(
+                        elevation: 5,
+                        color: Colors.grey[400],
+                        borderRadius: BorderRadius.circular(35),
+                        child: Container(
+                          width: size.width * 0.87,
+                          height: size.height * 0.2,
+                          child: Row(
+                            children: [
+                              Container(
+                                alignment: Alignment.topLeft,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(13.0),
+                                  child: CircleAvatar(
+                                    maxRadius: 25,
+                                    backgroundColor: Colors.white,
+                                    child: auth.user.urlFoto != ''
+                                        ? Container(
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(50),
+                                                image: DecorationImage(
+                                                    image: NetworkImage(
+                                                        auth.user.urlFoto),
+                                                    fit: BoxFit.fill)),
+                                          )
+                                        : Icon(
+                                            Icons.person,
+                                            color: Colors.black,
+                                            size: size.height * 0.04,
+                                          ),
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(top: 5.0),
+                                        child: Text(auth.user.name.toString(),
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontFamily: 'Poppins')),
+                                      ),
+                                      auth.user.admin
+                                          ? Container()
+                                          : Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 5.0),
+                                              child: Text(auth.user.idTurma,
+                                                  style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontFamily: 'Poppins')),
+                                            ),
+                                      auth.user.admin
+                                          ? Container()
+                                          : Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 5.0),
+                                              child: Text(age + ' Anos',
+                                                  style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontFamily: 'Poppins')),
+                                            ),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(top: 5.0),
+                                        child: Text(auth.user.email,
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontFamily: 'Poppins')),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  auth.user.admin
+                      ? Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                              left: size.width * 0.071,
+                              top: size.height * 0.05,
+                              bottom: 10,
+                            ),
+                            child: Text('Administrativos',
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontFamily: 'Poppins')),
+                          ),
+                        )
+                      : Container(),
+                  auth.user.admin
+                      ? Center(
+                          child: Material(
+                            elevation: 5,
+                            color: Colors.grey[400],
+                            borderRadius: BorderRadius.circular(35),
+                            child: Container(
+                                width: size.width * 0.87,
+                                height: size.height * 0.088,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Modular.to.pushNamed('/add-admin');
+                                  },
+                                  child: Container(
+                                    width: size.width * 0.02,
+                                    decoration: BoxDecoration(
+                                        color: Colors.blue,
+                                        borderRadius:
+                                            BorderRadius.circular(35)),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Center(
+                                        child: Text('Solicitações de usuários',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontFamily: 'Poppins',
+                                            )),
+                                      ),
+                                    ),
+                                  ),
+                                )),
+                          ),
+                        )
+                      : Container(),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        left: size.width * 0.071,
+                        top: size.height * 0.05,
+                        bottom: 10,
+                      ),
+                      child: Text('Sair do app',
+                          style: TextStyle(
+                              color: Colors.black, fontFamily: 'Poppins')),
+                    ),
+                  ),
+                  Center(
                     child: Material(
                       elevation: 5,
                       color: Colors.grey[400],
                       borderRadius: BorderRadius.circular(35),
                       child: Container(
-                        width: size.width * 0.87,
-                        height: size.height * 0.2,
-                        child: Row(
-                          children: [
-                            Container(
-                              alignment: Alignment.topLeft,
+                          width: size.width * 0.87,
+                          height: size.height * 0.088,
+                          child: GestureDetector(
+                            onTap: () async {
+                              await UtilsModalMessage().showMessageModal(
+                                  title: 'Deseja realmente sair?',
+                                  func: () {
+                                    auth.loggout();
+                                  },
+                                  colorButton: Colors.green,
+                                  context: context);
+                            },
+                            child: Container(
+                              width: size.width * 0.02,
+                              decoration: BoxDecoration(
+                                  color: Colors.blue,
+                                  borderRadius: BorderRadius.circular(35)),
                               child: Padding(
-                                padding: const EdgeInsets.all(13.0),
-                                child: CircleAvatar(
-                                  maxRadius: 25,
-                                  backgroundColor: Colors.white,
-                                  child: auth.user.urlFoto != ''
-                                      ? Container(
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(50),
-                                              image: DecorationImage(
-                                                  image: NetworkImage(
-                                                      auth.user.urlFoto),
-                                                  fit: BoxFit.fill)),
-                                        )
-                                      : Icon(
-                                          Icons.person,
-                                          color: Colors.black,
-                                          size: size.height * 0.04,
-                                        ),
+                                padding: const EdgeInsets.all(8.0),
+                                child: Center(
+                                  child: Text('SAIR',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: 'Poppins',
+                                      )),
                                 ),
                               ),
                             ),
-                            Container(
-                              child: SingleChildScrollView(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 5.0),
-                                      child: Text(auth.user.name.toString(),
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontFamily: 'Poppins')),
-                                    ),
-                                    auth.user.admin
-                                        ? Container()
-                                        : Padding(
-                                            padding:
-                                                const EdgeInsets.only(top: 5.0),
-                                            child: Text(auth.user.idTurma,
-                                                style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontFamily: 'Poppins')),
-                                          ),
-                                    auth.user.admin
-                                        ? Container()
-                                        : Padding(
-                                            padding:
-                                                const EdgeInsets.only(top: 5.0),
-                                            child: Text(age + ' Anos',
-                                                style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontFamily: 'Poppins')),
-                                          ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 5.0),
-                                      child: Text(auth.user.email,
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontFamily: 'Poppins')),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
+                          )),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        left: size.width * 0.071,
+                        top: size.height * 0.05,
+                        bottom: 10,
                       ),
+                      child: Text('Excluir conta',
+                          style: TextStyle(
+                              color: Colors.black, fontFamily: 'Poppins')),
                     ),
                   ),
-                ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      left: size.width * 0.071,
-                      top: size.height * 0.05,
-                      bottom: 10,
-                    ),
-                    child: Text('Sair do app',
-                        style: TextStyle(
-                            color: Colors.black, fontFamily: 'Poppins')),
-                  ),
-                ),
-                Center(
-                  child: Material(
-                    elevation: 5,
-                    color: Colors.grey[400],
-                    borderRadius: BorderRadius.circular(35),
-                    child: Container(
-                        width: size.width * 0.87,
-                        height: size.height * 0.088,
-                        child: GestureDetector(
-                          onTap: () async {
-                            await UtilsModalMessage().showMessageModal(
-                                title: 'Deseja realmente sair?',
-                                func: () {
-                                  auth.loggout();
-                                },
-                                colorButton: Colors.green,
-                                context: context);
-                          },
-                          child: Container(
-                            width: size.width * 0.02,
-                            decoration: BoxDecoration(
-                                color: Colors.blue,
-                                borderRadius: BorderRadius.circular(35)),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Center(
-                                child: Text('SAIR',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontFamily: 'Poppins',
-                                    )),
+                  Center(
+                    child: Material(
+                      elevation: 5,
+                      color: Colors.grey[400],
+                      borderRadius: BorderRadius.circular(35),
+                      child: Container(
+                          width: size.width * 0.87,
+                          height: size.height * 0.088,
+                          child: GestureDetector(
+                            onTap: () async {
+                              await UtilsModalMessage().showMessageModal(
+                                  title: 'Deseja realmente excluir sua conta?',
+                                  func: () {
+                                    auth.deleteProfile();
+                                  },
+                                  colorButton: Colors.red,
+                                  context: context);
+                            },
+                            child: Container(
+                              width: size.width * 0.02,
+                              decoration: BoxDecoration(
+                                  color: Colors.red,
+                                  borderRadius: BorderRadius.circular(35)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Center(
+                                  child: Text('EXCLUIR',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: 'Poppins',
+                                      )),
+                                ),
                               ),
                             ),
-                          ),
-                        )),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      left: size.width * 0.071,
-                      top: size.height * 0.05,
-                      bottom: 10,
+                          )),
                     ),
-                    child: Text('Excluir conta',
-                        style: TextStyle(
-                            color: Colors.black, fontFamily: 'Poppins')),
                   ),
-                ),
-                Center(
-                  child: Material(
-                    elevation: 5,
-                    color: Colors.grey[400],
-                    borderRadius: BorderRadius.circular(35),
-                    child: Container(
-                        width: size.width * 0.87,
-                        height: size.height * 0.088,
-                        child: GestureDetector(
-                          onTap: () async {
-                            await UtilsModalMessage().showMessageModal(
-                                title: 'Deseja realmente excluir sua conta?',
-                                func: () {
-                                  auth.deleteProfile();
-                                },
-                                colorButton: Colors.red,
-                                context: context);
-                          },
-                          child: Container(
-                            width: size.width * 0.02,
-                            decoration: BoxDecoration(
-                                color: Colors.red,
-                                borderRadius: BorderRadius.circular(35)),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Center(
-                                child: Text('EXCLUIR',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontFamily: 'Poppins',
-                                    )),
-                              ),
-                            ),
-                          ),
-                        )),
-                  ),
-                ),
-              ],
-            ),
-          )
-        ],
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

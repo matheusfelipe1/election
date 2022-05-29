@@ -64,6 +64,33 @@ mixin _$AuthController on _AuthControllerBase, Store {
     return _$loggoutAsyncAction.run(() => super.loggout());
   }
 
+  late final _$saveDeviceTokenAsyncAction =
+      AsyncAction('_AuthControllerBase.saveDeviceToken', context: context);
+
+  @override
+  Future saveDeviceToken() {
+    return _$saveDeviceTokenAsyncAction.run(() => super.saveDeviceToken());
+  }
+
+  late final _$verifyAproveRegisterAsyncAction =
+      AsyncAction('_AuthControllerBase.verifyAproveRegister', context: context);
+
+  @override
+  Future verifyAproveRegister() {
+    return _$verifyAproveRegisterAsyncAction
+        .run(() => super.verifyAproveRegister());
+  }
+
+  late final _$verifyDeviceInDataBaseAsyncAction = AsyncAction(
+      '_AuthControllerBase.verifyDeviceInDataBase',
+      context: context);
+
+  @override
+  Future<bool> verifyDeviceInDataBase() {
+    return _$verifyDeviceInDataBaseAsyncAction
+        .run(() => super.verifyDeviceInDataBase());
+  }
+
   @override
   String toString() {
     return '''

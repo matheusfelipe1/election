@@ -86,7 +86,7 @@ class _SubscribePageState extends State<SubscribePage> {
                     ),
                     auth.user.candidate
                         ? Container(
-                            width: size.width * 0.45,
+                            width: size.width * 0.5,
                             margin: EdgeInsets.only(top: size.height * 0.02),
                             child: Container(
                               decoration: BoxDecoration(

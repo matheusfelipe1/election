@@ -137,6 +137,54 @@ mixin _$ProfileEditController on _ProfileEditControllerBase, Store {
     });
   }
 
+  late final _$urlFotoAtom =
+      Atom(name: '_ProfileEditControllerBase.urlFoto', context: context);
+
+  @override
+  String get urlFoto {
+    _$urlFotoAtom.reportRead();
+    return super.urlFoto;
+  }
+
+  @override
+  set urlFoto(String value) {
+    _$urlFotoAtom.reportWrite(value, super.urlFoto, () {
+      super.urlFoto = value;
+    });
+  }
+
+  late final _$urlImageAtom =
+      Atom(name: '_ProfileEditControllerBase.urlImage', context: context);
+
+  @override
+  String get urlImage {
+    _$urlImageAtom.reportRead();
+    return super.urlImage;
+  }
+
+  @override
+  set urlImage(String value) {
+    _$urlImageAtom.reportWrite(value, super.urlImage, () {
+      super.urlImage = value;
+    });
+  }
+
+  late final _$fileSendAtom =
+      Atom(name: '_ProfileEditControllerBase.fileSend', context: context);
+
+  @override
+  XFile? get fileSend {
+    _$fileSendAtom.reportRead();
+    return super.fileSend;
+  }
+
+  @override
+  set fileSend(XFile? value) {
+    _$fileSendAtom.reportWrite(value, super.fileSend, () {
+      super.fileSend = value;
+    });
+  }
+
   late final _$showModalGetPhotoAsyncAction = AsyncAction(
       '_ProfileEditControllerBase.showModalGetPhoto',
       context: context);
@@ -155,6 +203,22 @@ mixin _$ProfileEditController on _ProfileEditControllerBase, Store {
   Future accessGalleryOrCamera(ImageSource source, VoidCallback func) {
     return _$accessGalleryOrCameraAsyncAction
         .run(() => super.accessGalleryOrCamera(source, func));
+  }
+
+  late final _$sendPhotoAsyncAction =
+      AsyncAction('_ProfileEditControllerBase.sendPhoto', context: context);
+
+  @override
+  Future sendPhoto(XFile? file) {
+    return _$sendPhotoAsyncAction.run(() => super.sendPhoto(file));
+  }
+
+  late final _$editUserAsyncAction =
+      AsyncAction('_ProfileEditControllerBase.editUser', context: context);
+
+  @override
+  Future editUser(BuildContext context) {
+    return _$editUserAsyncAction.run(() => super.editUser(context));
   }
 
   late final _$_ProfileEditControllerBaseActionController =
@@ -181,7 +245,10 @@ name: ${name},
 confirmedPassword: ${confirmedPassword},
 datNasc: ${datNasc},
 matricula: ${matricula},
-auth: ${auth}
+auth: ${auth},
+urlFoto: ${urlFoto},
+urlImage: ${urlImage},
+fileSend: ${fileSend}
     ''';
   }
 }

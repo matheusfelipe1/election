@@ -3,8 +3,10 @@
 import 'dart:async';
 
 import 'package:election/app/auth/auth_controller.dart';
+import 'package:election/app/pages/accept_admin/accept_admin.dart';
 import 'package:election/app/pages/admin_user/relatorio_admin/report_user.dart';
 import 'package:election/app/pages/charts_all_turmas/switch_turma/switch_turma.dart';
+import 'package:election/app/pages/create_team/create_team.dart';
 import 'package:election/app/pages/home/home.dart';
 import 'package:election/app/pages/screen_charts/screen_charts.dart';
 import 'package:election/app/pages/settings/settings_page.dart';
@@ -42,6 +44,7 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
             // SubscribePage(),
             ReportUser(),
             Winner(),
+            CreateTeam(),
             SettingsPage()
           ]
         : [
@@ -276,6 +279,11 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
                 BottomNavigationBarItem(
                   icon: Icon(FontAwesomeIcons.medal),
                   label: 'Votação',
+                  backgroundColor: Colors.grey,
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(FontAwesomeIcons.userGroup),
+                  label: 'Turmas',
                   backgroundColor: Colors.grey,
                 ),
                 BottomNavigationBarItem(

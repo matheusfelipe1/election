@@ -171,7 +171,7 @@ abstract class _PageChartControllerBase with Store {
         result.forEach((k, v) {
           values.add({'id': k, 'ctt': v['ctt']});
           values.forEach((element) {
-            dataCandidates.forEach((element2) {
+            candidatesFilter.forEach((element2) {
               if (element2['id'] == element['id']) {
                 element2['qttVotes'] =
                     double.tryParse(element['ctt'].toString());
@@ -189,7 +189,7 @@ abstract class _PageChartControllerBase with Store {
   renderDataInChart() {
     data.clear();
     int ctt = 0;
-    for (var item in dataCandidates) {
+    for (var item in candidatesFilter) {
       data.add(SubscriberSeries(
         year: item['userId'] == auth.user.userId
             ? 'Você'

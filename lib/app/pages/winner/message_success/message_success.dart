@@ -40,6 +40,9 @@ class _SucessState extends State<Sucess> with SingleTickerProviderStateMixin {
     timer = Timer.periodic(Duration(seconds: 1), (timer) {
       if (mounted) setState(() {});
     });
+    Future.delayed(Duration(seconds: 7), () {
+      _controller.finishVotation();
+    });
   }
 
   @override
@@ -47,9 +50,6 @@ class _SucessState extends State<Sucess> with SingleTickerProviderStateMixin {
     // TODO: implement dispose
     super.dispose();
     timer.cancel();
-    Future.delayed(Duration(seconds: 2), () {
-      _controller.finishVotation();
-    });
   }
 
   @override

@@ -25,8 +25,10 @@ import 'package:election/app/pages/splash.dart';
 import 'package:election/app/pages/subscribe/subscribe_controller.dart';
 import 'package:election/app/pages/vote/vote_page_controller.dart';
 import 'package:election/app/pages/winner/message_success/message_success.dart';
+import 'package:election/app/pages/winner/winner.dart';
 import 'package:election/app/pages/winner/winner_controller.dart';
 import 'package:election/app/pages/winners/winners.dart';
+import 'package:election/app/pages/winners/winners_controller.dart';
 import 'package:election/app/shared/custom_http.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -48,6 +50,7 @@ class AppModule extends Module {
         Bind((i) => WinnerController()),
         Bind((i) => AcceptAdminController()),
         Bind((i) => CreateTeamController()),
+        Bind((i) => WinnersController()),
       ];
   @override
   List<ModularRoute> get routes => [
@@ -91,5 +94,7 @@ class AppModule extends Module {
             transition: TransitionType.fadeIn),
         ChildRoute('/winners',
             child: (_, args) => Winners(), transition: TransitionType.fadeIn),
+        ChildRoute('/votation-new',
+            child: (_, args) => Winner(), transition: TransitionType.fadeIn),
       ];
 }

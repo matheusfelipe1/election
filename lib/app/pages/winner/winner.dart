@@ -315,6 +315,7 @@ class _WinnerState extends State<Winner> {
                                 setState(() {
                                   controller.counting = true;
                                 });
+                                Modular.to.pushNamed('/navigation');
                                 setState(() {});
                               }
                             },

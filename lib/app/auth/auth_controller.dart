@@ -110,10 +110,14 @@ abstract class _AuthControllerBase with Store {
   @action
   loggout() async {
     print('logout');
+    UtilsModalMessage().loading(1);
+    await resetDeviceToken();
+    UtilsModalMessage().loading(0);
     var shared = await SharedPreferences.getInstance();
     shared.remove('token');
     shared.remove('refreshToken');
     shared.remove('idUser');
+
     Modular.to.pushNamed('/login');
   }
 
@@ -123,15 +127,32 @@ abstract class _AuthControllerBase with Store {
       var shared = await SharedPreferences.getInstance();
       var token = shared.getString('deviceId');
       final map = {'deviceId': token, 'userId': user.userId};
-      bool valid = await verifyDeviceInDataBase();
-      if (!valid) {
-        Response response = await _http.client
-            .post('/v1/register-device-id', data: json.encode(map));
-        if (response.statusCode == 200) {
-          var _result = response.data;
-          if (_result['STATUS'] == 'SUCCESS') {
-            print(_result);
-          }
+
+      Response response = await _http.client
+          .post('/v1/register-device-id', data: json.encode(map));
+      if (response.statusCode == 200) {
+        var _result = response.data;
+        if (_result['STATUS'] == 'SUCCESS') {
+          print(_result);
+        }
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  @action
+  resetDeviceToken() async {
+    try {
+      var token = '00658';
+      final map = {'deviceId': token, 'userId': user.userId};
+
+      Response response = await _http.client
+          .post('/v1/register-device-id', data: json.encode(map));
+      if (response.statusCode == 200) {
+        var _result = response.data;
+        if (_result['STATUS'] == 'SUCCESS') {
+          print(_result);
         }
       }
     } catch (e) {

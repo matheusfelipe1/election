@@ -3,34 +3,31 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class NotificationsCall {
   int ctt = 0;
-  showNotification(int hash, String title, String body) {
+  showNotification(int hash, String title, String body) async {
     try {
-      final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-          FlutterLocalNotificationsPlugin();
-      const AndroidNotificationChannel channel = AndroidNotificationChannel(
-          'high_importance_channel', // id
-          'High Importance Notifications', // title
-          description:
-              'This channel is used for important notifications.', // description
-          importance: Importance.high,
-          playSound: true);
-      // ignore: prefer_const_constructors
-
       ctt++;
-      print(title);
-      print(body);
+      FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+          FlutterLocalNotificationsPlugin();
+      AndroidInitializationSettings initializationSettingsAndroid =
+          AndroidInitializationSettings('@mipmap/ic_launcher');
+      final InitializationSettings initializationSettings =
+          InitializationSettings(android: initializationSettingsAndroid);
+      await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+      print("_firebaseMessagingBackgroundHandler Clicked!");
       flutterLocalNotificationsPlugin.show(
-          hash,
+          ctt,
           title,
           body,
           NotificationDetails(
             android: AndroidNotificationDetails(
-              channel.id,
-              channel.name,
-              channelDescription: channel.description,
-              color: Colors.blue,
+              'election-notification',
+              'election-notification',
+              channelDescription: 'push notification for Election',
+              enableVibration: true,
               playSound: true,
-              icon: '@mipmap/ic_launcher',
+              importance: Importance.high,
+              priority: Priority.high,
+              showWhen: true,
             ),
           ));
     } catch (e) {

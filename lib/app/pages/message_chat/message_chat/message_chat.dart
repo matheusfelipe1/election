@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 
 class MessageChat extends StatefulWidget {
   dynamic data;
@@ -20,6 +21,7 @@ class _MessageChatState extends State<MessageChat> {
   MessageChatController controller = Modular.get<MessageChatController>();
   AuthController _auth = Modular.get<AuthController>();
   ScrollController _scroll = new ScrollController();
+  ScrollController _scroll2 = new ScrollController();
 
   updatedState() {
     if (mounted) setState(() {});
@@ -31,6 +33,17 @@ class _MessageChatState extends State<MessageChat> {
     super.initState();
     controller.listenMessageInDatabase();
     controller.func = updatedState;
+    Future.delayed(Duration(microseconds: 500), () {
+      _scroll2.animateTo(_scroll2.position.minScrollExtent,
+          duration: Duration(milliseconds: 500), curve: Curves.fastOutSlowIn);
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    controller.stopToListenUniqueChat();
   }
 
   @override
@@ -56,8 +69,30 @@ class _MessageChatState extends State<MessageChat> {
           widget.data['name'],
           style: const TextStyle(fontFamily: 'Poppins', color: Colors.black),
         ),
+        actions: [
+          !_auth.user.blocked
+              ? Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: IconButton(
+                      onPressed: () async {
+                        UtilsModalMessage().showMessageModal(
+                            title: 'Deseja aprovar este usuário?',
+                            func: () async {
+                              UtilsModalMessage().loading(1);
+                              await controller.aproveUser();
+                              UtilsModalMessage().loading(0);
+                              Modular.to.pop();
+                            },
+                            colorButton: Colors.green,
+                            context: context);
+                      },
+                      icon: Icon(FontAwesomeIcons.check)),
+                )
+              : Container()
+        ],
       ),
       body: SingleChildScrollView(
+        controller: _scroll2,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -106,10 +141,15 @@ class _MessageChatState extends State<MessageChat> {
                                   'message',
                                 );
                                 text.text = '';
+                                await controller.callNotification(
+                                    controller
+                                        .selectedChat!.profileModel!.userId!,
+                                    'Nova mensagem!',
+                                    'Você possui uma mensagem de ${_auth.user.name}');
                                 calculateScroll();
                               }
                             },
-                            keyboardType: TextInputType.text,
+                            keyboardType: TextInputType.multiline,
                             controller: text,
                             decoration: InputDecoration(
                                 border: InputBorder.none,
@@ -139,6 +179,12 @@ class _MessageChatState extends State<MessageChat> {
                                 'message',
                               );
                               text.text = '';
+                              await controller.callNotification(
+                                  controller
+                                      .selectedChat!.profileModel!.userId!,
+                                  'Nova mensagem!',
+                                  'Você possui uma mensagem de ${_auth.user.name}');
+
                               calculateScroll();
                             }
                           },
@@ -158,18 +204,42 @@ class _MessageChatState extends State<MessageChat> {
 
   myContext(Message message, BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final DateFormat formatter = DateFormat('HH:mm\ndd/MM/yyyy');
+    DateTime date = DateTime.parse(message.date!);
+    DateTime dateLocal = date.toLocal();
     // ignore: avoid_unnecessary_containers
     switch (message.type) {
       case 'message':
-        return new Align(
-          alignment: Alignment.centerRight,
-          child: new Card(
-            elevation: 10,
-            child: new Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: new Text(message.value!),
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            new Align(
+              alignment: Alignment.centerRight,
+              child: Container(
+                width: calcularTamanhoTalk(message.value!),
+                child: new Card(
+                  elevation: 10,
+                  child: new Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: new Text(
+                      message.value!,
+                      textAlign: TextAlign.right,
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ),
+                ),
+              ),
             ),
-          ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: new Text(
+                formatter
+                    .format(DateTime.parse(dateLocal.toString()).toLocal()),
+                textAlign: TextAlign.right,
+                style: TextStyle(fontSize: 11),
+              ),
+            ),
+          ],
         );
       case 'image':
         return GestureDetector(
@@ -177,28 +247,42 @@ class _MessageChatState extends State<MessageChat> {
             final map = {'foto': message.value!, 'name': widget.data['name']};
             Modular.to.pushNamed('/image-details', arguments: map);
           },
-          child: new Align(
-            alignment: Alignment.centerRight,
-            child: new Card(
-              elevation: 10,
-              child: new Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SizedBox(
-                    width: size.width * 0.5,
-                    child: new Image.network(message.value!, frameBuilder:
-                        (context, child, frame, wasSynchronouslyLoaded) {
-                      return child;
-                    }, loadingBuilder: (context, child, loadingProgress) {
-                      if (loadingProgress == null) {
-                        return child;
-                      } else {
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                    })),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              new Align(
+                alignment: Alignment.centerRight,
+                child: new Card(
+                  elevation: 10,
+                  child: new Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                        width: size.width * 0.5,
+                        child: new Image.network(message.value!, frameBuilder:
+                            (context, child, frame, wasSynchronouslyLoaded) {
+                          return child;
+                        }, loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) {
+                            return child;
+                          } else {
+                            return Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                        })),
+                  ),
+                ),
               ),
-            ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: new Text(
+                  formatter
+                      .format(DateTime.parse(dateLocal.toString()).toLocal()),
+                  textAlign: TextAlign.right,
+                  style: TextStyle(fontSize: 11),
+                ),
+              ),
+            ],
           ),
         );
         ;
@@ -208,21 +292,41 @@ class _MessageChatState extends State<MessageChat> {
 
   anotherContext(Message message, BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final DateFormat formatter = DateFormat('HH:mm\ndd/MM/yyyy');
+    DateTime date = DateTime.parse(message.date!);
+    DateTime dateLocal = date.toLocal();
     switch (message.type) {
       case 'message':
-        return new Align(
-          alignment: Alignment.centerLeft,
-          child: new Card(
-            color: Colors.blue,
-            elevation: 10,
-            child: new Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: new Text(
-                message.value!,
-                style: TextStyle(color: Colors.white),
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            new Align(
+              alignment: Alignment.centerLeft,
+              child: new Container(
+                width: calcularTamanhoTalk(message.value!),
+                child: new Card(
+                  color: Colors.blue,
+                  elevation: 10,
+                  child: new Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: new Text(
+                      message.value!,
+                      style: TextStyle(color: Colors.white, fontSize: 16),
+                    ),
+                  ),
+                ),
               ),
             ),
-          ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: new Text(
+                formatter
+                    .format(DateTime.parse(dateLocal.toString()).toLocal()),
+                textAlign: TextAlign.left,
+                style: TextStyle(fontSize: 11),
+              ),
+            )
+          ],
         );
       case 'image':
         return GestureDetector(
@@ -230,33 +334,47 @@ class _MessageChatState extends State<MessageChat> {
             final map = {'foto': message.value!, 'name': widget.data['name']};
             Modular.to.pushNamed('/image-details', arguments: map);
           },
-          child: new Align(
-            alignment: Alignment.centerLeft,
-            child: new Card(
-              color: Colors.blue,
-              elevation: 10,
-              child: new Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SizedBox(
-                  width: size.width * 0.5,
-                  child: new Image.network(message.value!, frameBuilder:
-                      (context, child, frame, wasSynchronouslyLoaded) {
-                    return child;
-                  }, loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) {
-                      return child;
-                    } else {
-                      return Center(
-                        child: CircularProgressIndicator(
-                          valueColor:
-                              const AlwaysStoppedAnimation<Color>(Colors.grey),
-                        ),
-                      );
-                    }
-                  }),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              new Align(
+                alignment: Alignment.centerLeft,
+                child: new Card(
+                  color: Colors.blue,
+                  elevation: 10,
+                  child: new Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      width: size.width * 0.5,
+                      child: new Image.network(message.value!, frameBuilder:
+                          (context, child, frame, wasSynchronouslyLoaded) {
+                        return child;
+                      }, loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress == null) {
+                          return child;
+                        } else {
+                          return Center(
+                            child: CircularProgressIndicator(
+                              valueColor: const AlwaysStoppedAnimation<Color>(
+                                  Colors.grey),
+                            ),
+                          );
+                        }
+                      }),
+                    ),
+                  ),
                 ),
               ),
-            ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: new Text(
+                  formatter
+                      .format(DateTime.parse(dateLocal.toString()).toLocal()),
+                  textAlign: TextAlign.left,
+                  style: TextStyle(fontSize: 11),
+                ),
+              )
+            ],
           ),
         );
       default:
@@ -268,5 +386,14 @@ class _MessageChatState extends State<MessageChat> {
       _scroll.animateTo(_scroll.position.minScrollExtent,
           duration: Duration(milliseconds: 500), curve: Curves.fastOutSlowIn);
     });
+  }
+
+  calcularTamanhoTalk(String msg) {
+    double tamanhoMaximoTela = MediaQuery.of(context).size.width * 0.6;
+    // Quantidade de caracteres * tamanho da letra + padding lateral
+    double widthMsg = ((msg.length * 14).toDouble() + 40);
+    double widthTalk =
+        widthMsg > tamanhoMaximoTela ? tamanhoMaximoTela : widthMsg;
+    return widthTalk;
   }
 }

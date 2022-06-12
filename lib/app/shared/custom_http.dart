@@ -36,7 +36,7 @@ class CustomHttp {
       method: requestOptions.method,
       headers: requestOptions.headers,
     );
-    return client.request<dynamic>(requestOptions.path,
+    return await client.request<dynamic>(requestOptions.path,
         data: requestOptions.data,
         queryParameters: requestOptions.queryParameters,
         options: options);

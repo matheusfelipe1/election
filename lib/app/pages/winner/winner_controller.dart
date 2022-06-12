@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:election/app/shared/custom_http.dart';
 import 'package:election/app/utils/modal_messages.dart';
@@ -27,9 +29,12 @@ abstract class _WinnerControllerBase with Store {
   @observable
   bool counting = false;
   VoidCallback? func;
+  @observable
+  List dataCandidates = [];
   @action
   Future<bool> setDateValidInRealtime(String date) async {
     try {
+      await getAllCandidates();
       await FirebaseDatabase.instance
           .reference()
           .child('isInProgress')
@@ -92,5 +97,42 @@ abstract class _WinnerControllerBase with Store {
   finishVotation() async {
     FirebaseDatabase.instance.reference().child('isInProgress').set(false);
     await callNotifications();
+  }
+
+  @observable
+  getAllCandidates() async {
+    UtilsModalMessage().loading(1);
+    try {
+      Response resp = await _http.client.get('/v1/get-all-users');
+      if (resp.statusCode == 200) {
+        if (resp.data['STATUS'] == 'SUCCESS') {
+          var result = resp.data['DATA'];
+          if (result is List) {
+            for (var item in result) {
+              if (item is Map && item['candidate'] == true) {
+                dataCandidates.add(item['userId']);
+                UtilsModalMessage().loading(0);
+              }
+            }
+          }
+          await resetCandidate();
+        }
+      }
+      UtilsModalMessage().loading(0);
+    } catch (e) {
+      print(e);
+      UtilsModalMessage().loading(0);
+    }
+  }
+
+  @action
+  Future<void> resetCandidate() async {
+    try {
+      final map = {'userIds': dataCandidates};
+      Response resp = await _http.client
+          .post('/v1/reset-candidate', data: json.encode(map));
+    } catch (e) {
+      print(e);
+    }
   }
 }

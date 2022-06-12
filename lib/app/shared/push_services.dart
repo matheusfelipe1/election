@@ -29,11 +29,10 @@ class PushService {
       badge: true,
       sound: true,
     );
+
     FirebaseMessaging.onMessage.listen((message) {
-      RemoteNotification? notification = message.notification;
-      AndroidNotification? android = message.notification?.android;
       NotificationsCall().showNotification(
-          notification!.hashCode, notification.title!, notification.body!);
+          message.hashCode, message.data['title']!, message.data['body']!);
     });
   }
 }

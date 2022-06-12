@@ -42,6 +42,7 @@ abstract class _LoginControllerBase with Store {
 
           auth.id = resultId;
           // return Modular.to.pushNamed('/navigation');
+          await auth.saveDeviceToken();
           UtilsModalMessage().loading(0);
           return auth.getUser();
         } else {

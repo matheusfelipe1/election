@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:age_calculator/age_calculator.dart';
@@ -109,8 +110,10 @@ abstract class _MessageChatControllerBase with Store {
           profile = await getUser(chatModel.recipient!);
           chatModel.profileModel = profile;
         }
-        chatModel.messages!.reversed.toList();
-        chats!.add(chatModel);
+        if (chatModel.messages!.length > 0) {
+          chatModel.messages!.reversed.toList();
+          chats!.add(chatModel);
+        }
       });
     }
     if (recipient.value != null) {
@@ -122,8 +125,10 @@ abstract class _MessageChatControllerBase with Store {
           profile = await getUser(chatModel.sender!);
           chatModel.profileModel = profile;
         }
-        chatModel.messages!.reversed.toList();
-        chats!.add(chatModel);
+        if (chatModel.messages!.length > 0) {
+          chatModel.messages!.reversed.toList();
+          chats!.add(chatModel);
+        }
       });
     }
   }
@@ -240,6 +245,7 @@ abstract class _MessageChatControllerBase with Store {
     });
   }
 
+  @action
   getImage(ImageSource source) async {
     XFile? file = await ImagePicker.platform.getImage(source: source);
     Modular.to.pop();
@@ -262,5 +268,79 @@ abstract class _MessageChatControllerBase with Store {
       await addMessage(urlImage, 'image');
       UtilsModalMessage().loading(0);
     }
+  }
+
+  @action
+  stopToListenUniqueChat() {
+    database
+        .reference()
+        .child(reference)
+        .child(idChat)
+        .child('messages')
+        .onChildAdded
+        .listen((event) {})
+        .cancel();
+  }
+
+  @action
+  stopToListenChats() {
+    database
+        .reference()
+        .child(reference)
+        .orderByChild(recipientRef)
+        .equalTo(_auth.user.userId)
+        .onChildAdded
+        .listen((event) {})
+        .cancel();
+    database
+        .reference()
+        .child(reference)
+        .orderByChild(senderRef)
+        .equalTo(_auth.user.userId)
+        .onChildAdded
+        .listen((event) {})
+        .cancel();
+  }
+
+  @action
+  callNotification(String id, String title, String body) async {
+    try {
+      final map = {
+        'userId': selectedChat!.recipient,
+        'title': title,
+        'body': body,
+      };
+      Response response = await _http.client
+          .post('/v1/call-notifications-service', data: json.encode(map));
+      print(response.data);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  @action
+  aproveUser() async {
+    try {
+      final map = {'userId': selectedChat!.recipient};
+      Response response =
+          await _http.client.post('/v1/aprove', data: json.encode(map));
+      if (response.statusCode == 200) {
+        if (response.data['STATUS'] == 'SUCCESS') {
+          await deleteChat();
+        }
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  @action
+  deleteChat() {
+    database
+        .reference()
+        .child(reference)
+        .child(idChat)
+        .child('messages')
+        .remove();
   }
 }

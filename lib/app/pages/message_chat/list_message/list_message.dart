@@ -45,6 +45,13 @@ class _ListMessageChatState extends State<ListMessageChat> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    controller.stopToListenChats();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(

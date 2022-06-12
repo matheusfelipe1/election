@@ -14,6 +14,7 @@ class UserModel {
   late bool alredyVoted;
   late bool candidate;
   late bool aproved;
+  late bool blocked;
 
   UserModel({
     required this.userId,
@@ -27,6 +28,7 @@ class UserModel {
     required this.alredyVoted,
     required this.candidate,
     required this.aproved,
+    required this.blocked,
   });
 
   UserModel.fromJson(Map<String, dynamic> json) {
@@ -41,6 +43,7 @@ class UserModel {
     alredyVoted = json['alreadyVoted'];
     candidate = json['candidate'];
     aproved = json['aproved'];
+    blocked = json['blocked'];
   }
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();

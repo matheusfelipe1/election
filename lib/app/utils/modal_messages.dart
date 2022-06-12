@@ -121,13 +121,26 @@ class UtilsModalMessage {
                             decoration: BoxDecoration(
                                 color: Colors.blue,
                                 borderRadius: BorderRadius.circular(35)),
-                            child: Text(
-                              'Galeria',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontFamily: 'Poppins',
-                                  fontSize: 12),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.image,
+                                    color: Colors.white,
+                                  ),
+                                  SizedBox(width: size.width * 0.028),
+                                  Text(
+                                    'Galeria',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: 'Poppins',
+                                        fontSize: 12),
+                                  ),
+                                ],
+                              ),
                             ),
                           )),
                       SizedBox(
@@ -140,13 +153,26 @@ class UtilsModalMessage {
                             decoration: BoxDecoration(
                                 color: colorButton,
                                 borderRadius: BorderRadius.circular(35)),
-                            child: Text(
-                              'Camera',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontFamily: 'Poppins',
-                                  fontSize: 12),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.camera,
+                                    color: Colors.white,
+                                  ),
+                                  SizedBox(width: size.width * 0.028),
+                                  Text(
+                                    'Camera',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: 'Poppins',
+                                        fontSize: 12),
+                                  ),
+                                ],
+                              ),
                             ),
                           )),
                     ],

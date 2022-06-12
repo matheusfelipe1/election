@@ -5,6 +5,7 @@ import 'package:election/app/utils/modal_messages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 
 class MessageChat extends StatefulWidget {
   dynamic data;
@@ -30,7 +31,6 @@ class _MessageChatState extends State<MessageChat> {
     super.initState();
     controller.listenMessageInDatabase();
     controller.func = updatedState;
-    controller.listenListMessages();
   }
 
   @override
@@ -121,9 +121,13 @@ class _MessageChatState extends State<MessageChat> {
                           onPressed: () {
                             UtilsModalMessage().accessMessageModal(
                                 title: 'Deseja enviar anexar uma imagem?',
-                                func: func,
-                                func2: func2,
-                                colorButton: Colors.blue,
+                                func: () {
+                                  controller.getImage(ImageSource.gallery);
+                                },
+                                func2: () {
+                                  controller.getImage(ImageSource.camera);
+                                },
+                                colorButton: Colors.green,
                                 context: context);
                           },
                           icon: Icon(Icons.image)),
@@ -155,34 +159,108 @@ class _MessageChatState extends State<MessageChat> {
   myContext(Message message, BuildContext context) {
     Size size = MediaQuery.of(context).size;
     // ignore: avoid_unnecessary_containers
-    return new Align(
-      alignment: Alignment.centerRight,
-      child: new Card(
-        elevation: 10,
-        child: new Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: new Text(message.value!),
-        ),
-      ),
-    );
+    switch (message.type) {
+      case 'message':
+        return new Align(
+          alignment: Alignment.centerRight,
+          child: new Card(
+            elevation: 10,
+            child: new Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: new Text(message.value!),
+            ),
+          ),
+        );
+      case 'image':
+        return GestureDetector(
+          onTap: () {
+            final map = {'foto': message.value!, 'name': widget.data['name']};
+            Modular.to.pushNamed('/image-details', arguments: map);
+          },
+          child: new Align(
+            alignment: Alignment.centerRight,
+            child: new Card(
+              elevation: 10,
+              child: new Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(
+                    width: size.width * 0.5,
+                    child: new Image.network(message.value!, frameBuilder:
+                        (context, child, frame, wasSynchronouslyLoaded) {
+                      return child;
+                    }, loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) {
+                        return child;
+                      } else {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                    })),
+              ),
+            ),
+          ),
+        );
+        ;
+      default:
+    }
   }
 
   anotherContext(Message message, BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return new Align(
-      alignment: Alignment.centerLeft,
-      child: new Card(
-        color: Colors.blue,
-        elevation: 10,
-        child: new Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: new Text(
-            message.value!,
-            style: TextStyle(color: Colors.white),
+    switch (message.type) {
+      case 'message':
+        return new Align(
+          alignment: Alignment.centerLeft,
+          child: new Card(
+            color: Colors.blue,
+            elevation: 10,
+            child: new Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: new Text(
+                message.value!,
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
           ),
-        ),
-      ),
-    );
+        );
+      case 'image':
+        return GestureDetector(
+          onTap: () {
+            final map = {'foto': message.value!, 'name': widget.data['name']};
+            Modular.to.pushNamed('/image-details', arguments: map);
+          },
+          child: new Align(
+            alignment: Alignment.centerLeft,
+            child: new Card(
+              color: Colors.blue,
+              elevation: 10,
+              child: new Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(
+                  width: size.width * 0.5,
+                  child: new Image.network(message.value!, frameBuilder:
+                      (context, child, frame, wasSynchronouslyLoaded) {
+                    return child;
+                  }, loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) {
+                      return child;
+                    } else {
+                      return Center(
+                        child: CircularProgressIndicator(
+                          valueColor:
+                              const AlwaysStoppedAnimation<Color>(Colors.grey),
+                        ),
+                      );
+                    }
+                  }),
+                ),
+              ),
+            ),
+          ),
+        );
+      default:
+    }
   }
 
   calculateScroll() {

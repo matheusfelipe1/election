@@ -31,6 +31,7 @@ abstract class _AuthControllerBase with Store {
       matricula: '',
       alredyVoted: false,
       aproved: false,
+      blocked: false,
       candidate: false);
 
   _AuthControllerBase() {

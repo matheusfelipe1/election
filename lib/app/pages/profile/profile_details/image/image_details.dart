@@ -61,10 +61,20 @@ class _ImageDetailsState extends State<ImageDetails> {
           onInteractionEnd: (details) {
             controller.value = initialControllerValue;
           },
-          child: Image.network(
-            widget.data['foto'],
-            fit: BoxFit.fill,
-          ),
+          child: Image.network(widget.data['foto'], fit: BoxFit.fill,
+              frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+            return child;
+          }, loadingBuilder: (context, child, loadingProgress) {
+            if (loadingProgress == null) {
+              return child;
+            } else {
+              return Center(
+                child: CircularProgressIndicator(
+                  valueColor: const AlwaysStoppedAnimation<Color>(Colors.grey),
+                ),
+              );
+            }
+          }),
         ),
       )),
     );

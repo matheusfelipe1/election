@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:age_calculator/age_calculator.dart';
 import 'package:dio/dio.dart';
 import 'package:election/app/auth/auth_controller.dart';
@@ -6,8 +8,10 @@ import 'package:election/app/models/profile_model.dart';
 import 'package:election/app/shared/custom_http.dart';
 import 'package:election/app/utils/modal_messages.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mobx/mobx.dart';
 
 part 'message_chat_controller.g.dart';
@@ -43,6 +47,8 @@ abstract class _MessageChatControllerBase with Store {
   List<ChatModel>? chats = [];
   @observable
   ChatModel? selectedChat;
+  @observable
+  String urlImage = '';
 
   _MessageChatControllerBase() {
     _init();
@@ -54,7 +60,7 @@ abstract class _MessageChatControllerBase with Store {
   }
 
   @observable
-  Future<ProfileModel> getUsersRecused(String id) async {
+  Future<ProfileModel> getUser(String id) async {
     UtilsModalMessage().loading(1);
     ProfileModel profile = new ProfileModel();
     try {
@@ -100,7 +106,7 @@ abstract class _MessageChatControllerBase with Store {
         ChatModel chatModel = ChatModel.fromJson(value);
         if (chatModel.recipient != _auth.user.userId) {
           ProfileModel? profile;
-          profile = await getUsersRecused(chatModel.recipient!);
+          profile = await getUser(chatModel.recipient!);
           chatModel.profileModel = profile;
         }
         chatModel.messages!.reversed.toList();
@@ -113,7 +119,7 @@ abstract class _MessageChatControllerBase with Store {
         ChatModel chatModel = ChatModel.fromJson(value);
         if (chatModel.sender != _auth.user.userId) {
           ProfileModel? profile;
-          profile = await getUsersRecused(chatModel.sender!);
+          profile = await getUser(chatModel.sender!);
           chatModel.profileModel = profile;
         }
         chatModel.messages!.reversed.toList();
@@ -232,5 +238,29 @@ abstract class _MessageChatControllerBase with Store {
       chats!.reversed.toList();
       funcList!.call();
     });
+  }
+
+  getImage(ImageSource source) async {
+    XFile? file = await ImagePicker.platform.getImage(source: source);
+    Modular.to.pop();
+    if (file != null) {
+      UtilsModalMessage().loading(1);
+      FirebaseStorage firebase = FirebaseStorage.instance;
+
+      // Create a Reference to the file
+      var date = DateTime.now().toIso8601String();
+      Reference ref = firebase.ref().child('$date.jpg');
+
+      final metadata = SettableMetadata(
+          contentType: 'image/jpeg',
+          customMetadata: {'picked-file-path': file.path});
+
+      await ref.putFile(File(file.path), metadata).then((p0) async {
+        urlImage = await p0.ref.getDownloadURL();
+      });
+      print(await ref.getDownloadURL());
+      await addMessage(urlImage, 'image');
+      UtilsModalMessage().loading(0);
+    }
   }
 }

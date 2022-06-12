@@ -115,10 +115,18 @@ class _ListMessageChatState extends State<ListMessageChat> {
                         subtitle: Text(
                           controller.chats![i].messages!.first.sender! ==
                                   _auth.user.userId
-                              ? 'Você: ' +
-                                  controller.chats![i].messages!.first.value!
-                              : '${controller.chats![i].profileModel!.name!}: ' +
-                                  controller.chats![i].messages!.first.value!,
+                              ? controller.chats![i].messages!.first.type! ==
+                                      'image'
+                                  ? 'Você: imagem'
+                                  : 'Você: ' +
+                                      controller
+                                          .chats![i].messages!.first.value!
+                              : controller.chats![i].messages!.first.type! ==
+                                      'image'
+                                  ? '${controller.chats![i].profileModel!.name!}: imagem'
+                                  : '${controller.chats![i].profileModel!.name!}: ' +
+                                      controller
+                                          .chats![i].messages!.first.value!,
                           style: const TextStyle(
                               fontFamily: 'Poppins', color: Colors.black),
                         ),

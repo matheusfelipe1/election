@@ -173,4 +173,8 @@ abstract class _WinnersControllerBase with Store {
       print(e);
     }
   }
+
+  resetVotation() {
+    return FirebaseDatabase.instance.reference().child('votation').remove();
+  }
 }

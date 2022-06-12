@@ -69,7 +69,8 @@ class _WinnersState extends State<Winners> {
                   onTap: () {
                     UtilsModalMessage().showMessageModal(
                         title: 'Deseja fazer outra votação?',
-                        func: () {
+                        func: () async {
+                          await controller.resetVotation();
                           Modular.to.pushNamed('/votation-new');
                         },
                         colorButton: Colors.green,
@@ -174,8 +175,8 @@ class _WinnersState extends State<Winners> {
           backgroundColor: !auth.user.admin ? Colors.grey : Colors.green,
           onPressed: !auth.user.admin
               ? null
-              : () {
-                  controller.callNotification();
+              : () async {
+                  await controller.callNotification();
                 },
           label: Row(
             children: [

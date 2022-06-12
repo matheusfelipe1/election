@@ -11,6 +11,9 @@ import 'package:election/app/pages/create_team/create_team_controller.dart';
 import 'package:election/app/pages/home/home_controller.dart';
 import 'package:election/app/pages/login/login.dart';
 import 'package:election/app/pages/login/login_controller.dart';
+import 'package:election/app/pages/message_chat/list_message/list_message.dart';
+import 'package:election/app/pages/message_chat/message_chat/message_chat.dart';
+import 'package:election/app/pages/message_chat/message_chat_controller.dart';
 import 'package:election/app/pages/passport/passport_admin.dart';
 import 'package:election/app/pages/profile/profile_details/image/image_details.dart';
 import 'package:election/app/pages/profile/profile_details/profile_details.dart';
@@ -51,6 +54,7 @@ class AppModule extends Module {
         Bind((i) => AcceptAdminController()),
         Bind((i) => CreateTeamController()),
         Bind((i) => WinnersController()),
+        Bind((i) => MessageChatController()),
       ];
   @override
   List<ModularRoute> get routes => [
@@ -96,5 +100,13 @@ class AppModule extends Module {
             child: (_, args) => Winners(), transition: TransitionType.fadeIn),
         ChildRoute('/votation-new',
             child: (_, args) => Winner(), transition: TransitionType.fadeIn),
+        ChildRoute('/details-chat',
+            child: (_, args) => MessageChat(
+                  data: args.data,
+                ),
+            transition: TransitionType.fadeIn),
+        ChildRoute('/list-chat',
+            child: (_, args) => ListMessageChat(),
+            transition: TransitionType.fadeIn),
       ];
 }

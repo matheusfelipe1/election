@@ -2,9 +2,12 @@ import 'dart:convert';
 
 import 'package:age_calculator/age_calculator.dart';
 import 'package:dio/dio.dart';
+import 'package:election/app/auth/auth_controller.dart';
+import 'package:election/app/pages/message_chat/message_chat_controller.dart';
 import 'package:election/app/shared/custom_http.dart';
 import 'package:election/app/utils/modal_messages.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 
 part 'accept_admin_controller.g.dart';
@@ -20,6 +23,13 @@ abstract class _AcceptAdminControllerBase with Store {
 
   @observable
   VoidCallback? func;
+
+  @observable
+  MessageChatController messageChatController =
+      Modular.get<MessageChatController>();
+
+  @observable
+  AuthController authController = Modular.get<AuthController>();
 
   @observable
   getAllUsers() async {
@@ -49,7 +59,7 @@ abstract class _AcceptAdminControllerBase with Store {
                   'foto': item['urlFoto'],
                   'blocked': item['blocked']
                 });
-                func!.call();
+                // func!.call();
                 print(item);
                 UtilsModalMessage().loading(0);
               }
@@ -58,6 +68,7 @@ abstract class _AcceptAdminControllerBase with Store {
         }
       }
       UtilsModalMessage().loading(0);
+      func!.call();
     } catch (e) {
       print(e);
       UtilsModalMessage().loading(0);
@@ -120,6 +131,7 @@ abstract class _AcceptAdminControllerBase with Store {
     }
   }
 
+  @action
   callNotification(String id, String title, String body) async {
     try {
       final map = {
@@ -132,5 +144,17 @@ abstract class _AcceptAdminControllerBase with Store {
     } catch (e) {
       print(e);
     }
+  }
+
+  @action
+  actionToCreateChat(String id, String name, String photo) async {
+    var result = await messageChatController.createChat(id);
+    messageChatController.idChat = result;
+    final map = {
+      'name': name,
+      'id': messageChatController.idChat,
+      'photo': photo
+    };
+    Modular.to.pushNamed('/details-chat', arguments: map);
   }
 }

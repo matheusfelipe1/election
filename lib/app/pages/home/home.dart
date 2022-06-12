@@ -25,11 +25,14 @@ class _HomePageState extends State<HomePage> {
   }
 
   filterCandidates(String query) {
-    if (query == null || query == '')
-      controller.data = controller.dataCandidates;
+    if (query == null || query == '') {
+      setState(() {
+        controller.dataCandidates = controller.data;
+      });
+    }
     if (mounted)
       setState(() {
-        controller.data = controller.dataCandidates
+        controller.dataCandidates = controller.data
             .where((element) => element
                 .toString()
                 .toLowerCase()
@@ -119,7 +122,7 @@ class _HomePageState extends State<HomePage> {
                   width: size.width,
                   height: size.height * 0.6,
                   child: ListView.builder(
-                      itemCount: controller.data.length,
+                      itemCount: controller.dataCandidates.length,
                       itemBuilder: (BuildContext context, int i) {
                         return Container(
                           child: Card(
@@ -154,13 +157,14 @@ class _HomePageState extends State<HomePage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    controller.data[i]['name'],
+                                    controller.dataCandidates[i]['name'],
                                     style: const TextStyle(
                                         fontFamily: 'Poppins',
                                         color: Colors.black),
                                   ),
                                   Text(
-                                    'Turma, ' + controller.data[i]['turma'],
+                                    'Turma, ' +
+                                        controller.dataCandidates[i]['turma'],
                                     style: const TextStyle(
                                         fontFamily: 'Poppins',
                                         color: Colors.black),
@@ -168,7 +172,7 @@ class _HomePageState extends State<HomePage> {
                                 ],
                               ),
                               trailing: Text(
-                                controller.data[i]['qttVotes']
+                                controller.dataCandidates[i]['qttVotes']
                                     .toString()
                                     .split('.')
                                     .first,

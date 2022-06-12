@@ -85,6 +85,77 @@ class UtilsModalMessage {
         });
   }
 
+  accessMessageModal({
+    required String title,
+    required VoidCallback func,
+    required VoidCallback func2,
+    required Color colorButton,
+    required BuildContext context,
+  }) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          Size size = MediaQuery.of(context).size;
+          return AlertDialog(
+              // backgroundColor: Colors.grey[400],
+              title: Text(
+                title,
+                style: TextStyle(
+                    // color: Colors.white,
+                    fontFamily: 'Poppins',
+                    fontSize: 15),
+              ),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(35)),
+              content: Container(
+                height: MediaQuery.of(context).size.height * 0.06,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                          onTap: () => func.call(),
+                          child: Container(
+                            width: size.width * 0.28,
+                            decoration: BoxDecoration(
+                                color: Colors.blue,
+                                borderRadius: BorderRadius.circular(35)),
+                            child: Text(
+                              'Galeria',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Poppins',
+                                  fontSize: 12),
+                            ),
+                          )),
+                      SizedBox(
+                        width: 15,
+                      ),
+                      GestureDetector(
+                          onTap: () => func2.call(),
+                          child: Container(
+                            width: size.width * 0.28,
+                            decoration: BoxDecoration(
+                                color: colorButton,
+                                borderRadius: BorderRadius.circular(35)),
+                            child: Text(
+                              'Camera',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Poppins',
+                                  fontSize: 12),
+                            ),
+                          )),
+                    ],
+                  ),
+                ),
+              ));
+        });
+  }
+
   loading(int param) {
     // showDialog(
     //   context: context,

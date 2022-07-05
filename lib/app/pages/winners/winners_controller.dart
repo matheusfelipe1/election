@@ -40,6 +40,8 @@ abstract class _WinnersControllerBase with Store {
 
   @observable
   getAllCandidates() async {
+    dataCandidates.clear();
+    dataUsers.clear();
     UtilsModalMessage().loading(1);
     try {
       Response resp = await _http.client.get('/v1/get-all-users');
@@ -80,6 +82,7 @@ abstract class _WinnersControllerBase with Store {
                 });
               });
             }
+            print(teams);
             teams.forEach((element) async {
               await renderValues(element);
             });
@@ -99,16 +102,19 @@ abstract class _WinnersControllerBase with Store {
     values.clear();
     DataSnapshot data =
         await FirebaseDatabase.instance.reference().child('votation').once();
+    print(data.value);
     if (data.value != null) {
-      var result = data.value;
+      Map result = data.value;
       result.forEach((k, v) {
         values.add({'id': k, 'ctt': v['ctt']});
       });
     }
+    print(values);
   }
 
   @action
   getTeams() async {
+    teams.clear();
     UtilsModalMessage().loading(1);
     try {
       Response response = await _http.client.get('/v1/get-teams');
@@ -116,7 +122,7 @@ abstract class _WinnersControllerBase with Store {
         var result = response.data;
         if (result['STATUS'] == 'SUCCESS') {
           print(result['DATA']);
-          var finalResult = result['DATA'];
+          List finalResult = result['DATA'];
           finalResult.forEach((element) {
             teams.add(element['turma']);
           });

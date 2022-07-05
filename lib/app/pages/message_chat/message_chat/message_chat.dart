@@ -34,7 +34,7 @@ class _MessageChatState extends State<MessageChat> {
     controller.listenMessageInDatabase();
     controller.func = updatedState;
     Future.delayed(Duration(microseconds: 500), () {
-      _scroll2.animateTo(_scroll2.position.minScrollExtent,
+      _scroll2.animateTo(_scroll2.position.maxScrollExtent,
           duration: Duration(milliseconds: 500), curve: Curves.fastOutSlowIn);
     });
   }
@@ -93,51 +93,92 @@ class _MessageChatState extends State<MessageChat> {
       ),
       body: SingleChildScrollView(
         controller: _scroll2,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: size.height * 0.82,
-              width: size.width,
-              child: controller.selectedChat!.messages!.length == 0
-                  ? Container()
-                  : ListView.builder(
-                      controller: _scroll,
-                      reverse: true,
-                      itemCount: controller.selectedChat!.messages!.length,
-                      itemBuilder: (context, i) {
-                        if (controller.selectedChat!.messages![i].sender ==
-                            _auth.user.userId) {
-                          return myContext(
-                              controller.selectedChat!.messages![i], context);
-                        } else {
-                          return anotherContext(
-                              controller.selectedChat!.messages![i], context);
-                        }
-                      }),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Material(
-                elevation: 5,
-                color: Colors.grey,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        width: size.width * 0.7,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(50)),
-                        child: Padding(
-                          padding: EdgeInsets.only(left: 15.0, right: 15),
-                          child: TextFormField(
-                            onFieldSubmitted: (query) async {
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height * 0.9,
+          ),
+          child: Stack(
+            children: [
+              SizedBox(
+                height: size.height * 0.8,
+                width: size.width,
+                child: controller.selectedChat!.messages!.length == 0
+                    ? Container()
+                    : ListView.builder(
+                        controller: _scroll,
+                        reverse: true,
+                        itemCount: controller.selectedChat!.messages!.length,
+                        itemBuilder: (context, i) {
+                          if (controller.selectedChat!.messages![i].sender ==
+                              _auth.user.userId) {
+                            return myContext(
+                                controller.selectedChat!.messages![i], context);
+                          } else {
+                            return anotherContext(
+                                controller.selectedChat!.messages![i], context);
+                          }
+                        }),
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Material(
+                  elevation: 5,
+                  color: Colors.grey,
+                  child: Padding(
+                    padding: const EdgeInsets.all(3.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          width: size.width * 0.7,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(50)),
+                          child: Padding(
+                            padding: EdgeInsets.only(left: 15.0, right: 15),
+                            child: TextFormField(
+                              onFieldSubmitted: (query) async {
+                                if (text.text != '') {
+                                  await controller.addMessage(
+                                    query.trim(),
+                                    'message',
+                                  );
+                                  text.text = '';
+                                  await controller.callNotification(
+                                      controller
+                                          .selectedChat!.profileModel!.userId!,
+                                      'Nova mensagem!',
+                                      'Você possui uma mensagem de ${_auth.user.name}');
+                                  calculateScroll();
+                                }
+                              },
+                              keyboardType: TextInputType.multiline,
+                              controller: text,
+                              decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: 'Digite sua mensage'),
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                            onPressed: () {
+                              UtilsModalMessage().accessMessageModal(
+                                  title: 'Deseja enviar anexar uma imagem?',
+                                  func: () {
+                                    controller.getImage(ImageSource.gallery);
+                                  },
+                                  func2: () {
+                                    controller.getImage(ImageSource.camera);
+                                  },
+                                  colorButton: Colors.green,
+                                  context: context);
+                            },
+                            icon: Icon(Icons.image)),
+                        IconButton(
+                            onPressed: () async {
                               if (text.text != '') {
                                 await controller.addMessage(
-                                  query.trim(),
+                                  text.text.trim(),
                                   'message',
                                 );
                                 text.text = '';
@@ -146,57 +187,20 @@ class _MessageChatState extends State<MessageChat> {
                                         .selectedChat!.profileModel!.userId!,
                                     'Nova mensagem!',
                                     'Você possui uma mensagem de ${_auth.user.name}');
+
                                 calculateScroll();
                               }
                             },
-                            keyboardType: TextInputType.multiline,
-                            controller: text,
-                            decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: 'Digite sua mensage'),
-                          ),
-                        ),
-                      ),
-                      IconButton(
-                          onPressed: () {
-                            UtilsModalMessage().accessMessageModal(
-                                title: 'Deseja enviar anexar uma imagem?',
-                                func: () {
-                                  controller.getImage(ImageSource.gallery);
-                                },
-                                func2: () {
-                                  controller.getImage(ImageSource.camera);
-                                },
-                                colorButton: Colors.green,
-                                context: context);
-                          },
-                          icon: Icon(Icons.image)),
-                      IconButton(
-                          onPressed: () async {
-                            if (text.text != '') {
-                              await controller.addMessage(
-                                text.text.trim(),
-                                'message',
-                              );
-                              text.text = '';
-                              await controller.callNotification(
-                                  controller
-                                      .selectedChat!.profileModel!.userId!,
-                                  'Nova mensagem!',
-                                  'Você possui uma mensagem de ${_auth.user.name}');
-
-                              calculateScroll();
-                            }
-                          },
-                          icon: Icon(
-                            Icons.send,
-                          ))
-                    ],
+                            icon: Icon(
+                              Icons.send,
+                            ))
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );

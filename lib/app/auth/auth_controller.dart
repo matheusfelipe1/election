@@ -224,16 +224,8 @@ abstract class _AuthControllerBase with Store {
 
   @action
   listenDataBase() async {
-    // DataSnapshot value =
-    //     await firebaseDatabase.reference().child('isInProgress').once();
-    // if (value.value == false) Modular.to.pushNamed('/winners');
-    firebaseDatabase.reference().child('isInProgress').onValue.listen((event) {
-      if (event.snapshot.value != null) {
-        var value = event.snapshot.value;
-        if (value == false) {
-          Modular.to.pushNamed('/winners');
-        }
-      }
-    });
+    DataSnapshot value =
+        await firebaseDatabase.reference().child('isInProgress').once();
+    if (value.value == false) Modular.to.pushNamed('/winners');
   }
 }

@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:election/app/pages/login/login_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -15,6 +16,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   LoginController controller = Modular.get<LoginController>();
+  bool showPas = false;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -68,10 +70,24 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: TextFormField(
                           textAlign: TextAlign.start,
                           controller: controller.password,
-                          obscureText: true,
+                          obscureText: showPas ? false : true,
                           decoration: InputDecoration(
                               hintText: 'Digite sua senha',
                               border: InputBorder.none,
+                              suffixIcon: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    showPas = !showPas;
+                                  });
+                                },
+                                child: Icon(
+                                  !showPas
+                                      ? FontAwesomeIcons.eyeSlash
+                                      : Icons.remove_red_eye_sharp,
+                                  size: 24,
+                                  color: Colors.black,
+                                ),
+                              ),
                               hintStyle: TextStyle(fontFamily: 'Poppins')),
                         ),
                       ),

@@ -35,6 +35,7 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
   @override
   void initState() {
     // TODO: implement initState
+    print('aquiiii');
     userAdmin = auth.user.admin;
     name = auth.user.name;
     _widgetOptions = userAdmin

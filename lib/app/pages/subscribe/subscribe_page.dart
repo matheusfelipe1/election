@@ -108,14 +108,26 @@ class _SubscribePageState extends State<SubscribePage> {
                         : GestureDetector(
                             onTap: () async {
                               // Modular.to.pushNamed('/login');
-                              await UtilsModalMessage().showMessageModal(
-                                  title:
-                                      'Deseja realmente se candidatar a representante de turma?',
-                                  func: () {
-                                    controller.subscribe();
-                                  },
-                                  colorButton: Colors.green,
-                                  context: context);
+                              if (auth.user.urlFoto == null ||
+                                  auth.user.urlFoto == '') {
+                                await UtilsModalMessage().showMessageModal(
+                                    title:
+                                        'Você deve anexar uma foto de perfil para se candidatar.\nDeseja acessar a edição de perfil agora?',
+                                    func: () {
+                                      Modular.to.pushNamed('/profile-edit');
+                                    },
+                                    colorButton: Colors.green,
+                                    context: context);
+                              } else {
+                                await UtilsModalMessage().showMessageModal(
+                                    title:
+                                        'Deseja realmente se candidatar a representante de turma?',
+                                    func: () {
+                                      controller.subscribe();
+                                    },
+                                    colorButton: Colors.green,
+                                    context: context);
+                              }
                             },
                             child: Container(
                                 width: size.width * 0.45,

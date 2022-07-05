@@ -53,7 +53,7 @@ android {
         applicationId "com.example.election"
         minSdkVersion 21
         targetSdkVersion flutter.targetSdkVersion
-        versionCode 202205230
+        versionCode 202207040
         versionName flutterVersionName
         multiDexEnabled true
     }

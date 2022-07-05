@@ -306,7 +306,7 @@ abstract class _MessageChatControllerBase with Store {
   callNotification(String id, String title, String body) async {
     try {
       final map = {
-        'userId': selectedChat!.recipient,
+        'userId': selectedChat!.profileModel!.userId,
         'title': title,
         'body': body,
       };
